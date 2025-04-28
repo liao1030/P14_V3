@@ -2,81 +2,6 @@ Archive member included to satisfy reference by file (symbol)
 
 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/rv32imacxw/ilp32/libgcc.a(save-restore.o)
                               ./Peripheral/src/ch32v20x_flash.o (__riscv_save_7)
-/Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-printf.o)
-                              ./User/main.o (printf)
-/Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-puts.o)
-                              ./User/main.o (puts)
-/Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-wbuf.o)
-                              /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-puts.o) (__swbuf_r)
-/Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-wsetup.o)
-                              /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-puts.o) (__swsetup_r)
-/Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-fflush.o)
-                              /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-wbuf.o) (_fflush_r)
-/Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-findfp.o)
-                              /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-printf.o) (__sinit)
-/Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-fwalk.o)
-                              /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-findfp.o) (_fwalk)
-/Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-impure.o)
-                              /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-fflush.o) (_global_impure_ptr)
-/Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-makebuf.o)
-                              /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-wsetup.o) (__smakebuf_r)
-/Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-memset.o)
-                              /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-findfp.o) (memset)
-/Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-nano-freer.o)
-                              /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-wsetup.o) (_free_r)
-/Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-nano-mallocr.o)
-                              /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-findfp.o) (_malloc_r)
-/Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-nano-vfprintf.o)
-                              /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-printf.o) (_vfprintf_r)
-/Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-nano-vfprintf_i.o)
-                              /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-nano-vfprintf.o) (_printf_i)
-/Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-sbrkr.o)
-                              /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-nano-mallocr.o) (_sbrk_r)
-/Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-stdio.o)
-                              /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-findfp.o) (__sread)
-/Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-writer.o)
-                              /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-stdio.o) (_write_r)
-/Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-closer.o)
-                              /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-stdio.o) (_close_r)
-/Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-fstatr.o)
-                              /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-makebuf.o) (_fstat_r)
-/Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-fvwrite.o)
-                              /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-nano-vfprintf.o) (__sfvwrite_r)
-/Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-isattyr.o)
-                              /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-makebuf.o) (_isatty_r)
-/Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-lseekr.o)
-                              /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-stdio.o) (_lseek_r)
-/Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-memchr.o)
-                              /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-nano-vfprintf.o) (memchr)
-/Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-memcpy.o)
-                              /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-fvwrite.o) (memcpy)
-/Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-memmove.o)
-                              /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-fvwrite.o) (memmove)
-/Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-mlock.o)
-                              /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-nano-freer.o) (__malloc_lock)
-/Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-nano-reallocr.o)
-                              /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-fvwrite.o) (_realloc_r)
-/Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-readr.o)
-                              /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-stdio.o) (_read_r)
-/Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-reent.o)
-                              /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-sbrkr.o) (errno)
-/Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-nano-msizer.o)
-                              /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-nano-reallocr.o) (_malloc_usable_size_r)
-/Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libnosys.a(close.o)
-                              /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-closer.o) (_close)
-/Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libnosys.a(fstat.o)
-                              /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-fstatr.o) (_fstat)
-/Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libnosys.a(isatty.o)
-                              /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-isattyr.o) (_isatty)
-/Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libnosys.a(lseek.o)
-                              /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-lseekr.o) (_lseek)
-/Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libnosys.a(read.o)
-                              /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-readr.o) (_read)
-
-Allocating common symbols
-Common symbol       size              file
-
-errno               0x4               /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-reent.o)
 
 Discarded input sections
 
@@ -89,6 +14,10 @@ Discarded input sections
  .text          0x0000000000000000        0x0 ./User/system_ch32v20x.o
  .data          0x0000000000000000        0x0 ./User/system_ch32v20x.o
  .bss           0x0000000000000000        0x0 ./User/system_ch32v20x.o
+ .text.SystemCoreClockUpdate
+                0x0000000000000000       0x92 ./User/system_ch32v20x.o
+ .data.AHBPrescTable
+                0x0000000000000000       0x10 ./User/system_ch32v20x.o
  .text          0x0000000000000000        0x0 ./Startup/startup_ch32v20x_D6.o
  .data          0x0000000000000000        0x0 ./Startup/startup_ch32v20x_D6.o
  .bss           0x0000000000000000        0x0 ./Startup/startup_ch32v20x_D6.o
@@ -318,6 +247,18 @@ Discarded input sections
                 0x0000000000000000        0x6 ./Peripheral/src/ch32v20x_dbgmcu.o
  .text.DBGMCU_Config
                 0x0000000000000000       0x14 ./Peripheral/src/ch32v20x_dbgmcu.o
+ .text.DBGMCU_GetCHIPID
+                0x0000000000000000        0xa ./Peripheral/src/ch32v20x_dbgmcu.o
+ .debug_info    0x0000000000000000      0xa89 ./Peripheral/src/ch32v20x_dbgmcu.o
+ .debug_abbrev  0x0000000000000000      0x2f7 ./Peripheral/src/ch32v20x_dbgmcu.o
+ .debug_loc     0x0000000000000000       0x7c ./Peripheral/src/ch32v20x_dbgmcu.o
+ .debug_aranges
+                0x0000000000000000       0x48 ./Peripheral/src/ch32v20x_dbgmcu.o
+ .debug_ranges  0x0000000000000000       0x50 ./Peripheral/src/ch32v20x_dbgmcu.o
+ .debug_line    0x0000000000000000      0x459 ./Peripheral/src/ch32v20x_dbgmcu.o
+ .debug_str     0x0000000000000000      0x666 ./Peripheral/src/ch32v20x_dbgmcu.o
+ .comment       0x0000000000000000       0x33 ./Peripheral/src/ch32v20x_dbgmcu.o
+ .debug_frame   0x0000000000000000       0x70 ./Peripheral/src/ch32v20x_dbgmcu.o
  .text          0x0000000000000000        0x0 ./Peripheral/src/ch32v20x_dma.o
  .data          0x0000000000000000        0x0 ./Peripheral/src/ch32v20x_dma.o
  .bss           0x0000000000000000        0x0 ./Peripheral/src/ch32v20x_dma.o
@@ -481,10 +422,6 @@ Discarded input sections
                 0x0000000000000000       0x1e ./Peripheral/src/ch32v20x_gpio.o
  .text.GPIO_ReadOutputData
                 0x0000000000000000       0x20 ./Peripheral/src/ch32v20x_gpio.o
- .text.GPIO_SetBits
-                0x0000000000000000       0x18 ./Peripheral/src/ch32v20x_gpio.o
- .text.GPIO_ResetBits
-                0x0000000000000000       0x18 ./Peripheral/src/ch32v20x_gpio.o
  .text.GPIO_WriteBit
                 0x0000000000000000       0x1e ./Peripheral/src/ch32v20x_gpio.o
  .text.GPIO_Write
@@ -609,8 +546,22 @@ Discarded input sections
  .text          0x0000000000000000        0x0 ./Peripheral/src/ch32v20x_misc.o
  .data          0x0000000000000000        0x0 ./Peripheral/src/ch32v20x_misc.o
  .bss           0x0000000000000000        0x0 ./Peripheral/src/ch32v20x_misc.o
+ .text.NVIC_PriorityGroupConfig
+                0x0000000000000000        0xa ./Peripheral/src/ch32v20x_misc.o
  .text.NVIC_Init
                 0x0000000000000000       0x58 ./Peripheral/src/ch32v20x_misc.o
+ .sbss.NVIC_Priority_Group
+                0x0000000000000000        0x4 ./Peripheral/src/ch32v20x_misc.o
+ .debug_info    0x0000000000000000      0xe61 ./Peripheral/src/ch32v20x_misc.o
+ .debug_abbrev  0x0000000000000000      0x2ea ./Peripheral/src/ch32v20x_misc.o
+ .debug_loc     0x0000000000000000       0x2d ./Peripheral/src/ch32v20x_misc.o
+ .debug_aranges
+                0x0000000000000000       0x28 ./Peripheral/src/ch32v20x_misc.o
+ .debug_ranges  0x0000000000000000       0x48 ./Peripheral/src/ch32v20x_misc.o
+ .debug_line    0x0000000000000000      0x4c8 ./Peripheral/src/ch32v20x_misc.o
+ .debug_str     0x0000000000000000      0xa9e ./Peripheral/src/ch32v20x_misc.o
+ .comment       0x0000000000000000       0x33 ./Peripheral/src/ch32v20x_misc.o
+ .debug_frame   0x0000000000000000       0x30 ./Peripheral/src/ch32v20x_misc.o
  .text          0x0000000000000000        0x0 ./Peripheral/src/ch32v20x_opa.o
  .data          0x0000000000000000        0x0 ./Peripheral/src/ch32v20x_opa.o
  .bss           0x0000000000000000        0x0 ./Peripheral/src/ch32v20x_opa.o
@@ -675,28 +626,16 @@ Discarded input sections
  .text          0x0000000000000000        0x0 ./Peripheral/src/ch32v20x_rcc.o
  .data          0x0000000000000000        0x0 ./Peripheral/src/ch32v20x_rcc.o
  .bss           0x0000000000000000        0x0 ./Peripheral/src/ch32v20x_rcc.o
- .text.RCC_DeInit
-                0x0000000000000000       0x42 ./Peripheral/src/ch32v20x_rcc.o
  .text.RCC_HSEConfig
                 0x0000000000000000       0x3c ./Peripheral/src/ch32v20x_rcc.o
  .text.RCC_AdjustHSICalibrationValue
                 0x0000000000000000       0x12 ./Peripheral/src/ch32v20x_rcc.o
- .text.RCC_HSICmd
-                0x0000000000000000       0x14 ./Peripheral/src/ch32v20x_rcc.o
  .text.RCC_PLLConfig
                 0x0000000000000000       0x16 ./Peripheral/src/ch32v20x_rcc.o
  .text.RCC_PLLCmd
                 0x0000000000000000       0x24 ./Peripheral/src/ch32v20x_rcc.o
- .text.RCC_SYSCLKConfig
-                0x0000000000000000        0xe ./Peripheral/src/ch32v20x_rcc.o
  .text.RCC_GetSYSCLKSource
                 0x0000000000000000        0xa ./Peripheral/src/ch32v20x_rcc.o
- .text.RCC_HCLKConfig
-                0x0000000000000000       0x10 ./Peripheral/src/ch32v20x_rcc.o
- .text.RCC_PCLK1Config
-                0x0000000000000000       0x10 ./Peripheral/src/ch32v20x_rcc.o
- .text.RCC_PCLK2Config
-                0x0000000000000000       0x16 ./Peripheral/src/ch32v20x_rcc.o
  .text.RCC_ITConfig
                 0x0000000000000000       0x16 ./Peripheral/src/ch32v20x_rcc.o
  .text.RCC_USBCLKConfig
@@ -713,8 +652,6 @@ Discarded input sections
                 0x0000000000000000       0x20 ./Peripheral/src/ch32v20x_rcc.o
  .text.RCC_AHBPeriphClockCmd
                 0x0000000000000000       0x1e ./Peripheral/src/ch32v20x_rcc.o
- .text.RCC_APB1PeriphClockCmd
-                0x0000000000000000       0x1e ./Peripheral/src/ch32v20x_rcc.o
  .text.RCC_APB2PeriphResetCmd
                 0x0000000000000000       0x1e ./Peripheral/src/ch32v20x_rcc.o
  .text.RCC_APB1PeriphResetCmd
@@ -725,8 +662,6 @@ Discarded input sections
                 0x0000000000000000       0x24 ./Peripheral/src/ch32v20x_rcc.o
  .text.RCC_MCOConfig
                 0x0000000000000000        0x8 ./Peripheral/src/ch32v20x_rcc.o
- .text.RCC_GetFlagStatus
-                0x0000000000000000       0x2e ./Peripheral/src/ch32v20x_rcc.o
  .text.RCC_WaitForHSEStartUp
                 0x0000000000000000       0x42 ./Peripheral/src/ch32v20x_rcc.o
  .text.RCC_ClearFlag
@@ -1054,6 +989,8 @@ Discarded input sections
                 0x0000000000000000       0x18 ./Peripheral/src/ch32v20x_usart.o
  .text.USART_LINCmd
                 0x0000000000000000       0x16 ./Peripheral/src/ch32v20x_usart.o
+ .text.USART_SendData
+                0x0000000000000000        0x8 ./Peripheral/src/ch32v20x_usart.o
  .text.USART_ReceiveData
                 0x0000000000000000        0x8 ./Peripheral/src/ch32v20x_usart.o
  .text.USART_SendBreak
@@ -1072,6 +1009,8 @@ Discarded input sections
                 0x0000000000000000       0x16 ./Peripheral/src/ch32v20x_usart.o
  .text.USART_IrDACmd
                 0x0000000000000000       0x18 ./Peripheral/src/ch32v20x_usart.o
+ .text.USART_GetFlagStatus
+                0x0000000000000000        0xa ./Peripheral/src/ch32v20x_usart.o
  .text.USART_ClearFlag
                 0x0000000000000000        0xc ./Peripheral/src/ch32v20x_usart.o
  .text.USART_GetITStatus
@@ -1114,8 +1053,14 @@ Discarded input sections
                 0x0000000000000000       0x3a ./Debug/debug.o
  .text.Delay_Ms
                 0x0000000000000000       0x3a ./Debug/debug.o
+ .text.USART_Printf_Init
+                0x0000000000000000       0x72 ./Debug/debug.o
  .text.SDI_Printf_Enable
                 0x0000000000000000       0x2a ./Debug/debug.o
+ .text._write   0x0000000000000000       0x4e ./Debug/debug.o
+ .text._sbrk    0x0000000000000000       0x2e ./Debug/debug.o
+ .sdata.curbrk.4652
+                0x0000000000000000        0x4 ./Debug/debug.o
  .text          0x0000000000000000        0x0 ./Core/core_riscv.o
  .data          0x0000000000000000        0x0 ./Core/core_riscv.o
  .bss           0x0000000000000000        0x0 ./Core/core_riscv.o
@@ -1169,156 +1114,6 @@ Discarded input sections
  .data          0x0000000000000000        0x0 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/rv32imacxw/ilp32/libgcc.a(save-restore.o)
  .bss           0x0000000000000000        0x0 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/rv32imacxw/ilp32/libgcc.a(save-restore.o)
  .eh_frame      0x0000000000000000       0xf8 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/rv32imacxw/ilp32/libgcc.a(save-restore.o)
- .text          0x0000000000000000        0x0 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-printf.o)
- .data          0x0000000000000000        0x0 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-printf.o)
- .bss           0x0000000000000000        0x0 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-printf.o)
- .text._printf_r
-                0x0000000000000000       0x40 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-printf.o)
- .text          0x0000000000000000        0x0 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-puts.o)
- .data          0x0000000000000000        0x0 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-puts.o)
- .bss           0x0000000000000000        0x0 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-puts.o)
- .text          0x0000000000000000        0x0 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-wbuf.o)
- .data          0x0000000000000000        0x0 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-wbuf.o)
- .bss           0x0000000000000000        0x0 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-wbuf.o)
- .text.__swbuf  0x0000000000000000       0x16 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-wbuf.o)
- .text          0x0000000000000000        0x0 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-wsetup.o)
- .data          0x0000000000000000        0x0 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-wsetup.o)
- .bss           0x0000000000000000        0x0 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-wsetup.o)
- .text          0x0000000000000000        0x0 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-fflush.o)
- .data          0x0000000000000000        0x0 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-fflush.o)
- .bss           0x0000000000000000        0x0 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-fflush.o)
- .text.fflush   0x0000000000000000       0x30 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-fflush.o)
- .text          0x0000000000000000        0x0 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-findfp.o)
- .data          0x0000000000000000        0x0 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-findfp.o)
- .bss           0x0000000000000000        0x0 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-findfp.o)
- .text.__fp_lock
-                0x0000000000000000        0x4 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-findfp.o)
- .text.__fp_unlock
-                0x0000000000000000        0x4 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-findfp.o)
- .text._cleanup
-                0x0000000000000000       0x12 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-findfp.o)
- .text.__sfp_lock_acquire
-                0x0000000000000000        0x2 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-findfp.o)
- .text.__sfp_lock_release
-                0x0000000000000000        0x2 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-findfp.o)
- .text.__sinit_lock_acquire
-                0x0000000000000000        0x2 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-findfp.o)
- .text.__sinit_lock_release
-                0x0000000000000000        0x2 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-findfp.o)
- .text.__fp_lock_all
-                0x0000000000000000       0x1a /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-findfp.o)
- .text.__fp_unlock_all
-                0x0000000000000000       0x1a /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-findfp.o)
- .text          0x0000000000000000        0x0 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-fwalk.o)
- .data          0x0000000000000000        0x0 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-fwalk.o)
- .bss           0x0000000000000000        0x0 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-fwalk.o)
- .text._fwalk   0x0000000000000000       0x60 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-fwalk.o)
- .text          0x0000000000000000        0x0 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-impure.o)
- .data          0x0000000000000000        0x0 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-impure.o)
- .bss           0x0000000000000000        0x0 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-impure.o)
- .text          0x0000000000000000        0x0 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-makebuf.o)
- .data          0x0000000000000000        0x0 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-makebuf.o)
- .bss           0x0000000000000000        0x0 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-makebuf.o)
- .data          0x0000000000000000        0x0 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-memset.o)
- .bss           0x0000000000000000        0x0 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-memset.o)
- .text          0x0000000000000000        0x0 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-nano-freer.o)
- .data          0x0000000000000000        0x0 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-nano-freer.o)
- .bss           0x0000000000000000        0x0 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-nano-freer.o)
- .text          0x0000000000000000        0x0 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-nano-mallocr.o)
- .data          0x0000000000000000        0x0 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-nano-mallocr.o)
- .bss           0x0000000000000000        0x0 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-nano-mallocr.o)
- .text          0x0000000000000000        0x0 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-nano-vfprintf.o)
- .data          0x0000000000000000        0x0 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-nano-vfprintf.o)
- .bss           0x0000000000000000        0x0 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-nano-vfprintf.o)
- .text.__sprint_r
-                0x0000000000000000       0x2c /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-nano-vfprintf.o)
- .text.vfprintf
-                0x0000000000000000       0x18 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-nano-vfprintf.o)
- .text          0x0000000000000000        0x0 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-nano-vfprintf_i.o)
- .data          0x0000000000000000        0x0 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-nano-vfprintf_i.o)
- .bss           0x0000000000000000        0x0 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-nano-vfprintf_i.o)
- .text          0x0000000000000000        0x0 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-sbrkr.o)
- .data          0x0000000000000000        0x0 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-sbrkr.o)
- .bss           0x0000000000000000        0x0 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-sbrkr.o)
- .text          0x0000000000000000        0x0 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-stdio.o)
- .data          0x0000000000000000        0x0 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-stdio.o)
- .bss           0x0000000000000000        0x0 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-stdio.o)
- .text.__seofread
-                0x0000000000000000        0x4 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-stdio.o)
- .text          0x0000000000000000        0x0 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-writer.o)
- .data          0x0000000000000000        0x0 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-writer.o)
- .bss           0x0000000000000000        0x0 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-writer.o)
- .text          0x0000000000000000        0x0 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-closer.o)
- .data          0x0000000000000000        0x0 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-closer.o)
- .bss           0x0000000000000000        0x0 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-closer.o)
- .text          0x0000000000000000        0x0 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-fstatr.o)
- .data          0x0000000000000000        0x0 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-fstatr.o)
- .bss           0x0000000000000000        0x0 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-fstatr.o)
- .text          0x0000000000000000        0x0 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-fvwrite.o)
- .data          0x0000000000000000        0x0 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-fvwrite.o)
- .bss           0x0000000000000000        0x0 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-fvwrite.o)
- .text.__sfvwrite_r
-                0x0000000000000000      0x306 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-fvwrite.o)
- .debug_frame   0x0000000000000000       0x60 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-fvwrite.o)
- .text          0x0000000000000000        0x0 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-isattyr.o)
- .data          0x0000000000000000        0x0 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-isattyr.o)
- .bss           0x0000000000000000        0x0 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-isattyr.o)
- .text          0x0000000000000000        0x0 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-lseekr.o)
- .data          0x0000000000000000        0x0 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-lseekr.o)
- .bss           0x0000000000000000        0x0 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-lseekr.o)
- .text          0x0000000000000000        0x0 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-memchr.o)
- .data          0x0000000000000000        0x0 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-memchr.o)
- .bss           0x0000000000000000        0x0 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-memchr.o)
- .text          0x0000000000000000        0x0 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-memcpy.o)
- .data          0x0000000000000000        0x0 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-memcpy.o)
- .bss           0x0000000000000000        0x0 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-memcpy.o)
- .text.memcpy   0x0000000000000000       0xb2 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-memcpy.o)
- .debug_frame   0x0000000000000000       0x20 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-memcpy.o)
- .text          0x0000000000000000        0x0 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-memmove.o)
- .data          0x0000000000000000        0x0 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-memmove.o)
- .bss           0x0000000000000000        0x0 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-memmove.o)
- .text.memmove  0x0000000000000000       0x46 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-memmove.o)
- .debug_frame   0x0000000000000000       0x20 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-memmove.o)
- .text          0x0000000000000000        0x0 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-mlock.o)
- .data          0x0000000000000000        0x0 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-mlock.o)
- .bss           0x0000000000000000        0x0 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-mlock.o)
- .text          0x0000000000000000        0x0 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-nano-reallocr.o)
- .data          0x0000000000000000        0x0 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-nano-reallocr.o)
- .bss           0x0000000000000000        0x0 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-nano-reallocr.o)
- .text._realloc_r
-                0x0000000000000000       0x72 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-nano-reallocr.o)
- .debug_frame   0x0000000000000000       0x40 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-nano-reallocr.o)
- .text          0x0000000000000000        0x0 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-readr.o)
- .data          0x0000000000000000        0x0 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-readr.o)
- .bss           0x0000000000000000        0x0 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-readr.o)
- .text          0x0000000000000000        0x0 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-reent.o)
- .data          0x0000000000000000        0x0 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-reent.o)
- .bss           0x0000000000000000        0x0 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-reent.o)
- .text.cleanup_glue
-                0x0000000000000000       0x2c /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-reent.o)
- .text._reclaim_reent
-                0x0000000000000000      0x10c /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-reent.o)
- .text          0x0000000000000000        0x0 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-nano-msizer.o)
- .data          0x0000000000000000        0x0 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-nano-msizer.o)
- .bss           0x0000000000000000        0x0 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-nano-msizer.o)
- .text._malloc_usable_size_r
-                0x0000000000000000       0x14 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-nano-msizer.o)
- .debug_frame   0x0000000000000000       0x20 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-nano-msizer.o)
- .text          0x0000000000000000        0x0 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libnosys.a(close.o)
- .data          0x0000000000000000        0x0 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libnosys.a(close.o)
- .bss           0x0000000000000000        0x0 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libnosys.a(close.o)
- .text          0x0000000000000000        0x0 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libnosys.a(fstat.o)
- .data          0x0000000000000000        0x0 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libnosys.a(fstat.o)
- .bss           0x0000000000000000        0x0 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libnosys.a(fstat.o)
- .text          0x0000000000000000        0x0 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libnosys.a(isatty.o)
- .data          0x0000000000000000        0x0 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libnosys.a(isatty.o)
- .bss           0x0000000000000000        0x0 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libnosys.a(isatty.o)
- .text          0x0000000000000000        0x0 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libnosys.a(lseek.o)
- .data          0x0000000000000000        0x0 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libnosys.a(lseek.o)
- .bss           0x0000000000000000        0x0 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libnosys.a(lseek.o)
- .text          0x0000000000000000        0x0 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libnosys.a(read.o)
- .data          0x0000000000000000        0x0 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libnosys.a(read.o)
- .bss           0x0000000000000000        0x0 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libnosys.a(read.o)
 
 Memory Configuration
 
@@ -1386,7 +1181,7 @@ END GROUP
  .vector        0x0000000000000004       0xfc ./Startup/startup_ch32v20x_D6.o
                 0x0000000000000100                . = ALIGN (0x40)
 
-.text           0x0000000000000100     0x1910
+.text           0x0000000000000100      0x65c
                 0x0000000000000100                . = ALIGN (0x4)
  *(.text)
  .text          0x0000000000000100       0x60 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/rv32imacxw/ilp32/libgcc.a(save-restore.o)
@@ -1416,301 +1211,156 @@ END GROUP
                 0x0000000000000154                __riscv_restore_1
                 0x0000000000000154                __riscv_restore_0
                 0x0000000000000154                __riscv_restore_2
- .text          0x0000000000000160       0xa8 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-memset.o)
-                0x0000000000000160                memset
  *(.text.*)
  .text.NMI_Handler
-                0x0000000000000208        0x2 ./User/ch32v20x_it.o
-                0x0000000000000208                NMI_Handler
+                0x0000000000000160        0x2 ./User/ch32v20x_it.o
+                0x0000000000000160                NMI_Handler
  .text.HardFault_Handler
-                0x000000000000020a       0x10 ./User/ch32v20x_it.o
-                0x000000000000020a                HardFault_Handler
+                0x0000000000000162       0x10 ./User/ch32v20x_it.o
+                0x0000000000000162                HardFault_Handler
+ .text.CH32V203_Init
+                0x0000000000000172      0x10e ./User/main.o
+                0x0000000000000172                CH32V203_Init
  .text.startup.main
-                0x000000000000021a       0x40 ./User/main.o
-                0x000000000000021a                main
+                0x0000000000000280        0x8 ./User/main.o
+                0x0000000000000280                main
  .text.SystemInit
-                0x000000000000025a       0xa8 ./User/system_ch32v20x.o
-                0x000000000000025a                SystemInit
- .text.SystemCoreClockUpdate
-                0x0000000000000302       0x92 ./User/system_ch32v20x.o
-                0x0000000000000302                SystemCoreClockUpdate
+                0x0000000000000288       0xa8 ./User/system_ch32v20x.o
+                0x0000000000000288                SystemInit
  .text.vector_handler
-                0x0000000000000394        0x2 ./Startup/startup_ch32v20x_D6.o
-                0x0000000000000394                USBWakeUp_IRQHandler
-                0x0000000000000394                TIM1_CC_IRQHandler
-                0x0000000000000394                SysTick_Handler
-                0x0000000000000394                PVD_IRQHandler
-                0x0000000000000394                EXTI3_IRQHandler
-                0x0000000000000394                USBFS_IRQHandler
-                0x0000000000000394                EXTI0_IRQHandler
-                0x0000000000000394                I2C2_EV_IRQHandler
-                0x0000000000000394                ADC1_2_IRQHandler
-                0x0000000000000394                Break_Point_Handler
-                0x0000000000000394                SPI1_IRQHandler
-                0x0000000000000394                TAMPER_IRQHandler
-                0x0000000000000394                Ecall_M_Mode_Handler
-                0x0000000000000394                DMA1_Channel4_IRQHandler
-                0x0000000000000394                USART3_IRQHandler
-                0x0000000000000394                RTC_IRQHandler
-                0x0000000000000394                DMA1_Channel7_IRQHandler
-                0x0000000000000394                CAN1_RX1_IRQHandler
-                0x0000000000000394                TIM4_IRQHandler
-                0x0000000000000394                I2C1_EV_IRQHandler
-                0x0000000000000394                DMA1_Channel6_IRQHandler
-                0x0000000000000394                UART4_IRQHandler
-                0x0000000000000394                TIM3_IRQHandler
-                0x0000000000000394                RCC_IRQHandler
-                0x0000000000000394                TIM1_TRG_COM_IRQHandler
-                0x0000000000000394                DMA1_Channel1_IRQHandler
-                0x0000000000000394                EXTI15_10_IRQHandler
-                0x0000000000000394                DMA1_Channel8_IRQHandler
-                0x0000000000000394                EXTI9_5_IRQHandler
-                0x0000000000000394                SPI2_IRQHandler
-                0x0000000000000394                DMA1_Channel5_IRQHandler
-                0x0000000000000394                EXTI4_IRQHandler
-                0x0000000000000394                USB_LP_CAN1_RX0_IRQHandler
-                0x0000000000000394                USB_HP_CAN1_TX_IRQHandler
-                0x0000000000000394                DMA1_Channel3_IRQHandler
-                0x0000000000000394                TIM1_UP_IRQHandler
-                0x0000000000000394                WWDG_IRQHandler
-                0x0000000000000394                Ecall_U_Mode_Handler
-                0x0000000000000394                TIM2_IRQHandler
-                0x0000000000000394                SW_Handler
-                0x0000000000000394                TIM1_BRK_IRQHandler
-                0x0000000000000394                EXTI1_IRQHandler
-                0x0000000000000394                RTCAlarm_IRQHandler
-                0x0000000000000394                USART2_IRQHandler
-                0x0000000000000394                I2C2_ER_IRQHandler
-                0x0000000000000394                DMA1_Channel2_IRQHandler
-                0x0000000000000394                CAN1_SCE_IRQHandler
-                0x0000000000000394                FLASH_IRQHandler
-                0x0000000000000394                USBFSWakeUp_IRQHandler
-                0x0000000000000394                USART1_IRQHandler
-                0x0000000000000394                I2C1_ER_IRQHandler
-                0x0000000000000394                EXTI2_IRQHandler
+                0x0000000000000330        0x2 ./Startup/startup_ch32v20x_D6.o
+                0x0000000000000330                USBWakeUp_IRQHandler
+                0x0000000000000330                TIM1_CC_IRQHandler
+                0x0000000000000330                SysTick_Handler
+                0x0000000000000330                PVD_IRQHandler
+                0x0000000000000330                EXTI3_IRQHandler
+                0x0000000000000330                USBFS_IRQHandler
+                0x0000000000000330                EXTI0_IRQHandler
+                0x0000000000000330                I2C2_EV_IRQHandler
+                0x0000000000000330                ADC1_2_IRQHandler
+                0x0000000000000330                Break_Point_Handler
+                0x0000000000000330                SPI1_IRQHandler
+                0x0000000000000330                TAMPER_IRQHandler
+                0x0000000000000330                Ecall_M_Mode_Handler
+                0x0000000000000330                DMA1_Channel4_IRQHandler
+                0x0000000000000330                USART3_IRQHandler
+                0x0000000000000330                RTC_IRQHandler
+                0x0000000000000330                DMA1_Channel7_IRQHandler
+                0x0000000000000330                CAN1_RX1_IRQHandler
+                0x0000000000000330                TIM4_IRQHandler
+                0x0000000000000330                I2C1_EV_IRQHandler
+                0x0000000000000330                DMA1_Channel6_IRQHandler
+                0x0000000000000330                UART4_IRQHandler
+                0x0000000000000330                TIM3_IRQHandler
+                0x0000000000000330                RCC_IRQHandler
+                0x0000000000000330                TIM1_TRG_COM_IRQHandler
+                0x0000000000000330                DMA1_Channel1_IRQHandler
+                0x0000000000000330                EXTI15_10_IRQHandler
+                0x0000000000000330                DMA1_Channel8_IRQHandler
+                0x0000000000000330                EXTI9_5_IRQHandler
+                0x0000000000000330                SPI2_IRQHandler
+                0x0000000000000330                DMA1_Channel5_IRQHandler
+                0x0000000000000330                EXTI4_IRQHandler
+                0x0000000000000330                USB_LP_CAN1_RX0_IRQHandler
+                0x0000000000000330                USB_HP_CAN1_TX_IRQHandler
+                0x0000000000000330                DMA1_Channel3_IRQHandler
+                0x0000000000000330                TIM1_UP_IRQHandler
+                0x0000000000000330                WWDG_IRQHandler
+                0x0000000000000330                Ecall_U_Mode_Handler
+                0x0000000000000330                TIM2_IRQHandler
+                0x0000000000000330                SW_Handler
+                0x0000000000000330                TIM1_BRK_IRQHandler
+                0x0000000000000330                EXTI1_IRQHandler
+                0x0000000000000330                RTCAlarm_IRQHandler
+                0x0000000000000330                USART2_IRQHandler
+                0x0000000000000330                I2C2_ER_IRQHandler
+                0x0000000000000330                DMA1_Channel2_IRQHandler
+                0x0000000000000330                CAN1_SCE_IRQHandler
+                0x0000000000000330                FLASH_IRQHandler
+                0x0000000000000330                USBFSWakeUp_IRQHandler
+                0x0000000000000330                USART1_IRQHandler
+                0x0000000000000330                I2C1_ER_IRQHandler
+                0x0000000000000330                EXTI2_IRQHandler
  .text.handle_reset
-                0x0000000000000396       0x86 ./Startup/startup_ch32v20x_D6.o
-                0x0000000000000396                handle_reset
- .text.DBGMCU_GetCHIPID
-                0x000000000000041c        0xa ./Peripheral/src/ch32v20x_dbgmcu.o
-                0x000000000000041c                DBGMCU_GetCHIPID
+                0x0000000000000332       0x82 ./Startup/startup_ch32v20x_D6.o
+                0x0000000000000332                handle_reset
  .text.GPIO_Init
-                0x0000000000000426       0xf2 ./Peripheral/src/ch32v20x_gpio.o
-                0x0000000000000426                GPIO_Init
- .text.NVIC_PriorityGroupConfig
-                0x0000000000000518        0x6 ./Peripheral/src/ch32v20x_misc.o
-                0x0000000000000518                NVIC_PriorityGroupConfig
+                0x00000000000003b4       0xf2 ./Peripheral/src/ch32v20x_gpio.o
+                0x00000000000003b4                GPIO_Init
+ .text.GPIO_SetBits
+                0x00000000000004a6       0x14 ./Peripheral/src/ch32v20x_gpio.o
+                0x00000000000004a6                GPIO_SetBits
+ .text.GPIO_ResetBits
+                0x00000000000004ba       0x14 ./Peripheral/src/ch32v20x_gpio.o
+                0x00000000000004ba                GPIO_ResetBits
+ .text.RCC_DeInit
+                0x00000000000004ce       0x42 ./Peripheral/src/ch32v20x_rcc.o
+                0x00000000000004ce                RCC_DeInit
+ .text.RCC_HSICmd
+                0x0000000000000510       0x14 ./Peripheral/src/ch32v20x_rcc.o
+                0x0000000000000510                RCC_HSICmd
+ .text.RCC_SYSCLKConfig
+                0x0000000000000524        0xe ./Peripheral/src/ch32v20x_rcc.o
+                0x0000000000000524                RCC_SYSCLKConfig
+ .text.RCC_HCLKConfig
+                0x0000000000000532       0x10 ./Peripheral/src/ch32v20x_rcc.o
+                0x0000000000000532                RCC_HCLKConfig
+ .text.RCC_PCLK1Config
+                0x0000000000000542       0x10 ./Peripheral/src/ch32v20x_rcc.o
+                0x0000000000000542                RCC_PCLK1Config
+ .text.RCC_PCLK2Config
+                0x0000000000000552       0x16 ./Peripheral/src/ch32v20x_rcc.o
+                0x0000000000000552                RCC_PCLK2Config
  .text.RCC_GetClocksFreq
-                0x000000000000051e       0xbe ./Peripheral/src/ch32v20x_rcc.o
-                0x000000000000051e                RCC_GetClocksFreq
+                0x0000000000000568       0xbe ./Peripheral/src/ch32v20x_rcc.o
+                0x0000000000000568                RCC_GetClocksFreq
  .text.RCC_APB2PeriphClockCmd
-                0x00000000000005dc       0x1e ./Peripheral/src/ch32v20x_rcc.o
-                0x00000000000005dc                RCC_APB2PeriphClockCmd
+                0x0000000000000626       0x1e ./Peripheral/src/ch32v20x_rcc.o
+                0x0000000000000626                RCC_APB2PeriphClockCmd
+ .text.RCC_APB1PeriphClockCmd
+                0x0000000000000644       0x1e ./Peripheral/src/ch32v20x_rcc.o
+                0x0000000000000644                RCC_APB1PeriphClockCmd
+ .text.RCC_GetFlagStatus
+                0x0000000000000662       0x2e ./Peripheral/src/ch32v20x_rcc.o
+                0x0000000000000662                RCC_GetFlagStatus
  .text.USART_Init
-                0x00000000000005fa       0x8c ./Peripheral/src/ch32v20x_usart.o
-                0x00000000000005fa                USART_Init
+                0x0000000000000690       0x8c ./Peripheral/src/ch32v20x_usart.o
+                0x0000000000000690                USART_Init
  .text.USART_Cmd
-                0x0000000000000686       0x16 ./Peripheral/src/ch32v20x_usart.o
-                0x0000000000000686                USART_Cmd
- .text.USART_SendData
-                0x000000000000069c        0x8 ./Peripheral/src/ch32v20x_usart.o
-                0x000000000000069c                USART_SendData
- .text.USART_GetFlagStatus
-                0x00000000000006a4        0xa ./Peripheral/src/ch32v20x_usart.o
-                0x00000000000006a4                USART_GetFlagStatus
+                0x000000000000071c       0x16 ./Peripheral/src/ch32v20x_usart.o
+                0x000000000000071c                USART_Cmd
  .text.Delay_Init
-                0x00000000000006ae       0x2a ./Debug/debug.o
-                0x00000000000006ae                Delay_Init
- .text.USART_Printf_Init
-                0x00000000000006d8       0x50 ./Debug/debug.o
-                0x00000000000006d8                USART_Printf_Init
- .text._write   0x0000000000000728       0x38 ./Debug/debug.o
-                0x0000000000000728                _write
- .text._sbrk    0x0000000000000760       0x26 ./Debug/debug.o
-                0x0000000000000760                _sbrk
- .text.printf   0x0000000000000786       0x40 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-printf.o)
-                0x0000000000000786                printf
-                0x0000000000000786                iprintf
- .text._puts_r  0x00000000000007c6       0xd4 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-puts.o)
-                0x00000000000007c6                _puts_r
- .text.puts     0x000000000000089a        0xa /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-puts.o)
-                0x000000000000089a                puts
- .text.__swbuf_r
-                0x00000000000008a4       0xbc /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-wbuf.o)
-                0x00000000000008a4                __swbuf_r
- .text.__swsetup_r
-                0x0000000000000960       0xfc /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-wsetup.o)
-                0x0000000000000960                __swsetup_r
- .text.__sflush_r
-                0x0000000000000a5c      0x130 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-fflush.o)
-                0x0000000000000a5c                __sflush_r
- .text._fflush_r
-                0x0000000000000b8c       0x64 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-fflush.o)
-                0x0000000000000b8c                _fflush_r
- .text.std      0x0000000000000bf0       0x66 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-findfp.o)
- .text._cleanup_r
-                0x0000000000000c56        0xa /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-findfp.o)
-                0x0000000000000c56                _cleanup_r
- .text.__sfmoreglue
-                0x0000000000000c60       0x46 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-findfp.o)
-                0x0000000000000c60                __sfmoreglue
- .text.__sinit  0x0000000000000ca6       0x66 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-findfp.o)
-                0x0000000000000ca6                __sinit
- .text.__sfp    0x0000000000000d0c       0x9c /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-findfp.o)
-                0x0000000000000d0c                __sfp
- .text._fwalk_reent
-                0x0000000000000da8       0x6a /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-fwalk.o)
-                0x0000000000000da8                _fwalk_reent
- .text.__swhatbuf_r
-                0x0000000000000e12       0x58 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-makebuf.o)
-                0x0000000000000e12                __swhatbuf_r
- .text.__smakebuf_r
-                0x0000000000000e6a       0x90 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-makebuf.o)
-                0x0000000000000e6a                __smakebuf_r
- .text._free_r  0x0000000000000efa       0xa8 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-nano-freer.o)
-                0x0000000000000efa                _free_r
- .text._malloc_r
-                0x0000000000000fa2       0xd4 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-nano-mallocr.o)
-                0x0000000000000fa2                _malloc_r
- .text.__sfputc_r
-                0x0000000000001076       0x28 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-nano-vfprintf.o)
- .text.__sfputs_r
-                0x000000000000109e       0x40 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-nano-vfprintf.o)
-                0x000000000000109e                __sfputs_r
- .text._vfprintf_r
-                0x00000000000010de      0x284 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-nano-vfprintf.o)
-                0x00000000000010de                _vfiprintf_r
-                0x00000000000010de                _vfprintf_r
- .text._printf_common
-                0x0000000000001362      0x10c /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-nano-vfprintf_i.o)
-                0x0000000000001362                _printf_common
- .text._printf_i
-                0x000000000000146e      0x2a0 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-nano-vfprintf_i.o)
-                0x000000000000146e                _printf_i
- .text._sbrk_r  0x000000000000170e       0x2a /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-sbrkr.o)
-                0x000000000000170e                _sbrk_r
- .text.__sread  0x0000000000001738       0x2c /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-stdio.o)
-                0x0000000000001738                __sread
- .text.__swrite
-                0x0000000000001764       0x48 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-stdio.o)
-                0x0000000000001764                __swrite
- .text.__sseek  0x00000000000017ac       0x30 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-stdio.o)
-                0x00000000000017ac                __sseek
- .text.__sclose
-                0x00000000000017dc        0x6 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-stdio.o)
-                0x00000000000017dc                __sclose
- .text._write_r
-                0x00000000000017e2       0x2e /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-writer.o)
-                0x00000000000017e2                _write_r
- .text._close_r
-                0x0000000000001810       0x28 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-closer.o)
-                0x0000000000001810                _close_r
- .text._fstat_r
-                0x0000000000001838       0x2a /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-fstatr.o)
-                0x0000000000001838                _fstat_r
- .text._isatty_r
-                0x0000000000001862       0x28 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-isattyr.o)
-                0x0000000000001862                _isatty_r
- .text._lseek_r
-                0x000000000000188a       0x2c /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-lseekr.o)
-                0x000000000000188a                _lseek_r
- .text.memchr   0x00000000000018b6       0x18 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-memchr.o)
-                0x00000000000018b6                memchr
- .text.__malloc_lock
-                0x00000000000018ce        0x2 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-mlock.o)
-                0x00000000000018ce                __malloc_lock
- .text.__malloc_unlock
-                0x00000000000018d0        0x2 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-mlock.o)
-                0x00000000000018d0                __malloc_unlock
- .text._read_r  0x00000000000018d2       0x2c /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-readr.o)
-                0x00000000000018d2                _read_r
- .text._close   0x00000000000018fe        0xc /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libnosys.a(close.o)
-                0x00000000000018fe                _close
- .text._fstat   0x000000000000190a        0xc /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libnosys.a(fstat.o)
-                0x000000000000190a                _fstat
- .text._isatty  0x0000000000001916        0xc /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libnosys.a(isatty.o)
-                0x0000000000001916                _isatty
- .text._lseek   0x0000000000001922        0xc /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libnosys.a(lseek.o)
-                0x0000000000001922                _lseek
- .text._read    0x000000000000192e        0xc /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libnosys.a(read.o)
-                0x000000000000192e                _read
+                0x0000000000000732       0x2a ./Debug/debug.o
+                0x0000000000000732                Delay_Init
  *(.rodata)
  *(.rodata*)
- *fill*         0x000000000000193a        0x2 
- .rodata.main.str1.4
-                0x000000000000193c       0x38 ./User/main.o
- .rodata.__sf_fake_stderr
-                0x0000000000001974       0x20 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-findfp.o)
-                0x0000000000001974                __sf_fake_stderr
- .rodata.__sf_fake_stdin
-                0x0000000000001994       0x20 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-findfp.o)
-                0x0000000000001994                __sf_fake_stdin
- .rodata.__sf_fake_stdout
-                0x00000000000019b4       0x20 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-findfp.o)
-                0x00000000000019b4                __sf_fake_stdout
- .rodata._vfprintf_r.str1.4
-                0x00000000000019d4       0x13 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-nano-vfprintf.o)
- *fill*         0x00000000000019e7        0x1 
- .rodata._printf_i.str1.4
-                0x00000000000019e8       0x28 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-nano-vfprintf_i.o)
-                                         0x25 (size before relaxing)
  *(.gnu.linkonce.t.*)
-                0x0000000000001a10                . = ALIGN (0x4)
+                0x000000000000075c                . = ALIGN (0x4)
 
-.rela.dyn       0x0000000000001a10        0x0
- .rela.init     0x0000000000001a10        0x0 ./User/ch32v20x_it.o
- .rela.vector   0x0000000000001a10        0x0 ./User/ch32v20x_it.o
+.rela.dyn       0x000000000000075c        0x0
+ .rela.init     0x000000000000075c        0x0 ./User/ch32v20x_it.o
+ .rela.vector   0x000000000000075c        0x0 ./User/ch32v20x_it.o
  .rela.text.handle_reset
-                0x0000000000001a10        0x0 ./User/ch32v20x_it.o
- .rela.text._sbrk
-                0x0000000000001a10        0x0 ./User/ch32v20x_it.o
- .rela.sdata.curbrk.4652
-                0x0000000000001a10        0x0 ./User/ch32v20x_it.o
- .rela.text._vfprintf_r
-                0x0000000000001a10        0x0 ./User/ch32v20x_it.o
- .rela.text._sbrk_r
-                0x0000000000001a10        0x0 ./User/ch32v20x_it.o
- .rela.text._write_r
-                0x0000000000001a10        0x0 ./User/ch32v20x_it.o
- .rela.text._close_r
-                0x0000000000001a10        0x0 ./User/ch32v20x_it.o
- .rela.text._fstat_r
-                0x0000000000001a10        0x0 ./User/ch32v20x_it.o
- .rela.text._isatty_r
-                0x0000000000001a10        0x0 ./User/ch32v20x_it.o
- .rela.text._lseek_r
-                0x0000000000001a10        0x0 ./User/ch32v20x_it.o
- .rela.text._read_r
-                0x0000000000001a10        0x0 ./User/ch32v20x_it.o
- .rela.text._close
-                0x0000000000001a10        0x0 ./User/ch32v20x_it.o
- .rela.text._fstat
-                0x0000000000001a10        0x0 ./User/ch32v20x_it.o
- .rela.text._isatty
-                0x0000000000001a10        0x0 ./User/ch32v20x_it.o
- .rela.text._lseek
-                0x0000000000001a10        0x0 ./User/ch32v20x_it.o
- .rela.text._read
-                0x0000000000001a10        0x0 ./User/ch32v20x_it.o
+                0x000000000000075c        0x0 ./User/ch32v20x_it.o
 
-.fini           0x0000000000001a10        0x0
+.fini           0x000000000000075c        0x0
  *(SORT_NONE(.fini))
-                0x0000000000001a10                . = ALIGN (0x4)
+                0x000000000000075c                . = ALIGN (0x4)
                 [!provide]                        PROVIDE (_etext = .)
                 [!provide]                        PROVIDE (_eitcm = .)
 
-.preinit_array  0x0000000000001a10        0x0
+.preinit_array  0x000000000000075c        0x0
                 [!provide]                        PROVIDE (__preinit_array_start = .)
  *(.preinit_array)
                 [!provide]                        PROVIDE (__preinit_array_end = .)
 
-.init_array     0x0000000000001a10        0x0
+.init_array     0x000000000000075c        0x0
                 [!provide]                        PROVIDE (__init_array_start = .)
  *(SORT_BY_INIT_PRIORITY(.init_array.*) SORT_BY_INIT_PRIORITY(.ctors.*))
  *(.init_array EXCLUDE_FILE(*crtend?.o *crtend.o *crtbegin?.o *crtbegin.o) .ctors)
                 [!provide]                        PROVIDE (__init_array_end = .)
 
-.fini_array     0x0000000000001a10        0x0
+.fini_array     0x000000000000075c        0x0
                 [!provide]                        PROVIDE (__fini_array_start = .)
  *(SORT_BY_INIT_PRIORITY(.fini_array.*) SORT_BY_INIT_PRIORITY(.dtors.*))
  *(.fini_array EXCLUDE_FILE(*crtend?.o *crtend.o *crtbegin?.o *crtbegin.o) .dtors)
@@ -1730,82 +1380,57 @@ END GROUP
  *(SORT_BY_NAME(.dtors.*))
  *(.dtors)
 
-.dalign         0x0000000020000000        0x0 load address 0x0000000000001a10
+.dalign         0x0000000020000000        0x0 load address 0x000000000000075c
                 0x0000000020000000                . = ALIGN (0x4)
                 0x0000000020000000                PROVIDE (_data_vma = .)
 
-.dlalign        0x0000000000001a10        0x0
-                0x0000000000001a10                . = ALIGN (0x4)
-                0x0000000000001a10                PROVIDE (_data_lma = .)
+.dlalign        0x000000000000075c        0x0
+                0x000000000000075c                . = ALIGN (0x4)
+                0x000000000000075c                PROVIDE (_data_lma = .)
 
-.data           0x0000000020000000       0x98 load address 0x0000000000001a10
+.data           0x0000000020000000       0x18 load address 0x000000000000075c
  *(.gnu.linkonce.r.*)
  *(.data .data.*)
- .data.AHBPrescTable
-                0x0000000020000000       0x10 ./User/system_ch32v20x.o
-                0x0000000020000000                AHBPrescTable
  .data.APBAHBPrescTable
-                0x0000000020000010       0x10 ./Peripheral/src/ch32v20x_rcc.o
- .data.impure_data
-                0x0000000020000020       0x60 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-impure.o)
+                0x0000000020000000       0x10 ./Peripheral/src/ch32v20x_rcc.o
  *(.gnu.linkonce.d.*)
-                0x0000000020000080                . = ALIGN (0x8)
-                0x0000000020000880                PROVIDE (__global_pointer$ = (. + 0x800))
+                0x0000000020000010                . = ALIGN (0x8)
+                0x0000000020000810                PROVIDE (__global_pointer$ = (. + 0x800))
  *(.sdata .sdata.*)
  .sdata.SystemCoreClock
-                0x0000000020000080        0x4 ./User/system_ch32v20x.o
-                0x0000000020000080                SystemCoreClock
+                0x0000000020000010        0x4 ./User/system_ch32v20x.o
+                0x0000000020000010                SystemCoreClock
  .sdata.ADCPrescTable
-                0x0000000020000084        0x4 ./Peripheral/src/ch32v20x_rcc.o
- .sdata.curbrk.4652
-                0x0000000020000088        0x4 ./Debug/debug.o
- .sdata._impure_ptr
-                0x000000002000008c        0x4 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-impure.o)
-                0x000000002000008c                _impure_ptr
+                0x0000000020000014        0x4 ./Peripheral/src/ch32v20x_rcc.o
  *(.sdata2.*)
- .sdata2._global_impure_ptr
-                0x0000000020000090        0x4 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-impure.o)
-                0x0000000020000090                _global_impure_ptr
  *(.gnu.linkonce.s.*)
-                0x0000000020000098                . = ALIGN (0x8)
- *fill*         0x0000000020000094        0x4 
+                0x0000000020000018                . = ALIGN (0x8)
  *(.srodata.cst16)
  *(.srodata.cst8)
  *(.srodata.cst4)
  *(.srodata.cst2)
  *(.srodata .srodata.*)
-                0x0000000020000098                . = ALIGN (0x4)
-                0x0000000020000098                PROVIDE (_edata = .)
+                0x0000000020000018                . = ALIGN (0x4)
+                0x0000000020000018                PROVIDE (_edata = .)
 
-.bss            0x0000000020000098       0x18 load address 0x0000000000001aa8
-                0x0000000020000098                . = ALIGN (0x4)
-                0x0000000020000098                PROVIDE (_sbss = .)
+.bss            0x0000000020000018        0x8 load address 0x0000000000000774
+                0x0000000020000018                . = ALIGN (0x4)
+                0x0000000020000018                PROVIDE (_sbss = .)
  *(.sbss*)
  .sbss.MCU_Version
-                0x0000000020000098        0x1 ./Peripheral/src/ch32v20x_gpio.o
-                0x0000000020000098                MCU_Version
- *fill*         0x0000000020000099        0x3 
- .sbss.NVIC_Priority_Group
-                0x000000002000009c        0x4 ./Peripheral/src/ch32v20x_misc.o
-                0x000000002000009c                NVIC_Priority_Group
- .sbss.p_ms     0x00000000200000a0        0x2 ./Debug/debug.o
- .sbss.p_us     0x00000000200000a2        0x1 ./Debug/debug.o
- *fill*         0x00000000200000a3        0x1 
- .sbss.__malloc_free_list
-                0x00000000200000a4        0x4 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-nano-mallocr.o)
-                0x00000000200000a4                __malloc_free_list
- .sbss.__malloc_sbrk_start
-                0x00000000200000a8        0x4 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-nano-mallocr.o)
-                0x00000000200000a8                __malloc_sbrk_start
+                0x0000000020000018        0x1 ./Peripheral/src/ch32v20x_gpio.o
+                0x0000000020000018                MCU_Version
+ *fill*         0x0000000020000019        0x1 
+ .sbss.p_ms     0x000000002000001a        0x2 ./Debug/debug.o
+ .sbss.p_us     0x000000002000001c        0x1 ./Debug/debug.o
  *(.gnu.linkonce.sb.*)
  *(.bss*)
  *(.gnu.linkonce.b.*)
  *(COMMON*)
- COMMON         0x00000000200000ac        0x4 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-reent.o)
-                0x00000000200000ac                errno
-                0x00000000200000b0                . = ALIGN (0x4)
-                0x00000000200000b0                PROVIDE (_ebss = .)
-                0x00000000200000b0                PROVIDE (_end = _ebss)
+                0x0000000020000020                . = ALIGN (0x4)
+ *fill*         0x000000002000001d        0x3 
+                0x0000000020000020                PROVIDE (_ebss = .)
+                0x0000000020000020                PROVIDE (_end = _ebss)
                 [!provide]                        PROVIDE (end = .)
 
 .stack          0x0000000020004800      0x800
@@ -1817,96 +1442,80 @@ END GROUP
                 0x0000000020005000                PROVIDE (_eusrstack = .)
 OUTPUT(CH32V203G8R6.elf elf32-littleriscv)
 
-.debug_info     0x0000000000000000     0x821f
+.debug_info     0x0000000000000000     0x6e60
  .debug_info    0x0000000000000000      0xbb5 ./User/ch32v20x_it.o
- .debug_info    0x0000000000000bb5      0xa26 ./User/main.o
- .debug_info    0x00000000000015db      0xb30 ./User/system_ch32v20x.o
- .debug_info    0x000000000000210b       0x22 ./Startup/startup_ch32v20x_D6.o
- .debug_info    0x000000000000212d      0xa89 ./Peripheral/src/ch32v20x_dbgmcu.o
- .debug_info    0x0000000000002bb6     0x1349 ./Peripheral/src/ch32v20x_gpio.o
- .debug_info    0x0000000000003eff      0xe61 ./Peripheral/src/ch32v20x_misc.o
- .debug_info    0x0000000000004d60     0x1268 ./Peripheral/src/ch32v20x_rcc.o
- .debug_info    0x0000000000005fc8     0x1335 ./Peripheral/src/ch32v20x_usart.o
- .debug_info    0x00000000000072fd      0xf22 ./Debug/debug.o
+ .debug_info    0x0000000000000bb5      0xf51 ./User/main.o
+ .debug_info    0x0000000000001b06      0xb30 ./User/system_ch32v20x.o
+ .debug_info    0x0000000000002636       0x22 ./Startup/startup_ch32v20x_D6.o
+ .debug_info    0x0000000000002658     0x1349 ./Peripheral/src/ch32v20x_gpio.o
+ .debug_info    0x00000000000039a1     0x1268 ./Peripheral/src/ch32v20x_rcc.o
+ .debug_info    0x0000000000004c09     0x1335 ./Peripheral/src/ch32v20x_usart.o
+ .debug_info    0x0000000000005f3e      0xf22 ./Debug/debug.o
 
-.debug_abbrev   0x0000000000000000     0x199f
+.debug_abbrev   0x0000000000000000     0x140c
  .debug_abbrev  0x0000000000000000      0x22c ./User/ch32v20x_it.o
- .debug_abbrev  0x000000000000022c      0x226 ./User/main.o
- .debug_abbrev  0x0000000000000452      0x2b0 ./User/system_ch32v20x.o
- .debug_abbrev  0x0000000000000702       0x12 ./Startup/startup_ch32v20x_D6.o
- .debug_abbrev  0x0000000000000714      0x2f7 ./Peripheral/src/ch32v20x_dbgmcu.o
- .debug_abbrev  0x0000000000000a0b      0x34b ./Peripheral/src/ch32v20x_gpio.o
- .debug_abbrev  0x0000000000000d56      0x2ea ./Peripheral/src/ch32v20x_misc.o
- .debug_abbrev  0x0000000000001040      0x36b ./Peripheral/src/ch32v20x_rcc.o
- .debug_abbrev  0x00000000000013ab      0x312 ./Peripheral/src/ch32v20x_usart.o
- .debug_abbrev  0x00000000000016bd      0x2e2 ./Debug/debug.o
+ .debug_abbrev  0x000000000000022c      0x274 ./User/main.o
+ .debug_abbrev  0x00000000000004a0      0x2b0 ./User/system_ch32v20x.o
+ .debug_abbrev  0x0000000000000750       0x12 ./Startup/startup_ch32v20x_D6.o
+ .debug_abbrev  0x0000000000000762      0x34b ./Peripheral/src/ch32v20x_gpio.o
+ .debug_abbrev  0x0000000000000aad      0x36b ./Peripheral/src/ch32v20x_rcc.o
+ .debug_abbrev  0x0000000000000e18      0x312 ./Peripheral/src/ch32v20x_usart.o
+ .debug_abbrev  0x000000000000112a      0x2e2 ./Debug/debug.o
 
-.debug_aranges  0x0000000000000000      0x430
+.debug_aranges  0x0000000000000000      0x3c8
  .debug_aranges
                 0x0000000000000000       0x28 ./User/ch32v20x_it.o
  .debug_aranges
-                0x0000000000000028       0x20 ./User/main.o
+                0x0000000000000028       0x28 ./User/main.o
  .debug_aranges
-                0x0000000000000048       0x28 ./User/system_ch32v20x.o
+                0x0000000000000050       0x28 ./User/system_ch32v20x.o
  .debug_aranges
-                0x0000000000000070       0x30 ./Startup/startup_ch32v20x_D6.o
+                0x0000000000000078       0x30 ./Startup/startup_ch32v20x_D6.o
  .debug_aranges
-                0x00000000000000a0       0x48 ./Peripheral/src/ch32v20x_dbgmcu.o
+                0x00000000000000a8       0xb0 ./Peripheral/src/ch32v20x_gpio.o
  .debug_aranges
-                0x00000000000000e8       0xb0 ./Peripheral/src/ch32v20x_gpio.o
+                0x0000000000000158      0x130 ./Peripheral/src/ch32v20x_rcc.o
  .debug_aranges
-                0x0000000000000198       0x28 ./Peripheral/src/ch32v20x_misc.o
+                0x0000000000000288       0xf0 ./Peripheral/src/ch32v20x_usart.o
  .debug_aranges
-                0x00000000000001c0      0x130 ./Peripheral/src/ch32v20x_rcc.o
- .debug_aranges
-                0x00000000000002f0       0xf0 ./Peripheral/src/ch32v20x_usart.o
- .debug_aranges
-                0x00000000000003e0       0x50 ./Debug/debug.o
+                0x0000000000000378       0x50 ./Debug/debug.o
 
-.debug_ranges   0x0000000000000000      0x3e0
+.debug_ranges   0x0000000000000000      0x350
  .debug_ranges  0x0000000000000000       0x18 ./User/ch32v20x_it.o
- .debug_ranges  0x0000000000000018       0x10 ./User/main.o
- .debug_ranges  0x0000000000000028       0x18 ./User/system_ch32v20x.o
- .debug_ranges  0x0000000000000040       0x28 ./Startup/startup_ch32v20x_D6.o
- .debug_ranges  0x0000000000000068       0x50 ./Peripheral/src/ch32v20x_dbgmcu.o
- .debug_ranges  0x00000000000000b8       0xa0 ./Peripheral/src/ch32v20x_gpio.o
- .debug_ranges  0x0000000000000158       0x48 ./Peripheral/src/ch32v20x_misc.o
- .debug_ranges  0x00000000000001a0      0x120 ./Peripheral/src/ch32v20x_rcc.o
- .debug_ranges  0x00000000000002c0       0xe0 ./Peripheral/src/ch32v20x_usart.o
- .debug_ranges  0x00000000000003a0       0x40 ./Debug/debug.o
+ .debug_ranges  0x0000000000000018       0x18 ./User/main.o
+ .debug_ranges  0x0000000000000030       0x18 ./User/system_ch32v20x.o
+ .debug_ranges  0x0000000000000048       0x28 ./Startup/startup_ch32v20x_D6.o
+ .debug_ranges  0x0000000000000070       0xa0 ./Peripheral/src/ch32v20x_gpio.o
+ .debug_ranges  0x0000000000000110      0x120 ./Peripheral/src/ch32v20x_rcc.o
+ .debug_ranges  0x0000000000000230       0xe0 ./Peripheral/src/ch32v20x_usart.o
+ .debug_ranges  0x0000000000000310       0x40 ./Debug/debug.o
 
-.debug_line     0x0000000000000000     0x59db
+.debug_line     0x0000000000000000     0x538b
  .debug_line    0x0000000000000000      0x37e ./User/ch32v20x_it.o
- .debug_line    0x000000000000037e      0x47f ./User/main.o
- .debug_line    0x00000000000007fd      0x69d ./User/system_ch32v20x.o
- .debug_line    0x0000000000000e9a      0x121 ./Startup/startup_ch32v20x_D6.o
- .debug_line    0x0000000000000fbb      0x459 ./Peripheral/src/ch32v20x_dbgmcu.o
- .debug_line    0x0000000000001414     0x16f6 ./Peripheral/src/ch32v20x_gpio.o
- .debug_line    0x0000000000002b0a      0x4c8 ./Peripheral/src/ch32v20x_misc.o
- .debug_line    0x0000000000002fd2     0x127e ./Peripheral/src/ch32v20x_rcc.o
- .debug_line    0x0000000000004250      0xf61 ./Peripheral/src/ch32v20x_usart.o
- .debug_line    0x00000000000051b1      0x82a ./Debug/debug.o
+ .debug_line    0x000000000000037e      0x750 ./User/main.o
+ .debug_line    0x0000000000000ace      0x69d ./User/system_ch32v20x.o
+ .debug_line    0x000000000000116b      0x121 ./Startup/startup_ch32v20x_D6.o
+ .debug_line    0x000000000000128c     0x16f6 ./Peripheral/src/ch32v20x_gpio.o
+ .debug_line    0x0000000000002982     0x127e ./Peripheral/src/ch32v20x_rcc.o
+ .debug_line    0x0000000000003c00      0xf61 ./Peripheral/src/ch32v20x_usart.o
+ .debug_line    0x0000000000004b61      0x82a ./Debug/debug.o
 
-.debug_str      0x0000000000000000     0x18ec
+.debug_str      0x0000000000000000     0x143b
  .debug_str     0x0000000000000000      0x642 ./User/ch32v20x_it.o
                                         0x6a5 (size before relaxing)
- .debug_str     0x0000000000000642       0x87 ./User/main.o
-                                        0x62e (size before relaxing)
- .debug_str     0x00000000000006c9       0xdd ./User/system_ch32v20x.o
+ .debug_str     0x0000000000000642      0x312 ./User/main.o
+                                        0x91b (size before relaxing)
+ .debug_str     0x0000000000000954       0xf3 ./User/system_ch32v20x.o
                                         0x6c0 (size before relaxing)
- .debug_str     0x00000000000007a6       0x2d ./Startup/startup_ch32v20x_D6.o
+ .debug_str     0x0000000000000a47       0x2d ./Startup/startup_ch32v20x_D6.o
                                          0x76 (size before relaxing)
- .debug_str     0x00000000000007d3       0xa6 ./Peripheral/src/ch32v20x_dbgmcu.o
-                                        0x666 (size before relaxing)
- .debug_str     0x0000000000000879      0x3ed ./Peripheral/src/ch32v20x_gpio.o
+ .debug_str     0x0000000000000a74      0x277 ./Peripheral/src/ch32v20x_gpio.o
                                         0x9dc (size before relaxing)
- .debug_str     0x0000000000000c66      0x401 ./Peripheral/src/ch32v20x_misc.o
-                                        0xa9e (size before relaxing)
- .debug_str     0x0000000000001067      0x3f0 ./Peripheral/src/ch32v20x_rcc.o
+ .debug_str     0x0000000000000ceb      0x371 ./Peripheral/src/ch32v20x_rcc.o
                                         0xaee (size before relaxing)
- .debug_str     0x0000000000001457      0x3fb ./Peripheral/src/ch32v20x_usart.o
+ .debug_str     0x000000000000105c      0x347 ./Peripheral/src/ch32v20x_usart.o
                                         0xb0a (size before relaxing)
- .debug_str     0x0000000000001852       0x9a ./Debug/debug.o
+ .debug_str     0x00000000000013a3       0x98 ./Debug/debug.o
                                         0x931 (size before relaxing)
 
 .comment        0x0000000000000000       0x32
@@ -1914,71 +1523,23 @@ OUTPUT(CH32V203G8R6.elf elf32-littleriscv)
                                          0x33 (size before relaxing)
  .comment       0x0000000000000032       0x33 ./User/main.o
  .comment       0x0000000000000032       0x33 ./User/system_ch32v20x.o
- .comment       0x0000000000000032       0x33 ./Peripheral/src/ch32v20x_dbgmcu.o
  .comment       0x0000000000000032       0x33 ./Peripheral/src/ch32v20x_gpio.o
- .comment       0x0000000000000032       0x33 ./Peripheral/src/ch32v20x_misc.o
  .comment       0x0000000000000032       0x33 ./Peripheral/src/ch32v20x_rcc.o
  .comment       0x0000000000000032       0x33 ./Peripheral/src/ch32v20x_usart.o
  .comment       0x0000000000000032       0x33 ./Debug/debug.o
 
-.debug_frame    0x0000000000000000     0x109c
+.debug_frame    0x0000000000000000      0x718
  .debug_frame   0x0000000000000000       0x30 ./User/ch32v20x_it.o
- .debug_frame   0x0000000000000030       0x28 ./User/main.o
- .debug_frame   0x0000000000000058       0x30 ./User/system_ch32v20x.o
- .debug_frame   0x0000000000000088       0x70 ./Peripheral/src/ch32v20x_dbgmcu.o
- .debug_frame   0x00000000000000f8      0x170 ./Peripheral/src/ch32v20x_gpio.o
- .debug_frame   0x0000000000000268       0x30 ./Peripheral/src/ch32v20x_misc.o
- .debug_frame   0x0000000000000298      0x254 ./Peripheral/src/ch32v20x_rcc.o
- .debug_frame   0x00000000000004ec      0x1e4 ./Peripheral/src/ch32v20x_usart.o
- .debug_frame   0x00000000000006d0       0xb8 ./Debug/debug.o
- .debug_frame   0x0000000000000788       0x54 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-printf.o)
- .debug_frame   0x00000000000007dc       0x54 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-puts.o)
- .debug_frame   0x0000000000000830       0x50 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-wbuf.o)
- .debug_frame   0x0000000000000880       0x3c /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-wsetup.o)
- .debug_frame   0x00000000000008bc       0x7c /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-fflush.o)
- .debug_frame   0x0000000000000938      0x148 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-findfp.o)
- .debug_frame   0x0000000000000a80       0x88 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-fwalk.o)
- .debug_frame   0x0000000000000b08       0x64 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-makebuf.o)
- .debug_frame   0x0000000000000b6c       0x40 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-nano-freer.o)
- .debug_frame   0x0000000000000bac       0x40 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-nano-mallocr.o)
- .debug_frame   0x0000000000000bec       0xd0 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-nano-vfprintf.o)
- .debug_frame   0x0000000000000cbc       0x8c /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-nano-vfprintf_i.o)
- .debug_frame   0x0000000000000d48       0x30 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-sbrkr.o)
- .debug_frame   0x0000000000000d78       0xa4 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-stdio.o)
- .debug_frame   0x0000000000000e1c       0x30 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-writer.o)
- .debug_frame   0x0000000000000e4c       0x30 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-closer.o)
- .debug_frame   0x0000000000000e7c       0x30 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-fstatr.o)
- .debug_frame   0x0000000000000eac       0x30 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-isattyr.o)
- .debug_frame   0x0000000000000edc       0x30 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-lseekr.o)
- .debug_frame   0x0000000000000f0c       0x20 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-memchr.o)
- .debug_frame   0x0000000000000f2c       0x30 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-mlock.o)
- .debug_frame   0x0000000000000f5c       0x30 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-readr.o)
- .debug_frame   0x0000000000000f8c       0x70 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-reent.o)
- .debug_frame   0x0000000000000ffc       0x20 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libnosys.a(close.o)
- .debug_frame   0x000000000000101c       0x20 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libnosys.a(fstat.o)
- .debug_frame   0x000000000000103c       0x20 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libnosys.a(isatty.o)
- .debug_frame   0x000000000000105c       0x20 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libnosys.a(lseek.o)
- .debug_frame   0x000000000000107c       0x20 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libnosys.a(read.o)
+ .debug_frame   0x0000000000000030       0x58 ./User/main.o
+ .debug_frame   0x0000000000000088       0x30 ./User/system_ch32v20x.o
+ .debug_frame   0x00000000000000b8      0x170 ./Peripheral/src/ch32v20x_gpio.o
+ .debug_frame   0x0000000000000228      0x254 ./Peripheral/src/ch32v20x_rcc.o
+ .debug_frame   0x000000000000047c      0x1e4 ./Peripheral/src/ch32v20x_usart.o
+ .debug_frame   0x0000000000000660       0xb8 ./Debug/debug.o
 
-.debug_loc      0x0000000000000000     0x1a19
+.debug_loc      0x0000000000000000     0x1970
  .debug_loc     0x0000000000000000       0xac ./User/system_ch32v20x.o
- .debug_loc     0x00000000000000ac       0x7c ./Peripheral/src/ch32v20x_dbgmcu.o
- .debug_loc     0x0000000000000128      0x8a1 ./Peripheral/src/ch32v20x_gpio.o
- .debug_loc     0x00000000000009c9       0x2d ./Peripheral/src/ch32v20x_misc.o
- .debug_loc     0x00000000000009f6      0x797 ./Peripheral/src/ch32v20x_rcc.o
- .debug_loc     0x000000000000118d      0x715 ./Peripheral/src/ch32v20x_usart.o
- .debug_loc     0x00000000000018a2      0x177 ./Debug/debug.o
-
-.stab           0x0000000000000000       0x84
- .stab          0x0000000000000000       0x24 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libnosys.a(close.o)
- .stab          0x0000000000000024       0x18 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libnosys.a(fstat.o)
-                                         0x24 (size before relaxing)
- .stab          0x000000000000003c       0x18 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libnosys.a(isatty.o)
-                                         0x24 (size before relaxing)
- .stab          0x0000000000000054       0x18 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libnosys.a(lseek.o)
-                                         0x24 (size before relaxing)
- .stab          0x000000000000006c       0x18 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libnosys.a(read.o)
-                                         0x24 (size before relaxing)
-
-.stabstr        0x0000000000000000      0x117
- .stabstr       0x0000000000000000      0x117 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libnosys.a(close.o)
+ .debug_loc     0x00000000000000ac      0x8a1 ./Peripheral/src/ch32v20x_gpio.o
+ .debug_loc     0x000000000000094d      0x797 ./Peripheral/src/ch32v20x_rcc.o
+ .debug_loc     0x00000000000010e4      0x715 ./Peripheral/src/ch32v20x_usart.o
+ .debug_loc     0x00000000000017f9      0x177 ./Debug/debug.o

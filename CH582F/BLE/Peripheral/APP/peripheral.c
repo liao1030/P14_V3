@@ -190,6 +190,86 @@ static simpleProfileCBs_t Peripheral_SimpleProfileCBs = {
  * PUBLIC FUNCTIONS
  */
 
+/* CH582F 系統初始化函數 */
+void CH582F_SystemInit(void)
+{
+    /* 使用PLL作為時鐘源，系統時鐘設定為60MHz */
+    SetSysClock(CLK_SOURCE_PLL_60MHz);
+    
+    /* 初始化延遲函數庫 */
+    DelayMs(10);
+}
+
+/* CH582F GPIO 初始化函數 */
+void CH582F_GPIOInit(void)
+{
+    /* 配置Strip_Detect_3(PB11)和Strip_Detect_5(PA15)為輸入模式，啟用上拉電阻 */
+    GPIOB_ModeCfg(GPIO_Pin_11, GPIO_ModeIN_PU);
+    GPIOA_ModeCfg(GPIO_Pin_15, GPIO_ModeIN_PU);
+    
+    /* 配置T3_IN_SEL(PB10)為輸出模式，初始設置為低電平 */
+    GPIOB_ModeCfg(GPIO_Pin_10, GPIO_ModeOut_PP_5mA);
+    GPIOB_ResetBits(GPIO_Pin_10);
+    
+    /* 配置V2P5_ENABLE(PA14)為輸出模式，初始設置為高電平 */
+    GPIOA_ModeCfg(GPIO_Pin_14, GPIO_ModeOut_PP_5mA);
+    GPIOA_SetBits(GPIO_Pin_14);
+    
+    /* 配置V_back_C(PA13)為輸出模式，初始設置為低電平 */
+    GPIOA_ModeCfg(GPIO_Pin_13, GPIO_ModeOut_PP_5mA);
+    GPIOA_ResetBits(GPIO_Pin_13);
+    
+    /* 配置VBUS_Get(PA12)為輸入模式 */
+    GPIOA_ModeCfg(GPIO_Pin_12, GPIO_ModeIN_Floating);
+}
+
+/* CH582F UART 初始化函數 */
+void CH582F_UARTInit(void)
+{
+    /* UART1 - 與CH32V203通訊 */
+    GPIOA_SetBits(GPIO_Pin_8);
+    GPIOA_ModeCfg(GPIO_Pin_8, GPIO_ModeIN_PU);    // RX
+    GPIOA_ModeCfg(GPIO_Pin_9, GPIO_ModeOut_PP_5mA); // TX
+    
+    UART1_DefInit();
+    UART1_BaudRateCfg(115200);
+    UART1_ByteTrigCfg(UART_7BYTE_TRIG);
+    UART1_INTCfg(ENABLE, RB_IER_RECV_RDY | RB_IER_LINE_STAT);
+    
+    /* UART0 - 與外部設備1通訊 */
+    GPIOB_SetBits(GPIO_Pin_4);
+    GPIOB_ModeCfg(GPIO_Pin_4, GPIO_ModeIN_PU);    // RX
+    GPIOB_ModeCfg(GPIO_Pin_7, GPIO_ModeOut_PP_5mA); // TX
+    
+    UART0_DefInit();
+    UART0_BaudRateCfg(115200);
+    UART0_ByteTrigCfg(UART_7BYTE_TRIG);
+    UART0_INTCfg(ENABLE, RB_IER_RECV_RDY | RB_IER_LINE_STAT);
+    
+    /* UART3 - 與外部設備2通訊 */
+    GPIOA_SetBits(GPIO_Pin_4);
+    GPIOA_ModeCfg(GPIO_Pin_4, GPIO_ModeIN_PU);    // RX
+    GPIOA_ModeCfg(GPIO_Pin_5, GPIO_ModeOut_PP_5mA); // TX
+    
+    UART3_DefInit();
+    UART3_BaudRateCfg(115200);
+    UART3_ByteTrigCfg(UART_7BYTE_TRIG);
+    UART3_INTCfg(ENABLE, RB_IER_RECV_RDY | RB_IER_LINE_STAT);
+}
+
+/* CH582F 完整初始化函數 */
+void CH582F_Init(void)
+{
+    /* 系統初始化 */
+    CH582F_SystemInit();
+    
+    /* GPIO初始化 */
+    CH582F_GPIOInit();
+    
+    /* UART初始化 */
+    CH582F_UARTInit();
+}
+
 /*********************************************************************
  * @fn      Peripheral_Init
  *
@@ -282,6 +362,9 @@ void Peripheral_Init()
 
     // Setup a delayed profile startup
     tmos_set_event(Peripheral_TaskID, SBP_START_DEVICE_EVT);
+
+    // 執行CH582F初始化
+    CH582F_Init();
 }
 
 /*********************************************************************

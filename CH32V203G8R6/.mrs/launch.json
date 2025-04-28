@@ -4,13 +4,13 @@
 		{
 			"type": "mrs-debugger",
 			"request": "launch",
-			"name": "CH582F",
-			"cwd": "/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE/Peripheral",
+			"name": "CH32V203G8R6",
+			"cwd": "/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH32V203G8R6",
 			"openOCDCfg": {
 				"useLocalOpenOCD": true,
 				"executable": "/Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/OpenOCD/OpenOCD/bin/openocd",
 				"configOptions": [
-					"-f \"/Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/OpenOCD/OpenOCD/bin/wch-riscv.cfg\" -c \"chip_id CH58x\""
+					"-f \"/Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/OpenOCD/OpenOCD/bin/wch-riscv.cfg\" -c \"chip_id CH32V20x\""
 				],
 				"gdbport": 3333,
 				"telnetport": 4444,
@@ -26,7 +26,8 @@
 				"commands": [
 					"set mem inaccessible-by-default off",
 					"set architecture riscv:rv32",
-					"set remotetimeout unlimited"
+					"set remotetimeout unlimited",
+					"set disassembler-options xw"
 				],
 				"options": []
 			},
@@ -38,8 +39,8 @@
 					"additionalCommands": []
 				},
 				"loadedFiles": {
-					"executableFile": "/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE/Peripheral/obj/CH582F.elf",
-					"symbolFile": "/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE/Peripheral/obj/CH582F.elf",
+					"executableFile": "/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH32V203G8R6/obj/CH32V203G8R6.elf",
+					"symbolFile": "/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH32V203G8R6/obj/CH32V203G8R6.elf",
 					"executableFileOffset": 0,
 					"symbolFileOffset": 0
 				},
@@ -53,7 +54,7 @@
 				},
 				"debugInRAM": false
 			},
-			"svdpath": "",
+			"svdpath": "/Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/SDK/default/RISC-V/CH32V203/NoneOS/CH32V203xx.svd",
 			"output": {
 				"showDebugGDBTrace": true,
 				"saveDebugOutputToFile": false,
