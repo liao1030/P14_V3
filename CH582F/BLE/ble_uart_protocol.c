@@ -327,4 +327,129 @@ void BLE_SetConnectedState(uint8_t connected)
     ble_connected = connected;
     
     PRINT("BLE %s\n", connected ? "Connected" : "Disconnected");
+}
+
+/*********************************************************************
+ * @fn      BLE_Protocol_ProcessCommand
+ *
+ * @brief   處理接收到的協議命令
+ *
+ * @param   cmd_id - 命令ID
+ *          data - 數據內容
+ *          length - 數據長度
+ *
+ * @return  none
+ */
+void BLE_Protocol_ProcessCommand(uint8_t cmd_id, uint8_t *data, uint8_t length)
+{
+    switch(cmd_id)
+    {
+        case CMD_SYNC_TIME:
+            BLE_Protocol_HandleSyncTime(data, length);
+            break;
+            
+        case CMD_REQUEST_STATUS:
+            BLE_Protocol_HandleRequestStatus(data, length);
+            break;
+            
+        case CMD_SET_CODE_EVENT:
+            BLE_Protocol_HandleSetCodeEvent(data, length);
+            break;
+            
+        case CMD_BLOOD_SAMPLE_CHECK:
+            BLE_Protocol_HandleBloodSampleCheck(data, length);
+            break;
+            
+        case CMD_REQUEST_RESULT:
+            BLE_Protocol_HandleRequestResult(data, length);
+            break;
+            
+        case CMD_REQUEST_RAW_DATA:
+            BLE_Protocol_HandleRequestRawData(data, length);
+            break;
+            
+        case CMD_T1_MEASUREMENT_RESULT:
+            BLE_Protocol_HandleT1MeasurementResult(data, length);
+            break;
+            
+        case CMD_STRIP_TYPE_CONFIRM:
+            BLE_Protocol_HandleStripTypeConfirm(data, length);
+            break;
+            
+        default:
+            /* 不支持的命令，返回錯誤 */
+            BLE_Protocol_SendErrorResponse(cmd_id, ERR_COMMAND_NOTSUPPORT);
+            break;
+    }
+}
+
+/*********************************************************************
+ * @fn      BLE_Protocol_HandleT1MeasurementResult
+ *
+ * @brief   處理T1測量結果
+ *
+ * @param   data - 數據內容
+ *          length - 數據長度
+ *
+ * @return  none
+ */
+void BLE_Protocol_HandleT1MeasurementResult(uint8_t *data, uint8_t length)
+{
+    uint16_t t1_voltage;
+    uint8_t strip_detected;
+    
+    /* 檢查數據長度 */
+    if (length < 3) {
+        BLE_Protocol_SendErrorResponse(CMD_T1_MEASUREMENT_RESULT, ERR_DATA_FORMAT);
+        return;
+    }
+    
+    /* 解析T1測量結果 */
+    t1_voltage = (uint16_t)data[0] | ((uint16_t)data[1] << 8);
+    strip_detected = data[2];
+    
+    /* 在此處處理T1測量結果，完成試片類型判斷 */
+    /* 此處應該調用相關邏輯進行試片類型判斷，但已經在CH58x_it.c中的StripDetectProcess完成 */
+    /* 所以這裡主要是接收CH32V203返回的結果並同步狀態 */
+    
+    PRINT("T1測量結果: 電壓=%d, 試片狀態=%d\n", t1_voltage, strip_detected);
+    
+    /* 如果需要，可以將結果保存在某個全局變數中，以便後續使用 */
+}
+
+/*********************************************************************
+ * @fn      BLE_Protocol_HandleStripTypeConfirm
+ *
+ * @brief   處理試片類型確認
+ *
+ * @param   data - 數據內容
+ *          length - 數據長度
+ *
+ * @return  none
+ */
+void BLE_Protocol_HandleStripTypeConfirm(uint8_t *data, uint8_t length)
+{
+    uint8_t strip_type;
+    
+    /* 檢查數據長度 */
+    if (length < 1) {
+        BLE_Protocol_SendErrorResponse(CMD_STRIP_TYPE_CONFIRM, ERR_DATA_FORMAT);
+        return;
+    }
+    
+    /* 解析試片類型 */
+    strip_type = data[0];
+    
+    /* 根據試片類型配置相應的測量電路 */
+    if (strip_type == PROTOCOL_STRIP_GAV) {
+        /* GAV試片需要啟用T3電極測量 */
+        GPIOB_SetBits(GPIO_Pin_10);  // 啟用T3_IN_SEL
+    } else {
+        /* 其他試片不需要T3電極 */
+        GPIOB_ResetBits(GPIO_Pin_10);  // 禁用T3_IN_SEL
+    }
+    
+    PRINT("試片類型確認: 類型=%d\n", strip_type);
+    
+    /* 如果需要，可以將結果保存在某個全局變數中，以便後續使用 */
 } 

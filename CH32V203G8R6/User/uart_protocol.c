@@ -12,15 +12,8 @@
 #include <string.h>
 #include "debug.h"
 
-/* 全局變量 */
-static uint8_t rx_buffer[MAX_FRAME_LENGTH * 2];  // UART接收緩衝區
-static uint16_t rx_index = 0;                    // 當前接收位置
+/* 全局變數 */
 static uint8_t tx_buffer[MAX_FRAME_LENGTH * 2];  // 發送緩衝區
-
-/* 協議狀態機變量 */
-static uint8_t frame_parsing = 0;
-static uint8_t frame_length = 0;
-static uint8_t frame_cmd_id = 0;
 
 /* 測量參數 */
 Measure_Param_t measure_param = {0};
@@ -28,7 +21,7 @@ Measure_Param_t measure_param = {0};
 /* RTC時間 */
 RTC_TimeStruct_t rtc_time = {0};
 
-/* 重傳機制變量 */
+/* 重傳機制變數 */
 static uint8_t retry_count = 0;
 static uint8_t last_cmd_id = 0;
 static uint16_t retry_timeout = 0;
@@ -47,6 +40,13 @@ uint16_t raw_data_length = 0;
 uint8_t blood_sampling_active = 0;
 uint8_t blood_countdown_seconds = 0;
 
+/* 外部函數聲明 */
+extern void HandleProtocolCommand(uint8_t cmd_id, uint8_t *data, uint8_t length);
+
+/* 試片相關函數宣告 */
+void UART_Protocol_HandleStartT1Measurement(uint8_t *data, uint8_t length);
+void UART_Protocol_HandleStripDetected(uint8_t *data, uint8_t length);
+
 /*********************************************************************
  * @fn      UART_Protocol_Init
  *
@@ -56,9 +56,6 @@ uint8_t blood_countdown_seconds = 0;
  */
 void UART_Protocol_Init(void)
 {
-    rx_index = 0;
-    frame_parsing = 0;
-    
     retry_count = 0;
     retry_timeout = 0;
     
@@ -72,7 +69,7 @@ void UART_Protocol_Init(void)
     measure_param.code = 0;
     measure_param.event = UART_EVENT_NONE;
     
-    /* 初始化測量狀態 */
+    /* 初始化採血狀態 */
     blood_sampling_active = 0;
     blood_countdown_seconds = 0;
     
@@ -195,25 +192,30 @@ void UART_Protocol_SendErrorResponse(uint8_t orig_cmd_id, uint8_t error_code)
 /*********************************************************************
  * @fn      UART_Protocol_Parse
  *
- * @brief   解析收到的數據
+ * @brief   解析接收到的數據
  *
- * @param   data - 收到的數據指針
- * @param   length - 數據長度
+ * @param   data - 接收到的數據指針
+ *          length - 數據長度
  *
- * @return  0-成功解析一個完整報文, 1-未完成, 2-錯誤
+ * @return  0-成功解析一個完整命令, 1-未完成, 2-錯誤
  */
 uint8_t UART_Protocol_Parse(uint8_t *data, uint16_t length)
 {
+    static uint8_t rx_buffer[MAX_FRAME_LENGTH];  // 接收緩衝區
+    static uint8_t rx_index = 0;                // 當前接收位置
+    static uint8_t frame_parsing = 0;           // 是否正在解析幀
+    static uint8_t frame_cmd_id = 0;            // 當前命令ID
+    static uint8_t frame_length = 0;            // 當前數據長度
     uint16_t i;
     uint8_t result = 1; // 默認未完成
     
-    /* 遍歷收到的數據 */
+    /* 遍歷接收到的數據 */
     for (i = 0; i < length; i++) {
         uint8_t byte = data[i];
         
         if (!frame_parsing) { // 等待起始標記
             if (byte == FRAME_START_BYTE) {
-                /* 新幀開始 */
+                /* 開始新的幀 */
                 frame_parsing = 1;
                 rx_index = 0;
                 rx_buffer[rx_index++] = byte;
@@ -223,11 +225,11 @@ uint8_t UART_Protocol_Parse(uint8_t *data, uint16_t length)
             rx_buffer[rx_index++] = byte;
             
             if (rx_index == 3) {
-                /* 已接收到指令ID和長度 */
+                /* 已經接收到命令ID和長度 */
                 frame_cmd_id = rx_buffer[1];
                 frame_length = rx_buffer[2];
             } else if (rx_index >= 5 && rx_index == frame_length + 5) {
-                /* 完整幀接收完成 */
+                /* 已接收到完整幀 */
                 if (byte == FRAME_END_BYTE) {
                     uint8_t calc_checksum;
                     uint8_t recv_checksum = rx_buffer[rx_index - 2];
@@ -237,8 +239,9 @@ uint8_t UART_Protocol_Parse(uint8_t *data, uint16_t length)
                     
                     /* 檢查校驗和 */
                     if (calc_checksum == recv_checksum) {
-                        /* 解析成功, 處理指令 */
-                        UART_Protocol_ProcessCommand(frame_cmd_id, &rx_buffer[3], frame_length);
+                        /* 解析成功，處理命令 */
+                        HandleProtocolCommand(frame_cmd_id, &rx_buffer[3], frame_length);
+                        
                         result = 0; // 解析成功
                     } else {
                         /* 校驗錯誤 */
@@ -256,7 +259,7 @@ uint8_t UART_Protocol_Parse(uint8_t *data, uint16_t length)
             }
             
             /* 檢查緩衝區溢出 */
-            if (rx_index >= MAX_FRAME_LENGTH * 2) {
+            if (rx_index >= MAX_FRAME_LENGTH) {
                 frame_parsing = 0;
                 result = 2; // 解析錯誤
             }
@@ -269,11 +272,11 @@ uint8_t UART_Protocol_Parse(uint8_t *data, uint16_t length)
 /*********************************************************************
  * @fn      UART_Protocol_ProcessCommand
  *
- * @brief   處理收到的指令
+ * @brief   處理接收到的協議命令
  *
- * @param   cmd_id - 指令ID
- * @param   data - 數據區指針
- * @param   length - 數據區長度
+ * @param   cmd_id - 命令ID
+ * @param   data - 數據內容
+ * @param   length - 數據長度
  *
  * @return  none
  */
@@ -281,7 +284,7 @@ void UART_Protocol_ProcessCommand(uint8_t cmd_id, uint8_t *data, uint8_t length)
 {
     printf("Received command: %02X, length=%d\r\n", cmd_id, length);
     
-    /* 根據指令類型分發處理 */
+    /* 根據命令類型分別處理 */
     switch (cmd_id) {
         case CMD_SYNC_TIME:
             UART_Protocol_HandleSyncTime(data, length);
@@ -307,9 +310,51 @@ void UART_Protocol_ProcessCommand(uint8_t cmd_id, uint8_t *data, uint8_t length)
             UART_Protocol_HandleRequestRawData(data, length);
             break;
             
+        case CMD_START_T1_MEASUREMENT:
+            UART_Protocol_HandleStartT1Measurement(data, length);
+            break;
+            
+        case CMD_STRIP_DETECTED:
+            UART_Protocol_HandleStripDetected(data, length);
+            break;
+            
         default:
-            /* 不支援的指令 */
+            /* 不支持的命令 */
             UART_Protocol_SendErrorResponse(cmd_id, ERR_COMMAND_NOTSUPPORT);
             break;
     }
+}
+
+/*********************************************************************
+ * @fn      UART_Protocol_HandleStartT1Measurement
+ *
+ * @brief   處理開始T1測量命令
+ *
+ * @param   data - 數據內容
+ * @param   length - 數據長度
+ *
+ * @return  none
+ */
+void UART_Protocol_HandleStartT1Measurement(uint8_t *data, uint8_t length)
+{
+    /* 委派給主程式中的處理函數 */
+    extern void HandleStartT1Measurement(uint8_t *data, uint8_t length);
+    HandleStartT1Measurement(data, length);
+}
+
+/*********************************************************************
+ * @fn      UART_Protocol_HandleStripDetected
+ *
+ * @brief   處理試片檢測通知
+ *
+ * @param   data - 數據內容
+ * @param   length - 數據長度
+ *
+ * @return  none
+ */
+void UART_Protocol_HandleStripDetected(uint8_t *data, uint8_t length)
+{
+    /* 委派給主程式中的處理函數 */
+    extern void HandleStripDetected(uint8_t *data, uint8_t length);
+    HandleStripDetected(data, length);
 } 
