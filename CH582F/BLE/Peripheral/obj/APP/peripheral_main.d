@@ -25,7 +25,7 @@ APP/peripheral_main.o: ../APP/peripheral_main.c \
  /Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE/HAL/include/LED.h \
  /Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE/HAL/include/KEY.h \
  /Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE/Peripheral/Profile/include/gattprofile.h \
- /Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE/Peripheral/APP/include/peripheral.h
+ ../APP/peripheral.h
 
 /Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE/HAL/include/CONFIG.h:
 
@@ -79,4 +79,4 @@ APP/peripheral_main.o: ../APP/peripheral_main.c \
 
 /Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE/Peripheral/Profile/include/gattprofile.h:
 
-/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE/Peripheral/APP/include/peripheral.h:
+../APP/peripheral.h:

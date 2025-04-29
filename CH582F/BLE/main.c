@@ -30,7 +30,10 @@ static uint16_t uart1_rx_len = 0;
 /* BLE相關參數 */
 #define BLE_DEVICE_NAME_BASE   "P14-"
 static uint8_t ble_mac[6];
-static uint8_t ble_device_name[20];
+static uint8_t main_ble_device_name[20];
+
+/* 外部變量聲明 - peripheral_main.c中的變量 */
+extern uint8_t ble_device_name[20];
 
 /* 函數聲明 */
 void SystemInit(void);
@@ -75,7 +78,7 @@ int main(void)
     /* 基本測試輸出 */
     PRINT("P14_V2.1 BLE 初始化完成\n");
     PRINT("系統時鐘: %d MHz\n", GetSysClock() / 1000000);
-    PRINT("設備名稱: %s\n", ble_device_name);
+    PRINT("設備名稱: %s\n", main_ble_device_name);
     
     /* 主循環 */
     while(1)
@@ -239,18 +242,21 @@ void BLE_Init(void)
     /* 獲取MAC地址 */
     GetMACAddress(ble_mac);
     
-    /* 生成設備名稱 P14-XXXX (MAC地址最後3字節) */
-    sprintf((char*)ble_device_name, "%s%02X%02X%02X", BLE_DEVICE_NAME_BASE, 
+    /* 生成設備名稱 P14-XXXXXX (MAC地址最後3字節) */
+    sprintf((char*)main_ble_device_name, "%s%02X%02X%02X", BLE_DEVICE_NAME_BASE, 
             ble_mac[3], ble_mac[4], ble_mac[5]);
+    
+    /* 更新peripheral_main.c中的ble_device_name */
+    strcpy((char*)ble_device_name, (char*)main_ble_device_name);
     
     /* BLE配置初始化 */
     BLE_LibInit();
     
-    /* 廣播初始化 */
+    /* 廣播初始化 - 注意: 設備名稱同時在peripheral.c中被使用 */
     GAPRole_PeripheralInit();
     
     /* 設置設備名稱 */
-    GAP_SetDeviceName((uint8_t *)ble_device_name);
+    GAP_SetDeviceName((uint8_t *)main_ble_device_name);
     
     /* 設置廣播參數 */
     {
@@ -261,10 +267,10 @@ void BLE_Init(void)
         adv_data[adv_len++] = 0x01;     // 類型: Flags
         adv_data[adv_len++] = 0x06;     // 值: LE General Discoverable
         
-        adv_data[adv_len++] = strlen((char*)ble_device_name) + 1; // 長度
+        adv_data[adv_len++] = strlen((char*)main_ble_device_name) + 1; // 長度
         adv_data[adv_len++] = 0x09;     // 類型: Complete Local Name
-        for (i = 0; i < strlen((char*)ble_device_name); i++) {
-            adv_data[adv_len++] = ble_device_name[i];
+        for (i = 0; i < strlen((char*)main_ble_device_name); i++) {
+            adv_data[adv_len++] = main_ble_device_name[i];
         }
         
         adv_data[adv_len++] = 0x03;     // 長度
@@ -300,7 +306,7 @@ void BLE_Init(void)
     /* 開始廣播 */
     GAPRole_PeripheralStartDiscovery();
     
-    PRINT("BLE initialized: %s\n", ble_device_name);
+    PRINT("BLE initialized: %s\n", main_ble_device_name);
 }
 
 /*********************************************************************

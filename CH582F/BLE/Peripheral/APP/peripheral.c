@@ -87,25 +87,22 @@ static uint8_t Peripheral_TaskID = INVALID_TASK_ID; // Task ID for internal task
 // GAP - SCAN RSP data (max size = 31 bytes)
 static uint8_t scanRspData[] = {
     // complete name
-    0x12, // length of this data
+    0x0F, // length of this data (將在運行時更新)
     GAP_ADTYPE_LOCAL_NAME_COMPLETE,
-    'S',
-    'i',
-    'm',
-    'p',
-    'l',
-    'e',
-    ' ',
     'P',
-    'e',
-    'r',
-    'i',
-    'p',
-    'h',
-    'e',
-    'r',
-    'a',
-    'l',
+    '1',
+    '4',
+    '-',
+    'X',
+    'X',
+    'X',
+    'X',
+    'X',
+    'X',
+    'X',
+    'X',
+    'X',
+    'X',
     // connection interval range
     0x05, // length of this data
     GAP_ADTYPE_SLAVE_CONN_INTERVAL_RANGE,
@@ -139,7 +136,7 @@ static uint8_t advertData[] = {
 };
 
 // GAP GATT Attributes
-static uint8_t attDeviceName[GAP_DEVICE_NAME_LEN] = "Simple Peripheral";
+static uint8_t attDeviceName[GAP_DEVICE_NAME_LEN] = "P14-XXXXXX";
 
 // Connection item list
 static peripheralConnItem_t peripheralConnList;
@@ -204,9 +201,21 @@ static simpleProfileCBs_t Peripheral_SimpleProfileCBs = {
  *
  * @return  none
  */
-void Peripheral_Init()
+void Peripheral_Init(void)
 {
     Peripheral_TaskID = TMOS_ProcessEventRegister(Peripheral_ProcessEvent);
+
+    // 更新設備名稱和廣播回應數據
+    uint8_t nameLen = strlen((char*)ble_device_name);
+    if (nameLen > 0 && nameLen < GAP_DEVICE_NAME_LEN) {
+        // 更新設備名稱屬性
+        memcpy(attDeviceName, ble_device_name, nameLen);
+        attDeviceName[nameLen] = '\0';
+        
+        // 更新廣播回應數據中的設備名稱
+        scanRspData[0] = nameLen + 1; // 包含類型字節的長度
+        memcpy(&scanRspData[2], ble_device_name, nameLen);
+    }
 
     // Setup the GAP Peripheral Role Profile
     {

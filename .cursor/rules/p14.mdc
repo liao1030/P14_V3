@@ -1,0 +1,6 @@
+---
+description: 不要自動編譯專案
+globs: 
+alwaysApply: false
+---
+不要自動編譯專案，要使用外部IDE(MounRiver)進行程式編譯

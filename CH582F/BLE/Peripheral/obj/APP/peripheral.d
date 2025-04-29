@@ -20,7 +20,7 @@ APP/peripheral.o: ../APP/peripheral.c \
  /Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/SRC/StdPeriphDriver/inc/ISP583.h \
  /Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE/Peripheral/Profile/include/devinfoservice.h \
  /Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE/Peripheral/Profile/include/gattprofile.h \
- /Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE/Peripheral/APP/include/peripheral.h
+ ../APP/peripheral.h
 
 /Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE/HAL/include/CONFIG.h:
 
@@ -64,4 +64,4 @@ APP/peripheral.o: ../APP/peripheral.c \
 
 /Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE/Peripheral/Profile/include/gattprofile.h:
 
-/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE/Peripheral/APP/include/peripheral.h:
+../APP/peripheral.h:

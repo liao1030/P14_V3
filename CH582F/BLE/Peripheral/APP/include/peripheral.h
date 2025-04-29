@@ -43,6 +43,9 @@ typedef struct
     uint16_t connTimeout;
 } peripheralConnItem_t;
 
+/* 外部變量聲明 */
+extern uint8_t ble_device_name[20]; /* 聲明來自main.c的設備名稱 */
+
 /*********************************************************************
  * FUNCTIONS
  */

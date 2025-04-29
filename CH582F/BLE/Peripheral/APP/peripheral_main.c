@@ -17,9 +17,10 @@
 #include "gattprofile.h"
 #include "peripheral.h"
 
-/*********************************************************************
- * GLOBAL TYPEDEFS
- */
+/* 定義給peripheral.c使用的外部變量 */
+/* 這個數組將在外部定義，實際使用時會從main.c中獲得真實的藍牙名稱 */
+uint8_t ble_device_name[20] = "P14-ABCDEF"; // 默認值，會在初始化時被替換
+
 __attribute__((aligned(4))) uint32_t MEM_BUF[BLE_MEMHEAP_SIZE / 4];
 
 #if(defined(BLE_MAC)) && (BLE_MAC == TRUE)
