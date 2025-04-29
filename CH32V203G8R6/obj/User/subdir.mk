@@ -10,7 +10,9 @@ C_SRCS += \
 ../User/param_store.c \
 ../User/param_table.c \
 ../User/param_test.c \
-../User/system_ch32v20x.c 
+../User/system_ch32v20x.c \
+../User/uart_protocol.c \
+../User/uart_protocol_handlers.c 
 
 C_DEPS += \
 ./User/ch32v20x_it.d \
@@ -18,7 +20,9 @@ C_DEPS += \
 ./User/param_store.d \
 ./User/param_table.d \
 ./User/param_test.d \
-./User/system_ch32v20x.d 
+./User/system_ch32v20x.d \
+./User/uart_protocol.d \
+./User/uart_protocol_handlers.d 
 
 OBJS += \
 ./User/ch32v20x_it.o \
@@ -26,7 +30,9 @@ OBJS += \
 ./User/param_store.o \
 ./User/param_table.o \
 ./User/param_test.o \
-./User/system_ch32v20x.o 
+./User/system_ch32v20x.o \
+./User/uart_protocol.o \
+./User/uart_protocol_handlers.o 
 
 
 

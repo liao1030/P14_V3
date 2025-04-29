@@ -18,6 +18,7 @@
 #include "param_table.h"
 #include "param_test.h"
 #include "param_store.h"
+#include "uart_protocol.h"
 
 /* 全局定義 */
 #define LED_RED_PIN     GPIO_Pin_6
@@ -27,12 +28,19 @@
 #define T1_ENABLE_PIN   GPIO_Pin_8
 #define WE_ENABLE_PIN   GPIO_Pin_15
 
+/* UART相關緩衝區 */
+#define UART_RX_BUF_SIZE       128
+static uint8_t uart2_rx_buf[UART_RX_BUF_SIZE];
+static uint16_t uart2_rx_len = 0;
+
 /* 函數聲明 */
 void GPIO_Config(void);
 void UART2_Config(void);
 void Key_Process(void);
 void ParamTable_Test(void);
 void USART_Receive_Byte(void);
+void Process_UART_Data(void);
+void Timer2_Config(void);
 
 /*********************************************************************
  * @fn      main
@@ -58,6 +66,12 @@ int main(void)
     /* UART2 初始化 - 與CH582F通訊 */
     UART2_Config();
     
+    /* 定時器2配置 - 用於周期性任務 */
+    Timer2_Config();
+    
+    /* 通訊協議初始化 */
+    UART_Protocol_Init();
+    
     /* 調試用UART初始化 */
     USART_Printf_Init(115200);
     printf("SystemClk:%d\r\n", SystemCoreClock);
@@ -71,20 +85,26 @@ int main(void)
         printf("參數存儲模塊初始化成功！\r\n");
     }
     
-    /* 執行參數模塊測試 */
+    /* 測試相關部分可以不執行 */
+    /*
     printf("按任意鍵開始參數存儲測試...\r\n");
     USART_Receive_Byte();
     PARAM_TestAll();
+    */
     
-    printf("測試完成，系統進入循環\r\n");
+    printf("系統初始化完成，進入循環\r\n");
+    printf("藍牙UART協議已啟用\r\n");
     
     while(1)
     {
         /* 處理按鍵 */
         Key_Process();
         
+        /* 處理UART數據 */
+        Process_UART_Data();
+        
         /* 延遲 */
-        Delay_Ms(50);
+        Delay_Ms(10);
     }
 }
 
@@ -171,6 +191,7 @@ void UART2_Config(void)
 {
     GPIO_InitTypeDef GPIO_InitStructure = {0};
     USART_InitTypeDef USART_InitStructure = {0};
+    NVIC_InitTypeDef NVIC_InitStructure = {0};
     
     /* 使能GPIOA和UART2時鐘 */
     RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA, ENABLE);
@@ -198,8 +219,138 @@ void UART2_Config(void)
     /* 配置UART2 */
     USART_Init(USART2, &USART_InitStructure);
     
+    /* 配置UART2中斷 */
+    NVIC_InitStructure.NVIC_IRQChannel = USART2_IRQn;
+    NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 1;
+    NVIC_InitStructure.NVIC_IRQChannelSubPriority = 1;
+    NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
+    NVIC_Init(&NVIC_InitStructure);
+    
+    /* 啟用UART2接收中斷 */
+    USART_ITConfig(USART2, USART_IT_RXNE, ENABLE);
+    
     /* 使能UART2 */
     USART_Cmd(USART2, ENABLE);
+    
+    /* 清空接收緩衝區 */
+    uart2_rx_len = 0;
+}
+
+/*********************************************************************
+ * @fn      Timer2_Config
+ *
+ * @brief   定時器2配置 - 用於周期性任務
+ *
+ * @return  none
+ */
+void Timer2_Config(void)
+{
+    TIM_TimeBaseInitTypeDef TIM_TimeBaseStructure = {0};
+    NVIC_InitTypeDef NVIC_InitStructure = {0};
+    
+    /* 使能定時器2時鐘 */
+    RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM2, ENABLE);
+    
+    /* 基礎定時器配置 */
+    TIM_TimeBaseStructure.TIM_Period = 100-1;           // 100ms計數週期
+    TIM_TimeBaseStructure.TIM_Prescaler = 16000-1;      // 16MHz / 16000 = 1kHz計數頻率
+    TIM_TimeBaseStructure.TIM_ClockDivision = TIM_CKD_DIV1;
+    TIM_TimeBaseStructure.TIM_CounterMode = TIM_CounterMode_Up;
+    TIM_TimeBaseInit(TIM2, &TIM_TimeBaseStructure);
+    
+    /* 使能定時器2中斷 */
+    TIM_ITConfig(TIM2, TIM_IT_Update, ENABLE);
+    
+    /* 配置定時器2中斷 */
+    NVIC_InitStructure.NVIC_IRQChannel = TIM2_IRQn;
+    NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 1;
+    NVIC_InitStructure.NVIC_IRQChannelSubPriority = 2;
+    NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
+    NVIC_Init(&NVIC_InitStructure);
+    
+    /* 啟動定時器 */
+    TIM_Cmd(TIM2, ENABLE);
+}
+
+/*********************************************************************
+ * @fn      Process_UART_Data
+ *
+ * @brief   處理UART接收到的數據
+ *
+ * @return  none
+ */
+void Process_UART_Data(void)
+{
+    /* 如果有數據需要處理 */
+    if (uart2_rx_len > 0) {
+        /* 通過協議處理 */
+        UART_Protocol_Parse(uart2_rx_buf, uart2_rx_len);
+        
+        /* 清空緩衝區 */
+        uart2_rx_len = 0;
+    }
+}
+
+/*********************************************************************
+ * @fn      USART2_IRQHandler
+ *
+ * @brief   USART2中斷處理函數
+ *
+ * @return  none
+ */
+void USART2_IRQHandler(void)
+{
+    /* 處理接收中斷 */
+    if(USART_GetITStatus(USART2, USART_IT_RXNE) != RESET) {
+        /* 讀取接收到的數據 */
+        uint8_t rx_data = USART_ReceiveData(USART2);
+        
+        /* 存入緩衝區 */
+        if (uart2_rx_len < UART_RX_BUF_SIZE) {
+            uart2_rx_buf[uart2_rx_len++] = rx_data;
+        }
+        
+        /* 清除中斷標誌 */
+        USART_ClearITPendingBit(USART2, USART_IT_RXNE);
+    }
+}
+
+/*********************************************************************
+ * @fn      TIM2_IRQHandler
+ *
+ * @brief   TIM2中斷處理函數
+ *
+ * @return  none
+ */
+void TIM2_IRQHandler(void)
+{
+    static uint8_t led_state = 0;
+    static uint16_t counter = 0;
+    
+    /* 檢查更新中斷 */
+    if (TIM_GetITStatus(TIM2, TIM_IT_Update) != RESET) {
+        /* 清除中斷標誌 */
+        TIM_ClearITPendingBit(TIM2, TIM_IT_Update);
+        
+        /* 100ms任務 */
+        counter++;
+        
+        /* 閃爍LED以指示系統正在運行 */
+        if (counter % 5 == 0) {  // 500ms
+            if (led_state) {
+                GPIO_SetBits(GPIOB, LED_GREEN_PIN);
+            } else {
+                GPIO_ResetBits(GPIOB, LED_GREEN_PIN);
+            }
+            led_state = !led_state;
+        }
+        
+        /* 其他周期性任務 */
+        if (counter >= 600) {  // 每分鐘執行一次
+            counter = 0;
+            /* 定期任務，例如自檢等 */
+        }
+    }
 }
 
 /*********************************************************************
