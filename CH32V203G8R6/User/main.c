@@ -17,6 +17,8 @@
  */
 
 #include "debug.h"
+#include "param_table.h"
+#include "param_test.h"
 
 /* 全局定義 */
 #define LED_RED_PIN     GPIO_Pin_6
@@ -29,6 +31,8 @@
 /* 函數聲明 */
 void GPIO_Config(void);
 void UART2_Config(void);
+void Key_Process(void);
+void ParamTable_Test(void);
 
 /*********************************************************************
  * @fn      main
@@ -60,9 +64,25 @@ int main(void)
     printf("SystemClk: %d MHz\r\n", SystemCoreClock/1000000);
     printf("ChipID: %08x\r\n", DBGMCU_GetCHIPID());
 
+    /* 參數表初始化 */
+    if (Param_Init() == 0) {
+        printf("Parameter table initialized successfully.\r\n");
+        GPIO_SetBits(GPIOB, LED_GREEN_PIN); /* 綠色LED點亮表示參數表初始化成功 */
+    } else {
+        printf("Parameter table initialization failed.\r\n");
+        GPIO_SetBits(GPIOB, LED_RED_PIN); /* 紅色LED點亮表示參數表初始化失敗 */
+    }
+
+    /* 執行一次參數表測試 */
+    ParamTable_Test();
+
     while(1)
     {
-        /* 主循環代碼 */
+        /* 處理按鍵 */
+        Key_Process();
+        
+        /* 延遲 */
+        Delay_Ms(50);
     }
 }
 
@@ -178,4 +198,53 @@ void UART2_Config(void)
     
     /* 使能UART2 */
     USART_Cmd(USART2, ENABLE);
+}
+
+/*********************************************************************
+ * @fn      ParamTable_Test
+ *
+ * @brief   測試參數表功能，列印當前參數設定並修改某參數
+ *
+ * @return  none
+ */
+void ParamTable_Test(void);
+
+/*********************************************************************
+ * @fn      Key_Process
+ *
+ * @brief   處理按鍵輸入
+ *
+ * @return  none
+ */
+void Key_Process(void)
+{
+    static uint8_t key1_last = 1;
+    static uint8_t key2_last = 1;
+    uint8_t key1_curr, key2_curr;
+    
+    /* 讀取當前按鍵狀態 */
+    key1_curr = GPIO_ReadInputDataBit(GPIOB, KEY_1_PIN);
+    key2_curr = GPIO_ReadInputDataBit(GPIOB, KEY_2_PIN);
+    
+    /* 檢測KEY1按下 (下降沿) */
+    if (key1_last == 1 && key1_curr == 0) {
+        printf("KEY1 pressed - Entering parameter test menu\r\n");
+        Param_TestMenu(); /* 進入參數表測試選單 */
+    }
+    
+    /* 檢測KEY2按下 (下降沿) */
+    if (key2_last == 1 && key2_curr == 0) {
+        printf("KEY2 pressed - Toggling LED\r\n");
+        
+        /* 切換LED狀態 */
+        if (GPIO_ReadOutputDataBit(GPIOB, LED_GREEN_PIN)) {
+            GPIO_ResetBits(GPIOB, LED_GREEN_PIN);
+        } else {
+            GPIO_SetBits(GPIOB, LED_GREEN_PIN);
+        }
+    }
+    
+    /* 更新按鍵狀態 */
+    key1_last = key1_curr;
+    key2_last = key2_curr;
 }
