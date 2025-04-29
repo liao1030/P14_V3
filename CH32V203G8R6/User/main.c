@@ -1,13 +1,11 @@
 /********************************** (C) COPYRIGHT *******************************
  * File Name          : main.c
- * Author             : WCH
+ * Author             : HMD
  * Version            : V1.0.0
- * Date               : 2021/06/06
+ * Date               : 2024/06/12
  * Description        : Main program body.
  *********************************************************************************
- * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
- * Attention: This software (modified or not) and binary are used for 
- * microcontroller manufactured by Nanjing Qinheng Microelectronics.
+ * Copyright (c) 2024 HMD Biomedical Inc.
  *******************************************************************************/
 
 /*
@@ -19,6 +17,7 @@
 #include "debug.h"
 #include "param_table.h"
 #include "param_test.h"
+#include "param_store.h"
 
 /* 全局定義 */
 #define LED_RED_PIN     GPIO_Pin_6
@@ -33,6 +32,7 @@ void GPIO_Config(void);
 void UART2_Config(void);
 void Key_Process(void);
 void ParamTable_Test(void);
+void USART_Receive_Byte(void);
 
 /*********************************************************************
  * @fn      main
@@ -60,22 +60,24 @@ int main(void)
     
     /* 調試用UART初始化 */
     USART_Printf_Init(115200);
-    printf("P14_V2.1 MCU 初始化完成\r\n");
-    printf("SystemClk: %d MHz\r\n", SystemCoreClock/1000000);
-    printf("ChipID: %08x\r\n", DBGMCU_GetCHIPID());
+    printf("SystemClk:%d\r\n", SystemCoreClock);
+    printf("ChipID:%08x\r\n", DBGMCU_GetCHIPID());
 
-    /* 參數表初始化 */
-    if (Param_Init() == 0) {
-        printf("Parameter table initialized successfully.\r\n");
-        GPIO_SetBits(GPIOB, LED_GREEN_PIN); /* 綠色LED點亮表示參數表初始化成功 */
+    /* 初始化參數存儲模塊 */
+    printf("初始化參數存儲模塊...\r\n");
+    if (PARAM_Init() != 0) {
+        printf("參數存儲模塊初始化失敗！\r\n");
     } else {
-        printf("Parameter table initialization failed.\r\n");
-        GPIO_SetBits(GPIOB, LED_RED_PIN); /* 紅色LED點亮表示參數表初始化失敗 */
+        printf("參數存儲模塊初始化成功！\r\n");
     }
-
-    /* 執行一次參數表測試 */
-    ParamTable_Test();
-
+    
+    /* 執行參數模塊測試 */
+    printf("按任意鍵開始參數存儲測試...\r\n");
+    USART_Receive_Byte();
+    PARAM_TestAll();
+    
+    printf("測試完成，系統進入循環\r\n");
+    
     while(1)
     {
         /* 處理按鍵 */
@@ -228,8 +230,8 @@ void Key_Process(void)
     
     /* 檢測KEY1按下 (下降沿) */
     if (key1_last == 1 && key1_curr == 0) {
-        printf("KEY1 pressed - Entering parameter test menu\r\n");
-        Param_TestMenu(); /* 進入參數表測試選單 */
+        printf("KEY1 pressed - Executing parameter test\r\n");
+        PARAM_TestAll(); /* 執行參數存儲測試 */
     }
     
     /* 檢測KEY2按下 (下降沿) */
@@ -247,4 +249,17 @@ void Key_Process(void)
     /* 更新按鍵狀態 */
     key1_last = key1_curr;
     key2_last = key2_curr;
+}
+
+/*********************************************************************
+ * @fn      USART_Receive_Byte
+ *
+ * @brief   Wait and receive a byte from USART.
+ *
+ * @return  none
+ */
+void USART_Receive_Byte(void)
+{
+    while(USART_GetFlagStatus(USART1, USART_FLAG_RXNE) == RESET);
+    USART_ReceiveData(USART1);
 }

@@ -7,6 +7,7 @@
 C_SRCS += \
 ../User/ch32v20x_it.c \
 ../User/main.c \
+../User/param_store.c \
 ../User/param_table.c \
 ../User/param_test.c \
 ../User/system_ch32v20x.c 
@@ -14,6 +15,7 @@ C_SRCS += \
 C_DEPS += \
 ./User/ch32v20x_it.d \
 ./User/main.d \
+./User/param_store.d \
 ./User/param_table.d \
 ./User/param_test.d \
 ./User/system_ch32v20x.d 
@@ -21,6 +23,7 @@ C_DEPS += \
 OBJS += \
 ./User/ch32v20x_it.o \
 ./User/main.o \
+./User/param_store.o \
 ./User/param_table.o \
 ./User/param_test.o \
 ./User/system_ch32v20x.o 

@@ -3,7 +3,7 @@
  * Author             : HMD
  * Version            : V1.0.0
  * Date               : 2024/06/12
- * Description        : Test program for parameter code table.
+ * Description        : Parameter storage test module for CH32V203G8R6.
  *********************************************************************************
  * Copyright (c) 2024 HMD Biomedical Inc.
  *******************************************************************************/
@@ -13,7 +13,7 @@
 
 #include "ch32v20x.h"
 
-/* Function prototypes */
-void Param_TestMenu(void);
+/* 參數測試功能函數原型 */
+void PARAM_TestAll(void);
 
 #endif /* __PARAM_TEST_H */ 
