@@ -1,0 +1,30 @@
+{
+	"folders": [
+		{
+			"path": "."
+		},
+		{
+			"name": "CH32V203G8R6",
+			"path": "../CH32V203G8R6"
+		},
+		{
+			"name": "BLE_UART",
+			"path": "../CH582F/BLE/BLE_UART"
+		}
+	],
+	"settings": {
+		"mrs.workspace.type": "solution",
+		"files.associations": {
+			"*.c": "c",
+			"*.h": "cpp",
+			"*.hxx": "cpp",
+			"*.hpp": "cpp",
+			"*.c++": "cpp",
+			"*.cpp": "cpp",
+			"*.cxx": "cpp",
+			"*.cc": "cpp",
+			"*.hh": "cpp",
+			"*.h++": "cpp"
+		}
+	}
+}
