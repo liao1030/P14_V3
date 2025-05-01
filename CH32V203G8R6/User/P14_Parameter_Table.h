@@ -240,7 +240,8 @@ typedef enum {
     STRIP_TYPE_U   = 1,   // 尿酸
     STRIP_TYPE_C   = 2,   // 總膽固醇
     STRIP_TYPE_TG  = 3,   // 三酸甘油脂
-    STRIP_TYPE_GAV = 4    // 血糖(另一種方法)
+    STRIP_TYPE_GAV = 4,   // 血糖(另一種方法)
+    STRIP_TYPE_UNKNOWN = 255 // 未知或錯誤
 } StripType_TypeDef;
 
 /* 事件類型定義 */

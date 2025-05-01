@@ -1,6 +1,6 @@
 /**
  * @file P14_BLE_Protocol.c
- * @brief 多功能生化檢測儀藍牙UART通訊協議實現
+ * @brief 多功能生化測試儀UART通訊協議實現
  * @version 1.0
  * @date 2023-04-28
  * 
@@ -15,23 +15,20 @@
 #include "string.h"
 #include "ch32v20x.h"
 
-/* 協議解析狀態 */
-typedef enum {
-    PROTOCOL_STATE_IDLE,
-    PROTOCOL_STATE_COMMAND,
-    PROTOCOL_STATE_LENGTH,
-    PROTOCOL_STATE_DATA,
-    PROTOCOL_STATE_CHECKSUM,
-    PROTOCOL_STATE_END
-} ProtocolState_TypeDef;
+/* 協議處理函數聲明 */
+void BLE_ProcessCommand(void);
+uint16_t Get_ADC_Value(uint8_t channel);
 
-/* 全局變數 */
+/* 全局變量 */
 static ProtocolState_TypeDef g_protocolState = PROTOCOL_STATE_IDLE;
 static BLEPacket_TypeDef g_rxPacket;
 static uint8_t g_dataIndex = 0;
 static BLEPacket_TypeDef g_txPacket;
+static uint8_t g_cmdType = 0;
+static uint8_t g_cmdData[16];
+static uint8_t g_dataLength = 0;
 
-/* 藍牙UART串口函數 - 由外部實現 */
+/* 調用UART發送函數 - 由外部實現 */
 extern void UART1_SendData(uint8_t *data, uint16_t len);
 
 /**
@@ -432,53 +429,56 @@ void BLE_ProcessReceivedData(uint8_t *data, uint16_t length)
             case PROTOCOL_STATE_IDLE:
                 if (byte == PROTOCOL_START_MARKER) {
                     g_rxPacket.start = byte;
-                    g_protocolState = PROTOCOL_STATE_COMMAND;
+                    g_protocolState = PROTOCOL_STATE_CMD_TYPE;
                 }
                 break;
                 
-            case PROTOCOL_STATE_COMMAND:
+            case PROTOCOL_STATE_CMD_TYPE:
                 g_rxPacket.command = byte;
-                g_protocolState = PROTOCOL_STATE_LENGTH;
-                break;
-                
-            case PROTOCOL_STATE_LENGTH:
-                g_rxPacket.length = byte;
-                g_dataIndex = 0;
-                
-                if (byte > 0) {
-                    g_protocolState = PROTOCOL_STATE_DATA;
-                } else {
-                    g_protocolState = PROTOCOL_STATE_CHECKSUM;
-                }
+                g_protocolState = PROTOCOL_STATE_DATA;
                 break;
                 
             case PROTOCOL_STATE_DATA:
-                if (g_dataIndex < g_rxPacket.length) {
-                    g_rxPacket.data[g_dataIndex++] = byte;
+                /* 首先讀取長度字段 */
+                if (g_dataIndex == 0) {
+                    g_rxPacket.length = byte;
+                    g_dataIndex++;
+                } 
+                /* 然後讀取數據 */
+                else if (g_dataIndex <= g_rxPacket.length) {
+                    g_rxPacket.data[g_dataIndex - 1] = byte;
+                    g_dataIndex++;
                     
-                    if (g_dataIndex >= g_rxPacket.length) {
-                        g_protocolState = PROTOCOL_STATE_CHECKSUM;
+                    if (g_dataIndex > g_rxPacket.length) {
+                        g_protocolState = PROTOCOL_STATE_END;
                     }
                 }
                 break;
                 
-            case PROTOCOL_STATE_CHECKSUM:
-                g_rxPacket.checksum = byte;
-                g_protocolState = PROTOCOL_STATE_END;
-                break;
-                
             case PROTOCOL_STATE_END:
-                g_rxPacket.end = byte;
-                g_protocolState = PROTOCOL_STATE_IDLE;
-                
-                /* 處理完整封包 */
-                if (byte == PROTOCOL_END_MARKER) {
-                    BLE_HandleCommand(&g_rxPacket, &g_txPacket);
+                /* 處理校驗和和結束標記 */
+                if (g_dataIndex == g_rxPacket.length + 1) {
+                    g_rxPacket.checksum = byte;
+                    g_dataIndex++;
+                } else if (g_dataIndex == g_rxPacket.length + 2) {
+                    g_rxPacket.end = byte;
+                    g_dataIndex = 0;
+                    g_protocolState = PROTOCOL_STATE_IDLE;
+                    
+                    /* 處理完整協議包 */
+                    if (byte == PROTOCOL_END_MARKER) {
+                        if (BLE_PacketVerify(&g_rxPacket)) {
+                            BLE_HandleCommand(&g_rxPacket, &g_txPacket);
+                        } else {
+                            BLE_SendErrorResponse(g_rxPacket.command, ERR_CHECKSUM);
+                        }
+                    }
                 }
                 break;
                 
             default:
                 g_protocolState = PROTOCOL_STATE_IDLE;
+                g_dataIndex = 0;
                 break;
         }
     }
@@ -515,7 +515,407 @@ void BLE_SendPacket(BLEPacket_TypeDef *packet)
  */
 void BLE_ProtocolInit(void)
 {
-    /* 重置協議狀態機 */
+    /* 初始化協議狀態機 */
     g_protocolState = PROTOCOL_STATE_IDLE;
+    g_cmdType = 0;
     g_dataIndex = 0;
+    g_dataLength = 0;
+    
+    printf("BLE通訊協議已初始化\r\n");
+}
+
+/**
+ * @brief 處理接收到的UART數據
+ * 
+ * @param rx_data - 接收到的單個字節數據
+ */
+void BLE_ProtocolRxHandler(uint8_t rx_data)
+{
+    /* 協議狀態機處理 */
+    switch (g_protocolState) {
+        case PROTOCOL_STATE_IDLE:
+            /* 等待命令開始標記 */
+            if (rx_data == CMD_START_MARKER) {
+                g_protocolState = PROTOCOL_STATE_CMD_TYPE;
+            }
+            break;
+            
+        case PROTOCOL_STATE_CMD_TYPE:
+            /* 接收命令類型 */
+            g_cmdType = rx_data;
+            g_dataIndex = 0;
+            
+            /* 根據命令類型設置期望的數據長度 */
+            switch (g_cmdType) {
+                case CMD_MEASURE_T1_OUT:
+                    g_dataLength = 0;  // 無數據
+                    g_protocolState = PROTOCOL_STATE_END;
+                    break;
+                
+                case CMD_STRIP_INSERTED:
+                    g_dataLength = 1;  // 試片類型
+                    g_protocolState = PROTOCOL_STATE_DATA;
+                    break;
+                
+                case CMD_STRIP_TYPE_RESULT:
+                    g_dataLength = 1;  // 結果代碼
+                    g_protocolState = PROTOCOL_STATE_DATA;
+                    break;
+                
+                case CMD_START_MEASUREMENT:
+                    g_dataLength = 1;  // 測量類型
+                    g_protocolState = PROTOCOL_STATE_DATA;
+                    break;
+                
+                default:
+                    /* 未知命令，重置狀態機 */
+                    g_protocolState = PROTOCOL_STATE_IDLE;
+                    break;
+            }
+            break;
+            
+        case PROTOCOL_STATE_DATA:
+            /* 接收數據 */
+            if (g_dataIndex < g_dataLength) {
+                g_cmdData[g_dataIndex++] = rx_data;
+                
+                /* 檢查是否已接收完所有數據 */
+                if (g_dataIndex >= g_dataLength) {
+                    g_protocolState = PROTOCOL_STATE_END;
+                }
+            }
+            break;
+            
+        case PROTOCOL_STATE_END:
+            /* 等待命令結束標記 */
+            if (rx_data == CMD_END_MARKER) {
+                /* 處理完整命令 */
+                BLE_ProcessCommand();
+            }
+            
+            /* 無論如何都重置狀態機 */
+            g_protocolState = PROTOCOL_STATE_IDLE;
+            break;
+            
+        default:
+            /* 重置狀態機 */
+            g_protocolState = PROTOCOL_STATE_IDLE;
+            break;
+    }
+}
+
+/**
+ * @brief 處理接收到的完整命令
+ */
+void BLE_ProcessCommand(void)
+{
+    switch (g_cmdType) {
+        case CMD_MEASURE_T1_OUT:
+            /* 測量T1_OUT電壓並回傳結果 */
+            BLE_MeasureT1Out();
+            break;
+            
+        case CMD_STRIP_INSERTED:
+            /* 處理試片插入通知 */
+            if (g_dataLength >= 1) {
+                StripType_TypeDef type = (StripType_TypeDef)g_cmdData[0];
+                BLE_ProcessStripInsertion(type);
+            }
+            break;
+            
+        case CMD_STRIP_TYPE_RESULT:
+            /* 處理試片類型判斷結果 */
+            if (g_dataLength >= 1) {
+                StripType_TypeDef type = (StripType_TypeDef)g_cmdData[0];
+                printf("接收到試片類型判斷結果: %d\r\n", type);
+                
+                /* 更新系統參數 */
+                BasicSystemBlock basicParams;
+                if (PARAM_ReadBlock(BLOCK_BASIC_SYSTEM, &basicParams, sizeof(BasicSystemBlock))) {
+                    basicParams.stripType = (uint8_t)type;
+                    PARAM_UpdateBlock(BLOCK_BASIC_SYSTEM, &basicParams, sizeof(BasicSystemBlock));
+                }
+            }
+            break;
+            
+        case CMD_START_MEASUREMENT:
+            /* 開始測量 */
+            if (g_dataLength >= 1) {
+                uint8_t measureType = g_cmdData[0];
+                printf("開始測量，類型: %d\r\n", measureType);
+                // 在此處添加測量啟動代碼
+            }
+            break;
+            
+        default:
+            /* 未知命令 */
+            printf("收到未知命令: 0x%02X\r\n", g_cmdType);
+            break;
+    }
+}
+
+/**
+ * @brief 測量T1_OUT電壓並回傳結果
+ */
+void BLE_MeasureT1Out(void)
+{
+    uint16_t adcValue;
+    uint16_t adcTotal = 0;
+    uint16_t adcValues[12]; // 保存多次測量值
+    uint8_t adcSamples = 12; // 增加取樣次數
+    uint8_t validSamples = 0;
+    float temperature;
+    float temperatureCoeff = 1.0f;
+    
+    /* 獲取當前溫度用於校準 - 使用內部溫度感測器 */
+    temperature = Get_Chip_Temperature();
+    
+    /* 計算溫度補償係數 (假設22℃為標準溫度) */
+    if (temperature > 15.0f && temperature < 35.0f) {
+        temperatureCoeff = 1.0f + (temperature - 22.0f) * 0.005f; // 每度偏差0.5%
+    }
+    
+    /* 啟用T1測量電路 */
+    GPIO_ResetBits(GPIOA, GPIO_Pin_8); // T1_ENABLE = Low (Enable)
+    
+    /* 等待電路穩定 */
+    Delay_Ms(30);  // 增加延遲時間以確保測量電路穩定
+    
+    /* 進行多次取樣 */
+    for (uint8_t i = 0; i < adcSamples; i++) {
+        /* 讀取ADC值 */
+        adcValues[i] = Get_ADC_Value(ADC_Channel_6); // PA6 (T1_OUT)
+        
+        /* 取樣間隔 */
+        Delay_Ms(5);
+    }
+    
+    /* 排序測量值，用於去除異常值 */
+    for (uint8_t i = 0; i < adcSamples - 1; i++) {
+        for (uint8_t j = 0; j < adcSamples - i - 1; j++) {
+            if (adcValues[j] > adcValues[j + 1]) {
+                uint16_t temp = adcValues[j];
+                adcValues[j] = adcValues[j + 1];
+                adcValues[j + 1] = temp;
+            }
+        }
+    }
+    
+    /* 去除最高和最低值後計算平均值 */
+    for (uint8_t i = 2; i < adcSamples - 2; i++) {
+        adcTotal += adcValues[i];
+        validSamples++;
+    }
+    
+    /* 確保有有效樣本 */
+    if (validSamples > 0) {
+        adcValue = adcTotal / validSamples;
+        
+        /* 應用溫度補償 */
+        adcValue = (uint16_t)((float)adcValue * temperatureCoeff);
+    } else {
+        /* 如果沒有有效樣本，使用中間值 */
+        adcValue = adcValues[adcSamples / 2];
+    }
+    
+    /* 關閉T1測量電路 */
+    GPIO_SetBits(GPIOA, GPIO_Pin_8); // T1_ENABLE = High (Disable)
+    
+    /* 發送ADC測量結果 */
+    BLE_SendADCValue(adcValue);
+    
+    printf("T1_OUT ADC測量值: %d (溫度: %.1f℃, 補償係數: %.3f)\r\n", 
+           adcValue, temperature, temperatureCoeff);
+    
+    /* 判斷電壓是否接近2.5V */
+    float voltage = (adcValue * 3.3f) / 4096.0f;
+    printf("T1_OUT電壓: %.2fV\r\n", voltage);
+    
+    /* 加入電壓狀態判斷 */
+    if (voltage > 2.3f && voltage < 2.7f) {
+        printf("電壓接近2.5V，可能為GLV/C/GAV試片\r\n");
+    } else {
+        printf("電壓遠離2.5V，可能為U/TG試片\r\n");
+    }
+    
+    /* 校驗測量穩定性 */
+    uint16_t maxDiff = 0;
+    for (uint8_t i = 2; i < adcSamples - 3; i++) {
+        uint16_t diff = (adcValues[i+1] > adcValues[i]) ? 
+                         (adcValues[i+1] - adcValues[i]) : 
+                         (adcValues[i] - adcValues[i+1]);
+        if (diff > maxDiff) maxDiff = diff;
+    }
+    
+    if (maxDiff > 100) {
+        printf("警告：T1_OUT測量波動較大 (最大偏差: %d)\r\n", maxDiff);
+    }
+}
+
+/**
+ * @brief 獲取芯片內部溫度
+ * 
+ * @return float 溫度值(攝氏度)
+ */
+float Get_Chip_Temperature(void)
+{
+    uint16_t adcValue;
+    float temperature;
+    
+    /* 配置ADC以讀取內部溫度感測器 */
+    ADC_TempSensorVrefintCmd(ENABLE);
+    Delay_Ms(1);
+    
+    /* 讀取ADC值 */
+    ADC_RegularChannelConfig(ADC1, ADC_Channel_16, 1, ADC_SampleTime_239Cycles5);
+    
+    /* 開始轉換 */
+    ADC_SoftwareStartConvCmd(ADC1, ENABLE);
+    
+    /* 等待轉換完成 */
+    while(ADC_GetFlagStatus(ADC1, ADC_FLAG_EOC) == RESET);
+    
+    /* 讀取轉換結果 */
+    adcValue = ADC_GetConversionValue(ADC1);
+    
+    /* 關閉溫度感測器 */
+    ADC_TempSensorVrefintCmd(DISABLE);
+    
+    /* 將ADC值轉換為溫度 (依據CH32V203數據手冊中的溫度感測器特性) */
+    temperature = ((float)adcValue * 3.3f / 4096.0f - 0.76f) / 0.0025f + 25.0f;
+    
+    return temperature;
+}
+
+/**
+ * @brief ADC測量函數
+ * 
+ * @param channel - ADC通道
+ * @return uint16_t - ADC測量值 (0-4095)
+ */
+uint16_t Get_ADC_Value(uint8_t channel)
+{
+    ADC_RegularChannelConfig(ADC1, channel, 1, ADC_SampleTime_239Cycles5);
+    
+    /* 開始轉換 */
+    ADC_SoftwareStartConvCmd(ADC1, ENABLE);
+    
+    /* 等待轉換完成 */
+    while(ADC_GetFlagStatus(ADC1, ADC_FLAG_EOC) == RESET);
+    
+    /* 讀取轉換結果 */
+    return ADC_GetConversionValue(ADC1);
+}
+
+/**
+ * @brief 發送ADC測量結果到CH582F
+ * 
+ * @param adc_value - ADC測量值
+ */
+void BLE_SendADCValue(uint16_t adc_value)
+{
+    uint8_t tx_buffer[5];
+    
+    /* 構建回應數據包 */
+    tx_buffer[0] = CMD_START_MARKER;
+    tx_buffer[1] = CMD_MEASURE_T1_OUT;
+    tx_buffer[2] = (uint8_t)(adc_value >> 8);   // 高位元組
+    tx_buffer[3] = (uint8_t)(adc_value & 0xFF); // 低位元組
+    tx_buffer[4] = CMD_END_MARKER;
+    
+    /* 發送回應 */
+    for (uint8_t i = 0; i < 5; i++) {
+        USART_SendData(USART2, tx_buffer[i]);
+        
+        /* 等待發送完成 */
+        while (USART_GetFlagStatus(USART2, USART_FLAG_TXE) == RESET);
+    }
+}
+
+/**
+ * @brief 處理試片插入通知
+ * 
+ * @param type - 試片類型
+ */
+void BLE_ProcessStripInsertion(StripType_TypeDef type)
+{
+    printf("檢測到試片插入，類型: ");
+    
+    switch (type) {
+        case STRIP_TYPE_GLV:
+            printf("血糖(GLV)\r\n");
+            break;
+        case STRIP_TYPE_U:
+            printf("尿酸\r\n");
+            break;
+        case STRIP_TYPE_C:
+            printf("總膽固醇\r\n");
+            break;
+        case STRIP_TYPE_TG:
+            printf("三酸甘油脂\r\n");
+            break;
+        case STRIP_TYPE_GAV:
+            printf("血糖(GAV)\r\n");
+            break;
+        default:
+            printf("未知類型\r\n");
+            break;
+    }
+    
+    /* 更新系統參數中的試片類型 */
+    BasicSystemBlock basicParams;
+    if (PARAM_ReadBlock(BLOCK_BASIC_SYSTEM, &basicParams, sizeof(BasicSystemBlock))) {
+        basicParams.stripType = (uint8_t)type;
+        PARAM_UpdateBlock(BLOCK_BASIC_SYSTEM, &basicParams, sizeof(BasicSystemBlock));
+        
+        /* 通知上層應用試片類型已變更 */
+        BLE_NotifyStripType(type);
+    }
+    
+    /* 根據試片類型設定相應參數 */
+    if (type == STRIP_TYPE_GAV) {
+        /* GAV試片使用T3電極 */
+        // 初始化T3電極參數...
+    } else {
+        /* 其他試片使用WE電極 */
+        // 初始化WE電極參數...
+    }
+}
+
+/**
+ * @brief 通知上層應用試片類型已變更
+ * 
+ * @param type - 試片類型
+ */
+void BLE_NotifyStripType(StripType_TypeDef type)
+{
+    /* 這裡可以添加將試片類型通知給上層應用的代碼，例如通過藍牙通知到手機APP */
+    printf("試片類型已更新為: %d\r\n", type);
+}
+
+/**
+ * @brief 依據腳位狀態判斷試片類型
+ * 
+ * @param pin3_state - Strip_Detect_3的狀態
+ * @param pin5_state - Strip_Detect_5的狀態
+ * @param t1_out_near_2p5v - T1_OUT電壓是否接近2.5V
+ *
+ * @return StripType_TypeDef - 試片類型
+ */
+StripType_TypeDef BLE_IdentifyStripType(uint8_t pin3_state, uint8_t pin5_state, uint8_t t1_out_near_2p5v)
+{
+    /* 根據檢測到的腳位狀態判斷試片類型 */
+    if (pin3_state == 0 && pin5_state == 1 && t1_out_near_2p5v) {
+        return STRIP_TYPE_GLV;     // 血糖(GLV試片)
+    } else if (pin3_state == 0 && pin5_state == 1 && !t1_out_near_2p5v) {
+        return STRIP_TYPE_U;       // 尿酸
+    } else if (pin3_state == 0 && pin5_state == 0 && t1_out_near_2p5v) {
+        return STRIP_TYPE_C;       // 總膽固醇
+    } else if (pin3_state == 1 && pin5_state == 0 && !t1_out_near_2p5v) {
+        return STRIP_TYPE_TG;      // 三酸甘油酯
+    } else if (pin3_state == 1 && pin5_state == 0 && t1_out_near_2p5v) {
+        return STRIP_TYPE_GAV;     // 血糖(GAV試片)
+    } else {
+        return STRIP_TYPE_UNKNOWN; // 未知類型
+    }
 } 

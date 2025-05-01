@@ -207,6 +207,7 @@ int main(void)
 {
     uint8_t key1Changed = 0;
     uint8_t key2Changed = 0;
+    StripType_TypeDef lastStripType = STRIP_TYPE_UNKNOWN;
     
     /* 系統初始化 */
     P14_CH32V203_System_Init();
@@ -257,6 +258,67 @@ int main(void)
         
         /* 處理藍牙UART數據 */
         UART1_ProcessReceivedData();
+        
+        /* 檢查試片類型是否改變 */
+        BasicSystemBlock basicParams;
+        if (PARAM_ReadBlock(BLOCK_BASIC_SYSTEM, &basicParams, sizeof(BasicSystemBlock))) {
+            StripType_TypeDef currentStripType = (StripType_TypeDef)basicParams.stripType;
+            
+            /* 判斷是否變更試片類型 */
+            if (currentStripType != lastStripType) {
+                /* 試片類型已變更，顯示相關信息 */
+                printf("========================================\r\n");
+                printf("試片類型已變更: %s\r\n", P14_ParamTable_GetStripTypeName(currentStripType));
+                
+                switch (currentStripType) {
+                    case STRIP_TYPE_GLV:
+                        printf("測量項目: 血糖(GLV試片)\r\n");
+                        printf("測量範圍: 20-600 mg/dL\r\n");
+                        /* 根據試片類型設置相關參數 */
+                        break;
+                        
+                    case STRIP_TYPE_U:
+                        printf("測量項目: 尿酸\r\n");
+                        printf("測量範圍: 3-20 mg/dL\r\n");
+                        /* 根據試片類型設置相關參數 */
+                        break;
+                        
+                    case STRIP_TYPE_C:
+                        printf("測量項目: 總膽固醇\r\n");
+                        printf("測量範圍: 100-400 mg/dL\r\n");
+                        /* 根據試片類型設置相關參數 */
+                        break;
+                        
+                    case STRIP_TYPE_TG:
+                        printf("測量項目: 三酸甘油脂\r\n");
+                        printf("測量範圍: 50-500 mg/dL\r\n");
+                        /* 根據試片類型設置相關參數 */
+                        break;
+                        
+                    case STRIP_TYPE_GAV:
+                        printf("測量項目: 血糖(GAV試片)\r\n");
+                        printf("測量範圍: 20-600 mg/dL\r\n");
+                        /* 根據試片類型設置相關參數 */
+                        break;
+                        
+                    default:
+                        printf("未知試片類型\r\n");
+                        break;
+                }
+                printf("========================================\r\n");
+                
+                /* 更新上次試片類型 */
+                lastStripType = currentStripType;
+                
+                /* 閃爍綠色LED提示使用者 */
+                for (int i = 0; i < 3; i++) {
+                    GPIO_ResetBits(GPIOB, GPIO_Pin_7);
+                    Delay_Ms(100);
+                    GPIO_SetBits(GPIOB, GPIO_Pin_7);
+                    Delay_Ms(100);
+                }
+            }
+        }
         
         /* 系統延時 */
         Delay_Ms(10);

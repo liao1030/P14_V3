@@ -24,7 +24,8 @@ User/ch32v20x_it.o: ../User/ch32v20x_it.c ../User/ch32v20x_it.h \
  /Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH32V203G8R6/Peripheral/inc/ch32v20x_usart.h \
  /Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH32V203G8R6/Peripheral/inc/ch32v20x_wwdg.h \
  /Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH32V203G8R6/User/ch32v20x_it.h \
- /Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH32V203G8R6/Peripheral/inc/ch32v20x_misc.h
+ /Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH32V203G8R6/Peripheral/inc/ch32v20x_misc.h \
+ ../User/P14_BLE_Protocol.h ../User/P14_Parameter_Table.h
 
 ../User/ch32v20x_it.h:
 
@@ -79,3 +80,7 @@ User/ch32v20x_it.o: ../User/ch32v20x_it.c ../User/ch32v20x_it.h \
 /Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH32V203G8R6/User/ch32v20x_it.h:
 
 /Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH32V203G8R6/Peripheral/inc/ch32v20x_misc.h:
+
+../User/P14_BLE_Protocol.h:
+
+../User/P14_Parameter_Table.h:

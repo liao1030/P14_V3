@@ -146,7 +146,7 @@ uint16_t BLE_PacketToBuffer(BLEPacket_TypeDef *packet, uint8_t *buffer, uint16_t
 /**
  * @brief 初始化藍牙協議
  */
-void P14_BLE_ProtocolInit(void)
+void P14_BLE_APP_ProtocolInit(void)
 {
     /* 重置協議狀態機 */
     g_protocolState = PROTOCOL_STATE_IDLE;
@@ -274,7 +274,7 @@ void BLE_SendToMCU(uint8_t *data, uint16_t length)
  * @param connection_handle 連接句柄
  * @param p_evt 事件指針
  */
-void P14_BLE_UartCallback(uint16_t connection_handle, ble_uart_evt_t *p_evt)
+void P14_BLE_APP_UartCallback(uint16_t connection_handle, ble_uart_evt_t *p_evt)
 {
     switch(p_evt->type)
     {
@@ -304,5 +304,5 @@ void P14_BLE_UartCallback(uint16_t connection_handle, ble_uart_evt_t *p_evt)
 static void P14_RegisterBLECallback(void)
 {
     /* 註冊藍牙UART服務回調 */
-    ble_uart_set_callback(P14_BLE_UartCallback);
+    ble_uart_set_callback(P14_BLE_APP_UartCallback);
 } 

@@ -11,6 +11,9 @@
 #include "CH58x_common.h"
 #include "P14_Init.h"
 
+/* 外部函數聲明 */
+void P14_UART1_RxHandler(uint8_t rx_data);
+
 /*********************************************************************
  * @fn      P14_CH582F_GPIO_Init
  *
@@ -77,6 +80,9 @@ void P14_CH582F_UART_Init(void)
     R8_UART1_IER = RB_IER_TXD_EN | RB_IER_RECV_RDY; // 啟用發送和接收中斷
     R8_UART1_DIV = 1;
     
+    /* 啟用UART1中斷 */
+    PFIC_EnableIRQ(UART1_IRQn);
+    
     /* UART0初始化 - 與外部設備1通訊 */
     UART0_DefInit();
     UART0_BaudRateCfg(115200);
@@ -119,4 +125,42 @@ void P14_CH582F_System_Init(void)
     
     /* 校準內部32K時鐘 */
     Calibration_LSI(Level_64);
+}
+
+/*********************************************************************
+ * @fn      UART1_IRQHandler
+ *
+ * @brief   UART1中斷處理函數
+ *
+ * @param   none
+ *
+ * @return  none
+ */
+__INTERRUPT
+__HIGH_CODE
+void UART1_IRQHandler(void)
+{
+    uint8_t status = R8_UART1_IIR;
+    
+    /* 處理接收中斷 */
+    if ((status & RB_IIR_INT_MASK) == UART_II_RECV_RDY) {
+        /* 讀取接收數據 */
+        while (R8_UART1_RFC) {
+            uint8_t rx_data = R8_UART1_RBR;
+            
+            /* 調用UART1接收處理函數 */
+            P14_UART1_RxHandler(rx_data);
+        }
+    }
+    
+    /* 處理發送完成中斷 */
+    if ((status & RB_IIR_INT_MASK) == UART_II_THR_EMPTY) {
+        /* 發送緩衝區已空，可在此添加發送相關處理 */
+    }
+    
+    /* 處理接收超時中斷 */
+    if ((status & RB_IIR_INT_MASK) == UART_II_RECV_TOUT) {
+        /* 讀取LSR寄存器以清除狀態 */
+        uint8_t line_status = R8_UART1_LSR;
+    }
 } 
