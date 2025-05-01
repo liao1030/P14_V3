@@ -17,6 +17,7 @@
 #include "gattprofile.h"
 #include "peripheral.h"
 #include "app_uart.h"
+#include "P14_Init.h"
 
 /*********************************************************************
  * GLOBAL TYPEDEFS
@@ -54,18 +55,24 @@ void Main_Circulation()
  *******************************************************************************/
 int main(void)
 {
-    SetSysClock(CLK_SOURCE_PLL_60MHz);
+    /* P14 V2.1 系統初始化 */
+    P14_CH582F_System_Init();
+    
 #ifdef DEBUG
     GPIOA_SetBits(bTXD1);
     GPIOA_ModeCfg(bTXD1, GPIO_ModeOut_PP_5mA);
     UART1_DefInit();
 #endif
     PRINT("%s\n", VER_LIB);
+    
+    /* BLE相關初始化 */
     CH58X_BLEInit();
     HAL_Init();
     GAPRole_PeripheralInit();
     Peripheral_Init();
     app_uart_init();
+    
+    /* 進入主循環 */
     Main_Circulation();
 }
 

@@ -1,0 +1,64 @@
+{
+	"version": "0.2.0",
+	"configurations": [
+		{
+			"type": "mrs-debugger",
+			"request": "launch",
+			"name": "BLE_UART",
+			"cwd": "/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE/BLE_UART",
+			"openOCDCfg": {
+				"useLocalOpenOCD": true,
+				"executable": "/Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/OpenOCD/OpenOCD/bin/openocd",
+				"configOptions": [
+					"-f \"/Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/OpenOCD/OpenOCD/bin/wch-riscv.cfg\" -c \"chip_id CH58x\""
+				],
+				"gdbport": 3333,
+				"telnetport": 4444,
+				"tclport": 6666,
+				"host": "localhost",
+				"port": 3333,
+				"skipDownloadBeforeDebug": false,
+				"enablePageEraser": false,
+				"enableNoZeroWaitingAreaFlash": false
+			},
+			"gdbCfg": {
+				"executable": "/Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/riscv-none-embed-gdb",
+				"commands": [
+					"set mem inaccessible-by-default off",
+					"set architecture riscv:rv32",
+					"set remotetimeout unlimited"
+				],
+				"options": []
+			},
+			"startup": {
+				"initCommands": {
+					"initReset": true,
+					"initResetType": "init",
+					"armSemihosting": false,
+					"additionalCommands": []
+				},
+				"loadedFiles": {
+					"executableFile": "/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE/BLE_UART/obj/BLE_UART.elf",
+					"symbolFile": "/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE/BLE_UART/obj/BLE_UART.elf",
+					"executableFileOffset": 0,
+					"symbolFileOffset": 0
+				},
+				"runCommands": {
+					"runReset": true,
+					"runResetType": "halt",
+					"additionalCommands": [],
+					"setBreakAt": "handle_reset",
+					"continue": true,
+					"setProgramCounterAt": 0
+				},
+				"debugInRAM": false
+			},
+			"svdpath": "",
+			"output": {
+				"showDebugGDBTrace": true,
+				"saveDebugOutputToFile": false,
+				"showDebugOutputTimestamps": true
+			}
+		}
+	]
+}

@@ -11,8 +11,13 @@
 *******************************************************************************/
 #include "ch32v20x_it.h"
 
+/* 全局變量聲明 */
+extern volatile uint32_t g_systicks;
+
 void NMI_Handler(void) __attribute__((interrupt("WCH-Interrupt-fast")));
 void HardFault_Handler(void) __attribute__((interrupt("WCH-Interrupt-fast")));
+/* 在main.c中實現的SysTick處理函數 */
+void SysTick_Handler(void) __attribute__((interrupt("WCH-Interrupt-fast")));
 
 /*********************************************************************
  * @fn      NMI_Handler
@@ -41,6 +46,19 @@ void HardFault_Handler(void)
   while (1)
   {
   }
+}
+
+/*********************************************************************
+ * @fn      SysTick_Handler
+ *
+ * @brief   系統計時器中斷處理
+ *
+ * @return  none
+ */
+void SysTick_Handler(void)
+{
+    g_systicks++;
+    SysTick->SR = 0;  /* 清除中斷標誌 */
 }
 
 

@@ -14,6 +14,10 @@
 
 #include "debug.h"
 
+/* ÖÐ”àÌŽÀíº¯”µÂ•Ã÷ */
+void NMI_Handler(void);
+void HardFault_Handler(void);
+void SysTick_Handler(void);
 
 #endif /* __CH32V20x_IT_H */
 
