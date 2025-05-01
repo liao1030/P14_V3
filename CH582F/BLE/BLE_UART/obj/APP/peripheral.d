@@ -22,8 +22,9 @@ APP/peripheral.o: ../APP/peripheral.c \
  /Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE/BLE_UART/Profile/include/gattprofile.h \
  /Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE/BLE_UART/APP/include/peripheral.h \
  /Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE/BLE_UART/APP/ble_uart_service/ble_uart_service.h \
+ /Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE/LIB/CH58xBLE_LIB.h \
  /Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE/BLE_UART/APP/app_drv_fifo/app_drv_fifo.h \
- /Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE/BLE_UART/APP/include/app_uart.h
+ ../APP/app_uart.h
 
 /Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE/HAL/include/CONFIG.h:
 
@@ -71,6 +72,8 @@ APP/peripheral.o: ../APP/peripheral.c \
 
 /Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE/BLE_UART/APP/ble_uart_service/ble_uart_service.h:
 
+/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE/LIB/CH58xBLE_LIB.h:
+
 /Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE/BLE_UART/APP/app_drv_fifo/app_drv_fifo.h:
 
-/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE/BLE_UART/APP/include/app_uart.h:
+../APP/app_uart.h:

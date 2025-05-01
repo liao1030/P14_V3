@@ -5,16 +5,19 @@
 
 # Add inputs and outputs from these tool invocations to the build variables 
 C_SRCS += \
+../APP/P14_BLE_Protocol.c \
 ../APP/app_uart.c \
 ../APP/peripheral.c \
 ../APP/peripheral_main.c 
 
 C_DEPS += \
+./APP/P14_BLE_Protocol.d \
 ./APP/app_uart.d \
 ./APP/peripheral.d \
 ./APP/peripheral_main.d 
 
 OBJS += \
+./APP/P14_BLE_Protocol.o \
 ./APP/app_uart.o \
 ./APP/peripheral.o \
 ./APP/peripheral_main.o 

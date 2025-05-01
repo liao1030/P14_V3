@@ -221,6 +221,12 @@ int main(void)
     /* 開啟綠色LED */
     GPIO_SetBits(GPIOB, GPIO_Pin_7);
     
+    /* 初始化UART和藍牙協議 */
+    UART1_Init(115200);
+    BLE_ProtocolInit();
+    
+    printf("UART和藍牙通訊協議初始化完成\r\n");
+    
     /* 主循環 */
     while(1)
     {
@@ -249,10 +255,8 @@ int main(void)
             TestParameterTable();
         }
         
-        if (key2Changed && g_key2.longPressed) {
-            printf("檢測到KEY2長按\r\n");
-            /* 長按處理邏輯可以放在這裡 */
-        }
+        /* 處理藍牙UART數據 */
+        UART1_ProcessReceivedData();
         
         /* 系統延時 */
         Delay_Ms(10);

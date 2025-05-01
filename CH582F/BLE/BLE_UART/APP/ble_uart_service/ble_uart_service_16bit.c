@@ -199,6 +199,20 @@ bStatus_t ble_uart_add_service(ble_uart_ProfileChangeCB_t cb)
 }
 
 /*********************************************************************
+ * @fn      ble_uart_set_callback
+ *
+ * @brief   ‘O÷√ªÿ’{∫Øîµ
+ *
+ * @param   cb - ªÿ’{∫Øîµ÷∏·ò
+ *
+ * @return  None
+ */
+void ble_uart_set_callback(ble_uart_ProfileChangeCB_t cb)
+{
+    ble_uart_AppCBs = cb;
+}
+
+/*********************************************************************
  * @fn          ble_uart_ReadAttrCB
  *
  * @brief       Read an attribute.

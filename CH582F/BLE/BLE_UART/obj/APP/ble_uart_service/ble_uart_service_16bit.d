@@ -20,7 +20,8 @@ APP/ble_uart_service/ble_uart_service_16bit.o: \
  /Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/SRC/StdPeriphDriver/inc/CH58x_usbhost.h \
  /Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/SRC/StdPeriphDriver/inc/ISP583.h \
  /Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE/BLE_UART/Profile/include/gattprofile.h \
- ../APP/ble_uart_service/ble_uart_service.h
+ ../APP/ble_uart_service/ble_uart_service.h \
+ /Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE/LIB/CH58xBLE_LIB.h
 
 /Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE/HAL/include/CONFIG.h:
 
@@ -63,3 +64,5 @@ APP/ble_uart_service/ble_uart_service_16bit.o: \
 /Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE/BLE_UART/Profile/include/gattprofile.h:
 
 ../APP/ble_uart_service/ble_uart_service.h:
+
+/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE/LIB/CH58xBLE_LIB.h:

@@ -18,7 +18,13 @@ extern "C" {
 #endif
 
 //#include "att.h"
-#include "stdint.h"
+#include "CONFIG.h"
+#include "CH58xBLE_LIB.h"
+#include <stdint.h>
+
+// 為了向下相容，添加類型別名定義
+typedef uint8_t   uint8;
+typedef uint16_t  uint16;
 
 #define BLE_UART_RX_BUFF_SIZE    1
 
@@ -60,6 +66,8 @@ extern bStatus_t ble_uart_add_service(ble_uart_ProfileChangeCB_t cb);
 extern uint8 ble_uart_notify_is_ready(uint16 connHandle);
 
 extern bStatus_t ble_uart_notify(uint16 connHandle, attHandleValueNoti_t *pNoti, uint8 taskId);
+
+extern void ble_uart_set_callback(ble_uart_ProfileChangeCB_t cb);
 /*********************************************************************
 *********************************************************************/
 

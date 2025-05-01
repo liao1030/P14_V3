@@ -64,8 +64,9 @@
 #define LL_ADV_CONNECTABLE_UNDIRECTED_EVT    0
 
 // 函數聲明
-static void Peripheral_GAPInit(void);
-static void SetBleAdvertData(void);
+void GAP_ParamInit(void);
+void SetBleAdvertData(void);
+void RegisterBLECallback(void);
 
 /*********************************************************************
  * TYPEDEFS
@@ -85,7 +86,6 @@ peripheralConnItem_t peripheralConnList;     // 修改為非靜態變數
 /*********************************************************************
  * EXTERNAL FUNCTIONS
  */
-extern void P14_BLE_UartCallback(uint16_t connection_handle, ble_uart_evt_t *p_evt);
 
 /*********************************************************************
  * LOCAL VARIABLES
@@ -191,7 +191,7 @@ static gapBondCBs_t Peripheral_BondMgrCBs = {
 void Peripheral_Init()
 {
     // 初始化 GAP
-    Peripheral_GAPInit();
+    GAP_ParamInit();
     
     // 註冊設備信息服務
     DevInfo_AddService();
@@ -201,6 +201,9 @@ void Peripheral_Init()
     
     // 設備信息服務
     SetBleAdvertData();
+    
+    // 註冊藍牙協議回調
+    RegisterBLECallback();
     
     PRINT("Peripheral Initialized\r\n");
 }
@@ -607,7 +610,7 @@ static void peripheralStateNotificationCB(gapRole_States_t newState, gapRoleEven
 /**
  * @brief GAP參數初始化
  */
-static void Peripheral_GAPInit(void)
+void GAP_ParamInit(void)
 {
     uint8_t advertising_enable_default = TRUE;
     uint16_t advIntMin = DEFAULT_DESIRED_MIN_CONN_INTERVAL;
@@ -621,6 +624,9 @@ static void Peripheral_GAPInit(void)
     
     // 配置廣播參數
     GAPRole_SetParameter(GAPROLE_ADVERT_ENABLED, sizeof(uint8_t), &advertising_enable_default);
+    GAPRole_SetParameter(GAPROLE_ADVERT_OFF_TIME, sizeof(uint16_t), &advIntMin);
+    GAPRole_SetParameter(GAPROLE_ADVERT_INTERVAL_MIN, sizeof(uint16_t), &advIntMin);
+    GAPRole_SetParameter(GAPROLE_ADVERT_INTERVAL_MAX, sizeof(uint16_t), &advIntMax);
     GAPRole_SetParameter(GAPROLE_ADV_EVENT_TYPE, sizeof(uint8_t), &advType);
     GAPRole_SetParameter(GAPROLE_ADV_FILTER_POLICY, sizeof(uint8_t), &advFilterPolicy);
     GAPRole_SetParameter(GAPROLE_ADV_CHANNEL_MAP, sizeof(uint8_t), &advChanMap);
@@ -633,7 +639,7 @@ static void Peripheral_GAPInit(void)
 /**
  * @brief 設置藍牙廣播數據
  */
-static void SetBleAdvertData(void)
+void SetBleAdvertData(void)
 {
     // 設置廣播數據
     GAPRole_SetParameter(GAPROLE_ADVERT_DATA, sizeof(advertData), advertData);
@@ -643,4 +649,9 @@ static void SetBleAdvertData(void)
     // 開始廣播
     uint8_t advertising_enable = TRUE;
     GAPRole_SetParameter(GAPROLE_ADVERT_ENABLED, sizeof(uint8_t), &advertising_enable);
+}
+
+void RegisterBLECallback(void)
+{
+    // Implementation of RegisterBLECallback function
 } 

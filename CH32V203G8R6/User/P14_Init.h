@@ -5,6 +5,8 @@
 #include "ch32v20x.h"
 #include "P14_Parameter_Table.h"
 #include "P14_Flash_Storage.h"
+#include "P14_BLE_Protocol.h"
+#include "P14_UART.h"
 
 /* GPIO≥ı ºªØœ‡ÍP∫Øîµ */
 void P14_CH32V203_GPIO_Init(void);

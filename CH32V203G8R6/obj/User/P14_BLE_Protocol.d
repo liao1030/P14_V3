@@ -1,5 +1,5 @@
-User/P14_Init.o: ../User/P14_Init.c ../User/P14_Init.h \
- /Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH32V203G8R6/Debug/debug.h \
+User/P14_BLE_Protocol.o: ../User/P14_BLE_Protocol.c \
+ ../User/P14_BLE_Protocol.h ../User/P14_Parameter_Table.h \
  /Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH32V203G8R6/Peripheral/inc/ch32v20x.h \
  /Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH32V203G8R6/Core/core_riscv.h \
  /Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH32V203G8R6/User/system_ch32v20x.h \
@@ -24,13 +24,13 @@ User/P14_Init.o: ../User/P14_Init.c ../User/P14_Init.h \
  /Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH32V203G8R6/Peripheral/inc/ch32v20x_usart.h \
  /Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH32V203G8R6/Peripheral/inc/ch32v20x_wwdg.h \
  /Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH32V203G8R6/User/ch32v20x_it.h \
+ /Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH32V203G8R6/Debug/debug.h \
  /Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH32V203G8R6/Peripheral/inc/ch32v20x_misc.h \
- ../User/P14_Parameter_Table.h ../User/P14_Flash_Storage.h \
- ../User/P14_BLE_Protocol.h ../User/P14_UART.h
+ ../User/P14_Flash_Storage.h
 
-../User/P14_Init.h:
+../User/P14_BLE_Protocol.h:
 
-/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH32V203G8R6/Debug/debug.h:
+../User/P14_Parameter_Table.h:
 
 /Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH32V203G8R6/Peripheral/inc/ch32v20x.h:
 
@@ -80,12 +80,8 @@ User/P14_Init.o: ../User/P14_Init.c ../User/P14_Init.h \
 
 /Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH32V203G8R6/User/ch32v20x_it.h:
 
+/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH32V203G8R6/Debug/debug.h:
+
 /Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH32V203G8R6/Peripheral/inc/ch32v20x_misc.h:
 
-../User/P14_Parameter_Table.h:
-
 ../User/P14_Flash_Storage.h:
-
-../User/P14_BLE_Protocol.h:
-
-../User/P14_UART.h:

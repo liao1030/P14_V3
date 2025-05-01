@@ -54,18 +54,24 @@ uint32_t uart_to_ble_send_evt_cnt = 0;
 /*********************************************************************
  * EXTERNAL VARIABLES
  */
+// 添加外部變數聲明
+extern peripheralConnItem_t peripheralConnList;
+extern tmosTaskID GATT_TaskID;
 
 /*********************************************************************
  * EXTERNAL FUNCTIONS
  */
+// 添加外部函數聲明
+extern void BLE_ProcessMcuData(uint8_t *data, uint16_t length);
+extern void P14_BLE_UartCallback(uint16_t connection_handle, ble_uart_evt_t *p_evt);
 
 /*********************************************************************
  * LOCAL VARIABLES
  */
 //
 
-//The tx buffer and rx buffer for app_drv_fifo
-//length should be a power of 2
+// The tx buffer and rx buffer for app_drv_fifo
+// length should be a power of 2
 static uint8_t app_uart_tx_buffer[APP_UART_TX_BUFFER_LENGTH] = {0};
 static uint8_t app_uart_rx_buffer[APP_UART_RX_BUFFER_LENGTH] = {0};
 
@@ -92,10 +98,21 @@ static uint8_t app_uart_rx_buffer[APP_UART_RX_BUFFER_LENGTH] = {0};
 void app_uart_process(void)
 {
     UINT32 irq_status;
+    static uint8_t uart_rx_buffer[UART_FIFO_SIZE * 2];
+    uint16_t rx_size = 0;
+    
     SYS_DisableAllIrq(&irq_status);
     if(uart_rx_flag)
     {
-        tmos_start_task(Peripheral_TaskID, UART_TO_BLE_SEND_EVT, 2);
+        /* 從FIFO中讀取數據 */
+        app_drv_fifo_read(&app_uart_rx_fifo, uart_rx_buffer, &rx_size);
+        
+        /* 處理數據 */
+        if (rx_size > 0) {
+            /* 使用P14藍牙協議處理來自MCU的數據 */
+            BLE_ProcessMcuData(uart_rx_buffer, rx_size);
+        }
+        
         uart_rx_flag = false;
     }
     SYS_RecoverIrq(irq_status);
@@ -213,20 +230,37 @@ void on_bleuartServiceEvt(uint16_t connection_handle, ble_uart_evt_t *p_evt)
         case BLE_UART_EVT_BLE_DATA_RECIEVED:
             PRINT("BLE RX DATA len:%d\r\n", p_evt->data.length);
 
-            //for notify back test
-            //to ble
-            uint16_t to_write_length = p_evt->data.length;
-            app_drv_fifo_write(&app_uart_rx_fifo, (uint8_t *)p_evt->data.p_data, &to_write_length);
-            tmos_start_task(Peripheral_TaskID, UART_TO_BLE_SEND_EVT, 2);
-            //end of nofify back test
-
-            //ble to uart
-            app_uart_tx_data((uint8_t *)p_evt->data.p_data, p_evt->data.length);
+            /* 使用P14藍牙協議處理數據 */
+            P14_BLE_UartCallback(connection_handle, p_evt);
 
             break;
         default:
             break;
     }
+}
+
+/*********************************************************************
+ * @fn      ble_uart_notify_data
+ *
+ * @brief   發送數據到藍牙客戶端
+ *
+ * @param   data - 數據指針
+ * @param   length - 數據長度
+ *
+ * @return  bStatus_t - 操作結果
+ */
+bStatus_t ble_uart_notify_data(uint8_t *data, uint16_t length)
+{
+    // 檢查連接是否有效
+    if (!ble_uart_notify_is_ready(peripheralConnList.connHandle)) {
+        return bleNotReady;
+    }
+    
+    attHandleValueNoti_t noti;
+    noti.len = length;
+    noti.pValue = (uint8 *)data;
+    
+    return ble_uart_notify(peripheralConnList.connHandle, &noti, 0);
 }
 
 /*********************************************************************

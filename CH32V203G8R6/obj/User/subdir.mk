@@ -5,25 +5,31 @@
 
 # Add inputs and outputs from these tool invocations to the build variables 
 C_SRCS += \
+../User/P14_BLE_Protocol.c \
 ../User/P14_Flash_Storage.c \
 ../User/P14_Init.c \
 ../User/P14_Parameter_Table.c \
+../User/P14_UART.c \
 ../User/ch32v20x_it.c \
 ../User/main.c \
 ../User/system_ch32v20x.c 
 
 C_DEPS += \
+./User/P14_BLE_Protocol.d \
 ./User/P14_Flash_Storage.d \
 ./User/P14_Init.d \
 ./User/P14_Parameter_Table.d \
+./User/P14_UART.d \
 ./User/ch32v20x_it.d \
 ./User/main.d \
 ./User/system_ch32v20x.d 
 
 OBJS += \
+./User/P14_BLE_Protocol.o \
 ./User/P14_Flash_Storage.o \
 ./User/P14_Init.o \
 ./User/P14_Parameter_Table.o \
+./User/P14_UART.o \
 ./User/ch32v20x_it.o \
 ./User/main.o \
 ./User/system_ch32v20x.o 

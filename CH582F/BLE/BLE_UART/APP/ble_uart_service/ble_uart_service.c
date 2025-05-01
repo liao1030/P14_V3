@@ -176,9 +176,9 @@ gattServiceCBs_t ble_uart_ProfileCBs = {
  */
 
 /*********************************************************************
- * @fn      ble_uart_AddService
+ * @fn      ble_uart_add_service
  *
- * @brief   Initializes the Simple Profile service by registering
+ * @brief   Initializes the raw pass GATT Profile service by registering
  *          GATT attributes with the GATT server.
  *
  * @param   services - services to add. This is a bit map and can
@@ -190,22 +190,47 @@ bStatus_t ble_uart_add_service(ble_uart_ProfileChangeCB_t cb)
 {
     uint8 status = SUCCESS;
 
+    // Initialize Client Characteristic Configuration attributes
     GATTServApp_InitCharCfg(INVALID_CONNHANDLE, ble_uart_TxCCCD);
-    // Register with Link DB to receive link status change callback
-    linkDB_Register(ble_uart_HandleConnStatusCB);
 
-    //    ble_uart_TxCCCD.connHandle = INVALID_CONNHANDLE;
-    //    ble_uart_TxCCCD.value = 0;
-    // Register GATT attribute list and CBs with GATT Server App
-    status = GATTServApp_RegisterService(ble_uart_ProfileAttrTbl,
-                                         GATT_NUM_ATTRS(ble_uart_ProfileAttrTbl),
-                                         GATT_MAX_ENCRYPT_KEY_SIZE,
-                                         &ble_uart_ProfileCBs);
+    // Register with GATT Server app
+    status = GATTServApp_RegisterService(ble_uart_ProfileAttrTbl, GATT_NUM_ATTRS(ble_uart_ProfileAttrTbl), GATT_MAX_ENCRYPT_KEY_SIZE, &ble_uart_ProfileCBs);
     if(status != SUCCESS)
-        PRINT("Add ble uart service failed!\n");
+    {
+        return (status);
+    }
+
     ble_uart_AppCBs = cb;
 
     return (status);
+}
+
+/*********************************************************************
+ * @fn      ble_uart_set_callback
+ *
+ * @brief   ‘O÷√ªÿ’{∫Øîµ
+ *
+ * @param   cb - ªÿ’{∫Øîµ÷∏·ò
+ *
+ * @return  None
+ */
+void ble_uart_set_callback(ble_uart_ProfileChangeCB_t cb)
+{
+    ble_uart_AppCBs = cb;
+}
+
+/*********************************************************************
+ * @fn          ble_uart_notify_is_ready
+ *
+ * @brief       Check if notifications are enabled for a given connection
+ *
+ * @param       connHandle - connection handle
+ *
+ * @return      TRUE if notifications enabled, FALSE otherwise
+ */
+uint8 ble_uart_notify_is_ready(uint16 connHandle)
+{
+    return (GATT_CLIENT_CFG_NOTIFY == GATTServApp_ReadCharCfg(connHandle, ble_uart_TxCCCD));
 }
 
 /*********************************************************************
@@ -345,10 +370,6 @@ static void ble_uart_HandleConnStatusCB(uint16 connHandle, uint8 changeType)
     }
 }
 
-uint8 ble_uart_notify_is_ready(uint16 connHandle)
-{
-    return (GATT_CLIENT_CFG_NOTIFY == GATTServApp_ReadCharCfg(connHandle, ble_uart_TxCCCD));
-}
 /*********************************************************************
  * @fn          BloodPressure_IMeasNotify
  *
