@@ -2,8 +2,8 @@
  * File Name          : main.c
  * Author             : WCH
  * Version            : V1.1
- * Date               : 2020/08/06
- * Description        : 外设从机应用主函数及任务系统初始化
+ * Date               : 2024/07/23
+ * Description        : 外设從機應用主函數及任務系統初始化
  *********************************************************************************
  * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
  * Attention: This software (modified or not) and binary are used for 
@@ -11,12 +11,13 @@
  *******************************************************************************/
 
 /******************************************************************************/
-/* 头文件包含 */
+/* 頭文件包含 */
 #include "CONFIG.h"
 #include "HAL.h"
 #include "gattprofile.h"
 #include "peripheral.h"
 #include "app_uart.h"
+#include "ch582f_init.h"
 
 /*********************************************************************
  * GLOBAL TYPEDEFS
@@ -29,7 +30,7 @@ u8C MacAddr[6] = {0x84, 0xC2, 0xE4, 0x03, 0x02, 0x02};
 
 /*******************************************************************************
  * Function Name  : Main_Circulation
- * Description    : 主循环
+ * Description    : 主循環
  * Input          : None
  * Output         : None
  * Return         : None
@@ -47,20 +48,22 @@ void Main_Circulation()
 
 /*******************************************************************************
  * Function Name  : main
- * Description    : 主函数
+ * Description    : 主函數
  * Input          : None
  * Output         : None
  * Return         : None
  *******************************************************************************/
 int main(void)
 {
-    SetSysClock(CLK_SOURCE_PLL_60MHz);
+    // 使用自定義初始化函數
+    CH582F_Init();
+    
 #ifdef DEBUG
-    GPIOA_SetBits(bTXD1);
-    GPIOA_ModeCfg(bTXD1, GPIO_ModeOut_PP_5mA);
-    UART1_DefInit();
-#endif
+    PRINT("CH582F 初始化完成\n");
+    PRINT("系統時鐘: %d MHz\n", GetSysClock()/1000000);
     PRINT("%s\n", VER_LIB);
+#endif
+    
     CH58X_BLEInit();
     HAL_Init();
     GAPRole_PeripheralInit();

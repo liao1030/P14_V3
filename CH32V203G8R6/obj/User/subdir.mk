@@ -5,16 +5,19 @@
 
 # Add inputs and outputs from these tool invocations to the build variables 
 C_SRCS += \
+../User/ch32v203_init.c \
 ../User/ch32v20x_it.c \
 ../User/main.c \
 ../User/system_ch32v20x.c 
 
 C_DEPS += \
+./User/ch32v203_init.d \
 ./User/ch32v20x_it.d \
 ./User/main.d \
 ./User/system_ch32v20x.d 
 
 OBJS += \
+./User/ch32v203_init.o \
 ./User/ch32v20x_it.o \
 ./User/main.o \
 ./User/system_ch32v20x.o 

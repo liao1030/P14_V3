@@ -6,16 +6,19 @@
 # Add inputs and outputs from these tool invocations to the build variables 
 C_SRCS += \
 ../APP/app_uart.c \
+../APP/ch582f_init.c \
 ../APP/peripheral.c \
 ../APP/peripheral_main.c 
 
 C_DEPS += \
 ./APP/app_uart.d \
+./APP/ch582f_init.d \
 ./APP/peripheral.d \
 ./APP/peripheral_main.d 
 
 OBJS += \
 ./APP/app_uart.o \
+./APP/ch582f_init.o \
 ./APP/peripheral.o \
 ./APP/peripheral_main.o 
 
