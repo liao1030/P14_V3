@@ -171,6 +171,51 @@ void P14_CH32V203_ParameterTable_Init(void)
 }
 
 /*********************************************************************
+ * @fn      P14_CH32V203_Flash_Storage_Init
+ *
+ * @brief   Flash參數儲存系統初始化
+ *
+ * @param   none
+ *
+ * @return  none
+ */
+void P14_CH32V203_Flash_Storage_Init(void)
+{
+    /* 初始化Flash參數儲存系統 */
+    if (PARAM_Init()) {
+        printf("Flash參數儲存系統初始化成功\r\n");
+    } else {
+        printf("Flash參數儲存系統初始化失敗，已載入默認值\r\n");
+    }
+    
+    /* 獲取基本系統參數 */
+    BasicSystemBlock basicParams;
+    if (PARAM_ReadBlock(BLOCK_BASIC_SYSTEM, &basicParams, sizeof(BasicSystemBlock))) {
+        /* 顯示當前測試模式 */
+        if (basicParams.factory == MODE_FACTORY) {
+            printf("當前模式: 工廠模式\r\n");
+        } else {
+            printf("當前模式: 使用者模式\r\n");
+        }
+        
+        /* 顯示當前測試項目 */
+        StripType_TypeDef stripType = (StripType_TypeDef)basicParams.stripType;
+        printf("當前測試項目: %s\r\n", P14_ParamTable_GetStripTypeName(stripType));
+        
+        /* 顯示測量單位 */
+        Unit_TypeDef unit = (Unit_TypeDef)basicParams.measureUnit;
+        printf("當前測量單位: %s\r\n", P14_ParamTable_GetUnitName(unit));
+        
+        /* 顯示測量次數 */
+        printf("累計測量次數: %d\r\n", basicParams.testCount);
+    }
+    
+    /* 獲取測試記錄數量 */
+    uint16_t recordCount = PARAM_GetTestRecordCount();
+    printf("測試記錄數量: %d\r\n", recordCount);
+}
+
+/*********************************************************************
  * @fn      P14_CH32V203_System_Init
  *
  * @brief   CH32V203系統初始化
@@ -196,8 +241,8 @@ void P14_CH32V203_System_Init(void)
     /* UART初始化 */
     P14_CH32V203_UART_Init();
     
-    /* 參數表初始化 */
-    P14_CH32V203_ParameterTable_Init();
+    /* Flash參數儲存系統初始化 */
+    P14_CH32V203_Flash_Storage_Init();
     
     /* 顯示初始化完成訊息 */
     printf("P14 CH32V203G8R6 系統初始化完成\r\n");

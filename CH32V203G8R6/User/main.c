@@ -59,27 +59,56 @@ Key_TypeDef g_key2 = {KEY_STATE_IDLE, 0, 0, 0};
  */
 void TestParameterTable(void)
 {
-    StripType_TypeDef currentType, newType;
-    uint8_t testCount;
+    BasicSystemBlock basicParams;
+    
+    /* 讀取當前基本系統參數 */
+    if (!PARAM_ReadBlock(BLOCK_BASIC_SYSTEM, &basicParams, sizeof(BasicSystemBlock))) {
+        printf("讀取基本系統參數失敗\r\n");
+        return;
+    }
     
     /* 切換測試項目類型 */
-    currentType = (StripType_TypeDef)P14_ParamTable_Read(PARAM_STRIP_TYPE);
-    newType = (currentType + 1) % 5; // 循環切換0-4之間的值
+    StripType_TypeDef currentType = (StripType_TypeDef)basicParams.stripType;
+    StripType_TypeDef newType = (currentType + 1) % 5; // 循環切換0-4之間的值
     
-    /* 更新參數表 */
-    P14_ParamTable_Write(PARAM_STRIP_TYPE, (uint8_t)newType);
-    P14_ParamTable_UpdateChecksum();
-    P14_ParamTable_Save();
+    /* 更新參數 */
+    basicParams.stripType = (uint8_t)newType;
+    
+    /* 寫入更新後的參數 */
+    if (!PARAM_UpdateBlock(BLOCK_BASIC_SYSTEM, &basicParams, sizeof(BasicSystemBlock))) {
+        printf("更新基本系統參數失敗\r\n");
+        return;
+    }
     
     /* 顯示切換後的項目 */
     printf("測試項目切換為: %s\r\n", P14_ParamTable_GetStripTypeName(newType));
     
-    /* 增加測試次數 */
-    P14_ParamTable_IncrementTestCount();
+    /* 測試記錄儲存功能 */
+    uint16_t randomValue = g_systicks % 300 + 100;  // 模擬測量值 (100-399)
+    if (PARAM_SaveTestRecord(randomValue, 0, basicParams.defaultEvent, 0, 3000, 250)) {
+        printf("儲存測試記錄成功，測量值: %d\r\n", randomValue);
+    } else {
+        printf("儲存測試記錄失敗\r\n");
+    }
     
     /* 顯示當前測試次數 */
-    testCount = P14_ParamTable_Read16(PARAM_NOT);
+    uint16_t testCount = PARAM_GetTestCount();
     printf("當前測試次數: %d\r\n", testCount);
+    
+    /* 顯示測試記錄總數 */
+    uint16_t recordCount = PARAM_GetTestRecordCount();
+    printf("測試記錄總數: %d\r\n", recordCount);
+    
+    /* 如果有測試記錄，顯示最新的一條 */
+    if (recordCount > 0) {
+        TestRecord record;
+        if (PARAM_GetTestRecord(0, &record)) {
+            printf("最新測試記錄: 類型=%d, 結果=%d, 事件=%d, 時間=%02d-%02d-%02d %02d:%02d:%02d\r\n",
+                   record.testType, record.resultValue, record.event,
+                   record.year, record.month, record.date,
+                   record.hour, record.minute, record.second);
+        }
+    }
 }
 
 /*********************************************************************
