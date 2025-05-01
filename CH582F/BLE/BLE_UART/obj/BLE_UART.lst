@@ -143,9 +143,9 @@ SYMBOL TABLE:
 200022b0 l     O .data	00000015 attDeviceName
 200022c8 l     O .data	00000019 scanRspData
 200024a8 l     O .bss	00000008 Broadcaster_BroadcasterCBs
-200024b0 l     O .bss	00000008 noti.5376
+200024b0 l     O .bss	00000008 noti.5369
 200024b8 l     O .bss	00000008 peripheralConnList
-200024c0 l     O .bss	00000002 read_length.5378
+200024c0 l     O .bss	00000002 read_length.5371
 20002448 l     O .data	00000007 advertData
 00000000 l    df *ABS*	00000000 message.c
 00000000 l    df *ABS*	00000000 tmos_snv.c
@@ -10546,12 +10546,12 @@ Peripheral_ProcessEvent():
     3dfa:	853a                	mv	a0,a4
     3dfc:	399010ef          	jal	ra,5994 <ATT_GetMTU>
     3e00:	1575                	addi	a0,a0,-3
-    3e02:	88a19823          	sh	a0,-1904(gp) # 200024c0 <read_length.5378>
+    3e02:	88a19823          	sh	a0,-1904(gp) # 200024c0 <read_length.5371>
 /Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE/BLE_UART/obj/../APP/peripheral.c:352
                 if(app_drv_fifo_length(&app_uart_rx_fifo) >= read_length)
     3e06:	18418513          	addi	a0,gp,388 # 20002db4 <app_uart_rx_fifo>
     3e0a:	3655                	jal	39ae <app_drv_fifo_length>
-    3e0c:	8901d783          	lhu	a5,-1904(gp) # 200024c0 <read_length.5378>
+    3e0c:	8901d783          	lhu	a5,-1904(gp) # 200024c0 <read_length.5371>
     3e10:	08f56c63          	bltu	a0,a5,3ea8 <Peripheral_ProcessEvent+0x15e>
 /Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE/BLE_UART/obj/../APP/peripheral.c:354
                     PRINT("FIFO_LEN:%d\r\n", app_drv_fifo_length(&app_uart_rx_fifo));
@@ -10563,7 +10563,7 @@ Peripheral_ProcessEvent():
     3e24:	5c41f0ef          	jal	ra,233e8 <iprintf>
 /Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE/BLE_UART/obj/../APP/peripheral.c:362
                         result = app_drv_fifo_read(&app_uart_rx_fifo, to_test_buffer, &read_length);
-    3e28:	89018613          	addi	a2,gp,-1904 # 200024c0 <read_length.5378>
+    3e28:	89018613          	addi	a2,gp,-1904 # 200024c0 <read_length.5371>
     3e2c:	39c18593          	addi	a1,gp,924 # 20002fcc <to_test_buffer>
     3e30:	18418513          	addi	a0,gp,388 # 20002db4 <app_uart_rx_fifo>
     3e34:	3169                	jal	3abe <app_drv_fifo_read>
@@ -10576,7 +10576,7 @@ Peripheral_ProcessEvent():
     3e3e:	fd49                	bnez	a0,3dd8 <Peripheral_ProcessEvent+0x8e>
 /Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE/BLE_UART/obj/../APP/peripheral.c:375
                     noti.len = read_length;
-    3e40:	8901d603          	lhu	a2,-1904(gp) # 200024c0 <read_length.5378>
+    3e40:	8901d603          	lhu	a2,-1904(gp) # 200024c0 <read_length.5371>
 /Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE/BLE_UART/obj/../APP/peripheral.c:376
                     noti.pValue = GATT_bm_alloc(peripheralConnList.connHandle, ATT_HANDLE_VALUE_NOTI, noti.len, NULL, 0);
     3e44:	4701                	li	a4,0
@@ -10585,23 +10585,23 @@ Peripheral_ProcessEvent():
     3e4a:	8881d503          	lhu	a0,-1912(gp) # 200024b8 <peripheralConnList>
 /Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE/BLE_UART/obj/../APP/peripheral.c:375
                     noti.len = read_length;
-    3e4e:	88c19123          	sh	a2,-1918(gp) # 200024b2 <noti.5376+0x2>
+    3e4e:	88c19123          	sh	a2,-1918(gp) # 200024b2 <noti.5369+0x2>
 /Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE/BLE_UART/obj/../APP/peripheral.c:376
                     noti.pValue = GATT_bm_alloc(peripheralConnList.connHandle, ATT_HANDLE_VALUE_NOTI, noti.len, NULL, 0);
     3e52:	68d050ef          	jal	ra,9cde <GATT_bm_alloc>
-    3e56:	88a1a223          	sw	a0,-1916(gp) # 200024b4 <noti.5376+0x4>
+    3e56:	88a1a223          	sw	a0,-1916(gp) # 200024b4 <noti.5369+0x4>
 /Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE/BLE_UART/obj/../APP/peripheral.c:377
                     if(noti.pValue != NULL)
     3e5a:	0c050f63          	beqz	a0,3f38 <Peripheral_ProcessEvent+0x1ee>
 /Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE/BLE_UART/obj/../APP/peripheral.c:379
                         tmos_memcpy(noti.pValue, to_test_buffer, noti.len);
-    3e5e:	8821d603          	lhu	a2,-1918(gp) # 200024b2 <noti.5376+0x2>
+    3e5e:	8821d603          	lhu	a2,-1918(gp) # 200024b2 <noti.5369+0x2>
     3e62:	39c18593          	addi	a1,gp,924 # 20002fcc <to_test_buffer>
     3e66:	1fffd097          	auipc	ra,0x1fffd
     3e6a:	bce080e7          	jalr	-1074(ra) # 20000a34 <tmos_memcpy>
 /Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE/BLE_UART/obj/../APP/peripheral.c:380
                         result = ble_uart_notify(peripheralConnList.connHandle, &noti, 0);
-    3e6e:	88018593          	addi	a1,gp,-1920 # 200024b0 <noti.5376>
+    3e6e:	88018593          	addi	a1,gp,-1920 # 200024b0 <noti.5369>
     3e72:	4601                	li	a2,0
     3e74:	8881d503          	lhu	a0,-1912(gp) # 200024b8 <peripheralConnList>
     3e78:	3cc5                	jal	3968 <ble_uart_notify>
@@ -10621,7 +10621,7 @@ Peripheral_ProcessEvent():
 /Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE/BLE_UART/obj/../APP/peripheral.c:421
                         GATT_bm_free((gattMsg_t *)&noti, ATT_HANDLE_VALUE_NOTI);
     3e90:	45ed                	li	a1,27
-    3e92:	88018513          	addi	a0,gp,-1920 # 200024b0 <noti.5376>
+    3e92:	88018513          	addi	a0,gp,-1920 # 200024b0 <noti.5369>
     3e96:	7c5050ef          	jal	ra,9e5a <GATT_bm_free>
 /Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE/BLE_UART/obj/../APP/peripheral.c:435
                     tmos_start_task(Peripheral_TaskID, UART_TO_BLE_SEND_EVT, 2);
@@ -10665,13 +10665,13 @@ Peripheral_ProcessEvent():
     3ed8:	82f1a023          	sw	a5,-2016(gp) # 20002450 <send_to_ble_state>
 /Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE/BLE_UART/obj/../APP/peripheral.c:428
                         read_length = 0;
-    3edc:	88019823          	sh	zero,-1904(gp) # 200024c0 <read_length.5378>
+    3edc:	88019823          	sh	zero,-1904(gp) # 200024c0 <read_length.5371>
 /Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE/BLE_UART/obj/../APP/peripheral.c:429
                         tmos_start_task(Peripheral_TaskID, UART_TO_BLE_SEND_EVT, 2);
     3ee0:	bf6d                	j	3e9a <Peripheral_ProcessEvent+0x150>
 /Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE/BLE_UART/obj/../APP/peripheral.c:411
                 noti.len = read_length;
-    3ee2:	8901d603          	lhu	a2,-1904(gp) # 200024c0 <read_length.5378>
+    3ee2:	8901d603          	lhu	a2,-1904(gp) # 200024c0 <read_length.5371>
 /Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE/BLE_UART/obj/../APP/peripheral.c:412
                 noti.pValue = GATT_bm_alloc(peripheralConnList.connHandle, ATT_HANDLE_VALUE_NOTI, noti.len, NULL, 0);
     3ee6:	4701                	li	a4,0
@@ -10680,23 +10680,23 @@ Peripheral_ProcessEvent():
     3eec:	8881d503          	lhu	a0,-1912(gp) # 200024b8 <peripheralConnList>
 /Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE/BLE_UART/obj/../APP/peripheral.c:411
                 noti.len = read_length;
-    3ef0:	88c19123          	sh	a2,-1918(gp) # 200024b2 <noti.5376+0x2>
+    3ef0:	88c19123          	sh	a2,-1918(gp) # 200024b2 <noti.5369+0x2>
 /Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE/BLE_UART/obj/../APP/peripheral.c:412
                 noti.pValue = GATT_bm_alloc(peripheralConnList.connHandle, ATT_HANDLE_VALUE_NOTI, noti.len, NULL, 0);
     3ef4:	5eb050ef          	jal	ra,9cde <GATT_bm_alloc>
-    3ef8:	88a1a223          	sw	a0,-1916(gp) # 200024b4 <noti.5376+0x4>
+    3ef8:	88a1a223          	sw	a0,-1916(gp) # 200024b4 <noti.5369+0x4>
 /Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE/BLE_UART/obj/../APP/peripheral.c:413
                 if(noti.pValue != NULL)
     3efc:	cd15                	beqz	a0,3f38 <Peripheral_ProcessEvent+0x1ee>
 /Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE/BLE_UART/obj/../APP/peripheral.c:415
                     tmos_memcpy(noti.pValue, to_test_buffer, noti.len);
-    3efe:	8821d603          	lhu	a2,-1918(gp) # 200024b2 <noti.5376+0x2>
+    3efe:	8821d603          	lhu	a2,-1918(gp) # 200024b2 <noti.5369+0x2>
     3f02:	39c18593          	addi	a1,gp,924 # 20002fcc <to_test_buffer>
     3f06:	1fffd097          	auipc	ra,0x1fffd
     3f0a:	b2e080e7          	jalr	-1234(ra) # 20000a34 <tmos_memcpy>
 /Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE/BLE_UART/obj/../APP/peripheral.c:416
                     result = ble_uart_notify(peripheralConnList.connHandle, &noti, 0);
-    3f0e:	88018593          	addi	a1,gp,-1920 # 200024b0 <noti.5376>
+    3f0e:	88018593          	addi	a1,gp,-1920 # 200024b0 <noti.5369>
     3f12:	4601                	li	a2,0
     3f14:	8881d503          	lhu	a0,-1912(gp) # 200024b8 <peripheralConnList>
     3f18:	a51ff0ef          	jal	ra,3968 <ble_uart_notify>

@@ -6729,11 +6729,11 @@ END GROUP
                 0x00000000200024a4                uart_to_ble_send_evt_cnt
  .sbss.Broadcaster_BroadcasterCBs
                 0x00000000200024a8        0x8 ./APP/peripheral.o
- .sbss.noti.5376
+ .sbss.noti.5369
                 0x00000000200024b0        0x8 ./APP/peripheral.o
  .sbss.peripheralConnList
                 0x00000000200024b8        0x8 ./APP/peripheral.o
- .sbss.read_length.5378
+ .sbss.read_length.5371
                 0x00000000200024c0        0x2 ./APP/peripheral.o
  *fill*         0x00000000200024c2        0x2 
  .sbss.attClientNotifyTxCB

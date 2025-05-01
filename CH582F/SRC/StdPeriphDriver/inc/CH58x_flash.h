@@ -24,7 +24,6 @@ extern "C" {
  * @param   Buffer      - read buffer
  * @param   len         - read len
  */
-void FLASH_ROM_READ(uint32_t StartAddr, void *Buffer, uint32_t len);
 
 void FLASH_ROM_READ(UINT32 StartAddr, PVOID Buffer, UINT32 len); /* ∂¡»°Flash-ROM */
 
