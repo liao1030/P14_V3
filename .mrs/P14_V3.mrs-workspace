@@ -9,7 +9,7 @@
 		},
 		{
 			"name": "BLE_UART",
-			"path": "../CH582F/BLE/BLE_UART"
+			"path": "../CH582F/BLE_UART"
 		}
 	],
 	"settings": {
