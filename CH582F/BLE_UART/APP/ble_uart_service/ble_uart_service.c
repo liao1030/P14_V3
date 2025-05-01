@@ -51,16 +51,13 @@
 //{0x16,0x96,0x24,0x47,0xc6,0x23, 0x61,0xba,0xd9,0x4b,0x4d,0x1e,0x43,0x53,0x53,0x49};
 
 // ble_uart GATT Profile Service UUID
-CONST uint8 ble_uart_ServiceUUID[ATT_UUID_SIZE] =
-    {0x9F, 0xCA, 0xDC, 0x24, 0x0E, 0xE5, 0xA9, 0xE0, 0x93, 0xF3, 0xA3, 0xB5, 0x01, 0x00, 0x40, 0x6E};
+CONST uint8 ble_uart_ServiceUUID[ATT_BT_UUID_SIZE] = {0xE0, 0xFF};
 
-// Characteristic rx uuid
-CONST uint8 ble_uart_RxCharUUID[ATT_UUID_SIZE] =
-    {0x9F, 0xCA, 0xDC, 0x24, 0x0E, 0xE5, 0xA9, 0xE0, 0x93, 0xF3, 0xA3, 0xB5, 0x02, 0x00, 0x40, 0x6E};
+// Characteristic rx uuid (Write Without Response)
+CONST uint8 ble_uart_RxCharUUID[ATT_BT_UUID_SIZE] = {0xE1, 0xFF};
 
-// Characteristic tx uuid
-CONST uint8 ble_uart_TxCharUUID[ATT_UUID_SIZE] =
-    {0x9F, 0xCA, 0xDC, 0x24, 0x0E, 0xE5, 0xA9, 0xE0, 0x93, 0xF3, 0xA3, 0xB5, 0x03, 0x00, 0x40, 0x6E};
+// Characteristic tx uuid (Notify)
+CONST uint8 ble_uart_TxCharUUID[ATT_BT_UUID_SIZE] = {0xE2, 0xFF};
 
 /*********************************************************************
  * EXTERNAL VARIABLES
@@ -123,7 +120,7 @@ static gattAttribute_t ble_uart_ProfileAttrTbl[] = {
 
     // Characteristic Value 1
     {
-        {ATT_UUID_SIZE, ble_uart_RxCharUUID},
+        {ATT_BT_UUID_SIZE, ble_uart_RxCharUUID},
         GATT_PERMIT_WRITE,
         0,
         &ble_uart_RxCharValue[0]},
@@ -137,7 +134,7 @@ static gattAttribute_t ble_uart_ProfileAttrTbl[] = {
 
     // Characteristic Value 2
     {
-        {ATT_UUID_SIZE, ble_uart_TxCharUUID},
+        {ATT_BT_UUID_SIZE, ble_uart_TxCharUUID},
         0,
         0,
         (uint8 *)&ble_uart_TxCharValue},

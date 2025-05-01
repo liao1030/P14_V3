@@ -20,6 +20,8 @@
 #include "ble_uart_service.h"
 #include "app_drv_fifo.h"
 #include "app_uart.h"
+#include <stdio.h>
+#include <string.h>
 
 /*********************************************************************
  * MACROS
@@ -98,9 +100,9 @@ blePaControlConfig_t pa_lna_ctl;
 // GAP - SCAN RSP data (max size = 31 bytes)
 static uint8 scanRspData[] = {
     // complete name
-    15, // length of this data
+    10, // length of this data
     GAP_ADTYPE_LOCAL_NAME_COMPLETE,
-    'c', 'h', '5', '8', '3', '_', 'b', 'l', 'e', '_', 'u', 'a', 'r', 't',
+    'P', '1', '4', '-', 'x', 'x', 'x', 'x', 'x', 'x',
     // connection interval range
     0x05, // length of this data
     GAP_ADTYPE_SLAVE_CONN_INTERVAL_RANGE,
@@ -133,7 +135,7 @@ static uint8 advertData[] = {
     HI_UINT16(SIMPLEPROFILE_SERV_UUID)};
 
 // GAP GATT Attributes
-static uint8 attDeviceName[GAP_DEVICE_NAME_LEN] = "ch583_ble_uart";
+static uint8 attDeviceName[GAP_DEVICE_NAME_LEN] = "P14-xxxxxx";
 
 // Connection item list
 static peripheralConnItem_t peripheralConnList;
@@ -192,7 +194,17 @@ static gapBondCBs_t Peripheral_BondMgrCBs = {
 void Peripheral_Init()
 {
     Peripheral_TaskID = TMOS_ProcessEventRegister(Peripheral_ProcessEvent);
-
+    
+    // 使用MAC地址的後6位來設定設備名稱
+    uint8_t macAddr[6];
+    GetMACAddress(macAddr);
+    
+    // 將MAC地址的後6位轉換為16進制字符串
+    sprintf((char*)&attDeviceName[3], "-%02X%02X%02X", macAddr[3], macAddr[4], macAddr[5]);
+    
+    // 同時更新掃描回應數據中的設備名稱
+    memcpy(&scanRspData[2], attDeviceName, 10);
+    
     // Setup the GAP Peripheral Role Profile
     {
         uint8  initial_advertising_enable = TRUE;
