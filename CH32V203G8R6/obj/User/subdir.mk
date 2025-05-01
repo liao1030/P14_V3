@@ -8,18 +8,24 @@ C_SRCS += \
 ../User/ch32v203_init.c \
 ../User/ch32v20x_it.c \
 ../User/main.c \
+../User/parameter_table.c \
+../User/parameter_test.c \
 ../User/system_ch32v20x.c 
 
 C_DEPS += \
 ./User/ch32v203_init.d \
 ./User/ch32v20x_it.d \
 ./User/main.d \
+./User/parameter_table.d \
+./User/parameter_test.d \
 ./User/system_ch32v20x.d 
 
 OBJS += \
 ./User/ch32v203_init.o \
 ./User/ch32v20x_it.o \
 ./User/main.o \
+./User/parameter_table.o \
+./User/parameter_test.o \
 ./User/system_ch32v20x.o 
 
 

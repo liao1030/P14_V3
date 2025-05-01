@@ -12,6 +12,7 @@
 
 #include "debug.h"
 #include "ch32v203_init.h"
+#include "parameter_table.h"
 
 /*********************************************************************
  * @fn      CH32V203_RCC_Init

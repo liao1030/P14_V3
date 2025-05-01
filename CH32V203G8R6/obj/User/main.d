@@ -25,7 +25,8 @@ User/main.o: ../User/main.c \
  /Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH32V203G8R6/Peripheral/inc/ch32v20x_wwdg.h \
  /Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH32V203G8R6/User/ch32v20x_it.h \
  /Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH32V203G8R6/Peripheral/inc/ch32v20x_misc.h \
- ../User/ch32v203_init.h
+ ../User/ch32v203_init.h ../User/parameter_table.h \
+ ../User/parameter_test.h
 
 /Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH32V203G8R6/Debug/debug.h:
 
@@ -80,3 +81,7 @@ User/main.o: ../User/main.c \
 /Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH32V203G8R6/Peripheral/inc/ch32v20x_misc.h:
 
 ../User/ch32v203_init.h:
+
+../User/parameter_table.h:
+
+../User/parameter_test.h:
