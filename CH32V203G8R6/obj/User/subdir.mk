@@ -5,6 +5,7 @@
 
 # Add inputs and outputs from these tool invocations to the build variables 
 C_SRCS += \
+../User/P14_Flash_Storage.c \
 ../User/ch32v203_init.c \
 ../User/ch32v20x_it.c \
 ../User/main.c \
@@ -13,6 +14,7 @@ C_SRCS += \
 ../User/system_ch32v20x.c 
 
 C_DEPS += \
+./User/P14_Flash_Storage.d \
 ./User/ch32v203_init.d \
 ./User/ch32v20x_it.d \
 ./User/main.d \
@@ -21,6 +23,7 @@ C_DEPS += \
 ./User/system_ch32v20x.d 
 
 OBJS += \
+./User/P14_Flash_Storage.o \
 ./User/ch32v203_init.o \
 ./User/ch32v20x_it.o \
 ./User/main.o \

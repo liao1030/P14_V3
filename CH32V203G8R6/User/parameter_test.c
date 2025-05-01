@@ -2,15 +2,17 @@
  * File Name          : parameter_test.c
  * Author             : HMD
  * Version            : V1.0
- * Date               : 2024/07/23
- * Description        : 多功能生化測試儀參數代碼表測試函數
+ * Date               : 2024/07/25
+ * Description        : Flash參數儲存方案測試程式
  *********************************************************************************
  * Copyright (c) 2024 HMD Biomedical Inc.
  *******************************************************************************/
 
-#include "parameter_table.h"
+#include "parameter_test.h"
+#include "P14_Flash_Storage.h"
 #include "debug.h"
 #include <string.h>
+#include <stdbool.h>
 
 /**
  * @brief 獲取系統時間計數器值 (毫秒)
@@ -246,4 +248,272 @@ void PARAM_Test_RunPerformanceTest(void)
     
     // 恢復原始值
     PARAM_Reset();
+}
+
+/**
+ * @brief 列印參數區塊資訊
+ */
+static void PrintParameterInfo(void)
+{
+    BasicSystemBlock basicParams;
+    HardwareCalibBlock calibParams;
+    
+    /* 讀取基本系統參數 */
+    if (PARAM_ReadParameterBlock(BLOCK_BASIC_SYSTEM, &basicParams, sizeof(BasicSystemBlock))) {
+        printf("=== 基本系統參數 ===\r\n");
+        printf("產品型號: %d\r\n", basicParams.modelNo);
+        printf("韌體版本: %d.%d\r\n", basicParams.fwNo/10, basicParams.fwNo%10);
+        printf("測試次數: %d\r\n", basicParams.testCount);
+        printf("日期時間: 20%02d-%02d-%02d %02d:%02d:%02d\r\n",
+               basicParams.year, basicParams.month, basicParams.date,
+               basicParams.hour, basicParams.minute, basicParams.second);
+        printf("溫度範圍: %d°C ~ %d°C\r\n", basicParams.tempLowLimit, basicParams.tempHighLimit);
+        printf("測試項目: %d\r\n", basicParams.stripType);
+        printf("濃度單位: %s\r\n", basicParams.measureUnit ? "mg/dL" : "mmol/L");
+    } else {
+        printf("讀取基本系統參數失敗\r\n");
+    }
+    
+    /* 讀取硬體校正參數 */
+    if (PARAM_ReadParameterBlock(BLOCK_HARDWARE_CALIB, &calibParams, sizeof(HardwareCalibBlock))) {
+        printf("\r\n=== 硬體校正參數 ===\r\n");
+        printf("EV_T3觸發電壓: %d mV\r\n", calibParams.evT3Trigger);
+        printf("溫度補償: %d (0.1°C)\r\n", calibParams.tempOffset);
+        printf("電池補償: %d (10mV)\r\n", calibParams.batteryOffset);
+        printf("OPA斜率: %.4f\r\n", calibParams.ops);
+        printf("OPA截距: %.4f\r\n", calibParams.opi);
+    } else {
+        printf("讀取硬體校正參數失敗\r\n");
+    }
+    
+    printf("\r\n");
+}
+
+/**
+ * @brief 測試系統參數更新
+ */
+static void TestSystemParamUpdate(void)
+{
+    BasicSystemBlock basicParams;
+    
+    /* 讀取當前參數 */
+    if (!PARAM_ReadParameterBlock(BLOCK_BASIC_SYSTEM, &basicParams, sizeof(BasicSystemBlock))) {
+        printf("讀取系統參數失敗\r\n");
+        return;
+    }
+    
+    /* 顯示原始參數 */
+    printf("原始測試次數: %d\r\n", basicParams.testCount);
+    
+    /* 更新測試次數 */
+    if (PARAM_IncreaseTestCount()) {
+        printf("測試次數+1成功\r\n");
+    } else {
+        printf("測試次數+1失敗\r\n");
+        return;
+    }
+    
+    /* 重新讀取參數 */
+    if (!PARAM_ReadParameterBlock(BLOCK_BASIC_SYSTEM, &basicParams, sizeof(BasicSystemBlock))) {
+        printf("讀取系統參數失敗\r\n");
+        return;
+    }
+    
+    /* 顯示更新後參數 */
+    printf("更新後測試次數: %d\r\n", basicParams.testCount);
+    printf("\r\n");
+}
+
+/**
+ * @brief 測試日期時間更新
+ */
+static void TestDateTimeUpdate(void)
+{
+    uint8_t year, month, date, hour, minute, second;
+    
+    /* 讀取當前時間 */
+    if (!PARAM_GetDateTime(&year, &month, &date, &hour, &minute, &second)) {
+        printf("讀取日期時間失敗\r\n");
+        return;
+    }
+    
+    /* 顯示原始時間 */
+    printf("原始時間: 20%02d-%02d-%02d %02d:%02d:%02d\r\n",
+           year, month, date, hour, minute, second);
+    
+    /* 更新時間 */
+    if (PARAM_UpdateDateTime(24, 7, 25, 15, 30, 0)) {
+        printf("更新日期時間成功\r\n");
+    } else {
+        printf("更新日期時間失敗\r\n");
+        return;
+    }
+    
+    /* 重新讀取時間 */
+    if (!PARAM_GetDateTime(&year, &month, &date, &hour, &minute, &second)) {
+        printf("讀取日期時間失敗\r\n");
+        return;
+    }
+    
+    /* 顯示更新後時間 */
+    printf("更新後時間: 20%02d-%02d-%02d %02d:%02d:%02d\r\n",
+           year, month, date, hour, minute, second);
+    printf("\r\n");
+}
+
+/**
+ * @brief 測試參數抓取
+ */
+static void TestParametersFetch(void)
+{
+    uint16_t ndl, udl, bloodIn;
+    uint8_t lowLimit;
+    uint16_t highLimit;
+    uint16_t tpl1, trd1, evWidth1;
+    uint16_t tpl2, trd2, evWidth2;
+    
+    /* 測試血糖參數 */
+    printf("=== 血糖參數測試 ===\r\n");
+    
+    /* 讀取試片參數 */
+    if (PARAM_GetStripParametersByStripType(STRIP_TYPE_GLV, &ndl, &udl, &bloodIn)) {
+        printf("血糖試片參數: NDL=%d, UDL=%d, BloodIn=%d\r\n", ndl, udl, bloodIn);
+    } else {
+        printf("讀取血糖試片參數失敗\r\n");
+    }
+    
+    /* 讀取測量範圍 */
+    if (PARAM_GetMeasurementRangeByStripType(STRIP_TYPE_GLV, &lowLimit, &highLimit)) {
+        printf("血糖測量範圍: %d ~ %d mg/dL\r\n", lowLimit, highLimit);
+    } else {
+        printf("讀取血糖測量範圍失敗\r\n");
+    }
+    
+    /* 讀取時序參數(組1) */
+    if (PARAM_GetTimingParametersByStripType(STRIP_TYPE_GLV, &tpl1, &trd1, &evWidth1, 1)) {
+        printf("血糖時序參數(組1): TPL=%d, TRD=%d, EVWidth=%d\r\n", tpl1, trd1, evWidth1);
+    } else {
+        printf("讀取血糖時序參數(組1)失敗\r\n");
+    }
+    
+    /* 讀取時序參數(組2) */
+    if (PARAM_GetTimingParametersByStripType(STRIP_TYPE_GLV, &tpl2, &trd2, &evWidth2, 2)) {
+        printf("血糖時序參數(組2): TPL=%d, TRD=%d, EVWidth=%d\r\n", tpl2, trd2, evWidth2);
+    } else {
+        printf("讀取血糖時序參數(組2)失敗\r\n");
+    }
+    
+    /* 測試尿酸參數 */
+    printf("\r\n=== 尿酸參數測試 ===\r\n");
+    
+    /* 讀取試片參數 */
+    if (PARAM_GetStripParametersByStripType(STRIP_TYPE_U, &ndl, &udl, &bloodIn)) {
+        printf("尿酸試片參數: NDL=%d, UDL=%d, BloodIn=%d\r\n", ndl, udl, bloodIn);
+    } else {
+        printf("讀取尿酸試片參數失敗\r\n");
+    }
+    
+    /* 讀取測量範圍 */
+    if (PARAM_GetMeasurementRangeByStripType(STRIP_TYPE_U, &lowLimit, &highLimit)) {
+        printf("尿酸測量範圍: %d ~ %d mg/dL\r\n", lowLimit, highLimit);
+    } else {
+        printf("讀取尿酸測量範圍失敗\r\n");
+    }
+    
+    printf("\r\n");
+}
+
+/**
+ * @brief 測試硬體校正參數更新
+ */
+static void TestHardwareCalibUpdate(void)
+{
+    HardwareCalibBlock calibParams;
+    
+    /* 讀取當前參數 */
+    if (!PARAM_ReadParameterBlock(BLOCK_HARDWARE_CALIB, &calibParams, sizeof(HardwareCalibBlock))) {
+        printf("讀取硬體校正參數失敗\r\n");
+        return;
+    }
+    
+    /* 顯示原始參數 */
+    printf("原始溫度補償: %d (0.1°C)\r\n", calibParams.tempOffset);
+    printf("原始電池補償: %d (10mV)\r\n", calibParams.batteryOffset);
+    
+    /* 更新校正參數 */
+    calibParams.tempOffset = 5;     // 增加0.5°C
+    calibParams.batteryOffset = -10; // 減少100mV
+    
+    if (PARAM_UpdateBlock(BLOCK_HARDWARE_CALIB, &calibParams, sizeof(HardwareCalibBlock))) {
+        printf("更新硬體校正參數成功\r\n");
+    } else {
+        printf("更新硬體校正參數失敗\r\n");
+        return;
+    }
+    
+    /* 重新讀取參數 */
+    if (!PARAM_ReadParameterBlock(BLOCK_HARDWARE_CALIB, &calibParams, sizeof(HardwareCalibBlock))) {
+        printf("讀取硬體校正參數失敗\r\n");
+        return;
+    }
+    
+    /* 顯示更新後參數 */
+    printf("更新後溫度補償: %d (0.1°C)\r\n", calibParams.tempOffset);
+    printf("更新後電池補償: %d (10mV)\r\n", calibParams.batteryOffset);
+    printf("\r\n");
+}
+
+/**
+ * @brief 重置參數測試
+ */
+static void TestParameterReset(void)
+{
+    printf("執行重置參數測試...\r\n");
+    
+    /* 顯示重置前參數 */
+    printf("=== 重置前參數 ===\r\n");
+    PrintParameterInfo();
+    
+    /* 重置參數 */
+    PARAM_ResetToDefault();
+    
+    /* 顯示重置後參數 */
+    printf("=== 重置後參數 ===\r\n");
+    PrintParameterInfo();
+}
+
+/**
+ * @brief 執行參數儲存測試
+ */
+void RunParameterTest(void)
+{
+    printf("\r\n===== 開始Flash參數儲存方案測試 =====\r\n\r\n");
+    
+    /* 初始化參數儲存系統 */
+    FLASH_Storage_Init();
+    
+    /* 列印參數資訊 */
+    PrintParameterInfo();
+    
+    /* 測試系統參數更新 */
+    printf("測試系統參數更新...\r\n");
+    TestSystemParamUpdate();
+    
+    /* 測試日期時間更新 */
+    printf("測試日期時間更新...\r\n");
+    TestDateTimeUpdate();
+    
+    /* 測試參數抓取 */
+    printf("測試參數抓取...\r\n");
+    TestParametersFetch();
+    
+    /* 測試硬體校正參數更新 */
+    printf("測試硬體校正參數更新...\r\n");
+    TestHardwareCalibUpdate();
+    
+    /* 重置參數測試 */
+    printf("測試參數重置...\r\n");
+    TestParameterReset();
+    
+    printf("\r\n===== Flash參數儲存方案測試完成 =====\r\n");
 } 

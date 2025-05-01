@@ -1,4 +1,5 @@
-User/parameter_test.o: ../User/parameter_test.c ../User/parameter_test.h \
+User/P14_Flash_Storage.o: ../User/P14_Flash_Storage.c \
+ ../User/P14_Flash_Storage.h \
  /Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH32V203G8R6/Peripheral/inc/ch32v20x.h \
  /Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH32V203G8R6/Core/core_riscv.h \
  /Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH32V203G8R6/User/system_ch32v20x.h \
@@ -25,9 +26,9 @@ User/parameter_test.o: ../User/parameter_test.c ../User/parameter_test.h \
  /Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH32V203G8R6/User/ch32v20x_it.h \
  /Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH32V203G8R6/Debug/debug.h \
  /Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH32V203G8R6/Peripheral/inc/ch32v20x_misc.h \
- ../User/P14_Flash_Storage.h ../User/parameter_table.h
+ ../User/parameter_table.h
 
-../User/parameter_test.h:
+../User/P14_Flash_Storage.h:
 
 /Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH32V203G8R6/Peripheral/inc/ch32v20x.h:
 
@@ -80,7 +81,5 @@ User/parameter_test.o: ../User/parameter_test.c ../User/parameter_test.h \
 /Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH32V203G8R6/Debug/debug.h:
 
 /Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH32V203G8R6/Peripheral/inc/ch32v20x_misc.h:
-
-../User/P14_Flash_Storage.h:
 
 ../User/parameter_table.h:

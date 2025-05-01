@@ -21,12 +21,15 @@
 #include "debug.h"
 #include "ch32v203_init.h"
 #include "parameter_table.h"
+#include <stdbool.h>
+#include "P14_Flash_Storage.h"
 #include "parameter_test.h"
 
 /* Global typedef */
 
 /* Global define */
 #define RUN_EXTENDED_TESTS      0   // 設為0關閉更多測試
+#define RUN_NEW_FLASH_TESTS     1   // 設為1開啟新的Flash參數儲存方案測試
 
 /* Global Variable */
 
@@ -151,6 +154,14 @@ int main(void)
     
     // 執行參數表測試
     RunParameterTests();
+
+#if RUN_NEW_FLASH_TESTS
+    // 延遲3秒，以分隔兩個測試
+    Delay_Ms(3000);
+    
+    // 執行新Flash參數儲存方案測試
+    RunParameterTest();
+#endif
 
     while(1)
     {
