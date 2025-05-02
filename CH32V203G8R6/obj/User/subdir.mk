@@ -7,16 +7,19 @@
 C_SRCS += \
 ../User/ch32v20x_it.c \
 ../User/main.c \
+../User/parameter_code.c \
 ../User/system_ch32v20x.c 
 
 C_DEPS += \
 ./User/ch32v20x_it.d \
 ./User/main.d \
+./User/parameter_code.d \
 ./User/system_ch32v20x.d 
 
 OBJS += \
 ./User/ch32v20x_it.o \
 ./User/main.o \
+./User/parameter_code.o \
 ./User/system_ch32v20x.o 
 
 
