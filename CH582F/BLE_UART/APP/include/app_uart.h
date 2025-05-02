@@ -1,13 +1,11 @@
 /********************************** (C) COPYRIGHT *******************************
  * File Name          : app_uart.h
- * Author             : WCH
+ * Author             : HMD Team
  * Version            : V1.0
- * Date               : 2018/12/11
- * Description        :
+ * Date               : 2024/05/08
+ * Description        : 多功能生化儀藍牙UART應用層
  *********************************************************************************
- * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
- * Attention: This software (modified or not) and binary are used for 
- * microcontroller manufactured by Nanjing Qinheng Microelectronics.
+ * Copyright (c) 2024 HMD. All rights reserved.
  *******************************************************************************/
 
 #ifndef app_uart_H
@@ -60,8 +58,11 @@ extern void app_uart_tx_data(uint8_t *data, uint16_t length);
 
 extern void on_bleuartServiceEvt(uint16_t connection_handle, ble_uart_evt_t *p_evt);
 
-// 函數聲明
+// 將UART數據發送至BLE的函數
 void uart_to_ble_send(void);
+
+// 通過BLE通知發送數據
+void ble_uart_notify_data(uint8_t *data, uint16_t length);
 
 /*********************************************************************
 *********************************************************************/

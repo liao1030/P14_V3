@@ -248,20 +248,94 @@ void uart_to_ble_send(void)
     uint8_t data[BLE_BUFF_MAX_LEN - 4];
     uint16_t read_len = 0;
     
-    // 從UART接收FIFO讀取數據
+    // 從UART接收FIFO中讀取數據
     app_drv_fifo_read(&app_uart_rx_fifo, data, &read_len);
     
-    if (read_len > 0) {
-        // 將數據交給協議處理模塊
-        protocol_process_uart_data(data, read_len);
+    if(read_len)
+    {
+        PRINT("UART接收: %d字節\n", read_len);
         
-        // 記錄接收到的UART數據
-        PRINT("UART->BLE: ");
-        for (uint16_t i = 0; i < read_len && i < 16; i++) {
-            PRINT("%02X ", data[i]);
+        // 轉給協議處理層處理
+        protocol_process_uart_data(data, read_len);
+    }
+    
+    // 啟動計時器以檢查是否需要重試
+    tmos_start_task(Peripheral_TaskID, PROTOCOL_TIMER_EVT, MS1_TO_SYSTEM_TIME(100));
+}
+
+/*********************************************************************
+ * @fn      ble_uart_notify_data
+ *
+ * @brief   通過BLE發送數據給手機APP
+ *
+ * @param   data - 數據指針
+ * @param   length - 數據長度
+ *
+ * @return  None
+ */
+void ble_uart_notify_data(uint8_t *data, uint16_t length)
+{
+    uint16_t conn_handle;
+    attHandleValueNoti_t notify_data;
+    
+    // 直接從peripheralConnList獲取連接句柄
+    extern peripheralConnItem_t peripheralConnList;
+    conn_handle = peripheralConnList.connHandle;
+    
+    // 檢查連接狀態
+    if(conn_handle == GAP_CONNHANDLE_INIT)
+    {
+        PRINT("BLE未連接，無法發送數據\n");
+        return;
+    }
+    
+    // 檢查是否啟用了通知
+    if(!ble_uart_notify_is_ready(conn_handle))
+    {
+        PRINT("BLE通知未啟用，無法發送數據\n");
+        return;
+    }
+    
+    // 獲取MTU大小
+    uint16_t mtu = ATT_GetMTU(conn_handle);
+    
+    // 最大通知數據長度為MTU-3
+    uint16_t max_len = mtu - 3;
+    
+    PRINT("發送BLE通知，數據長度：%d\n", length);
+    
+    // 分片發送數據，確保不超過最大長度
+    uint16_t offset = 0;
+    while(offset < length)
+    {
+        uint16_t chunk_len = (length - offset > max_len) ? max_len : (length - offset);
+        
+        // 準備通知數據
+        notify_data.len = chunk_len;
+        notify_data.pValue = (uint8_t*)GATT_bm_alloc(conn_handle, ATT_HANDLE_VALUE_NOTI, chunk_len, NULL, 0);
+        
+        if(notify_data.pValue != NULL)
+        {
+            // 複製數據到通知緩衝區
+            tmos_memcpy(notify_data.pValue, data + offset, chunk_len);
+            
+            // 發送通知
+            if(ble_uart_notify(conn_handle, &notify_data, Peripheral_TaskID) != SUCCESS)
+            {
+                PRINT("發送BLE通知失敗\n");
+                GATT_bm_free((gattMsg_t *)&notify_data, ATT_HANDLE_VALUE_NOTI);
+            }
+            else
+            {
+                PRINT("發送BLE通知: %d字節\n", chunk_len);
+                offset += chunk_len;
+            }
         }
-        if (read_len > 16) PRINT("...");
-        PRINT("\n");
+        else
+        {
+            PRINT("分配BLE通知緩衝區失敗\n");
+            break;
+        }
     }
 }
 

@@ -1,13 +1,11 @@
 /********************************** (C) COPYRIGHT *******************************
  * File Name          : peripheral.h
- * Author             : WCH
+ * Author             : HMD Team
  * Version            : V1.0
- * Date               : 2018/12/11
- * Description        :
+ * Date               : 2024/05/08
+ * Description        : 多功能生化儀藍牙外設角色管理
  *********************************************************************************
- * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
- * Attention: This software (modified or not) and binary are used for 
- * microcontroller manufactured by Nanjing Qinheng Microelectronics.
+ * Copyright (c) 2024 HMD. All rights reserved.
  *******************************************************************************/
 
 #ifndef PERIPHERAL_H
@@ -27,10 +25,10 @@ extern "C" {
 
 // Peripheral Task Events
 #define SBP_START_DEVICE_EVT    0x0001
-
 #define SBP_READ_RSSI_EVT       0x0004
 #define SBP_PARAM_UPDATE_EVT    0x0008
 #define UART_TO_BLE_SEND_EVT    0x0010
+#define PROTOCOL_TIMER_EVT      0x0020
 
 /*********************************************************************
  * MACROS
@@ -44,6 +42,7 @@ typedef struct
 } peripheralConnItem_t;
 
 extern uint8_t Peripheral_TaskID;
+extern peripheralConnItem_t peripheralConnList;
 /*********************************************************************
  * FUNCTIONS
  */

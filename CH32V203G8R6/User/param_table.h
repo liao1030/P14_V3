@@ -45,9 +45,9 @@ extern "C" {
 #define UNIT_GM_DL                  2    // gm/dl
 
 /* 事件類型 */
-#define EVENT_QC                    0    // 品管液測試
-#define EVENT_AC                    1    // 餐前測試
-#define EVENT_PC                    2    // 餐後測試
+#define EVENT_QC                    0x0003    // 品管液測試
+#define EVENT_AC                    0x0001    // 餐前測試
+#define EVENT_PC                    0x0002    // 餐後測試
 
 /* 儀器操作模式 */
 #define MODE_USER                   0    // 使用者模式

@@ -21,6 +21,7 @@
 
 #include "debug.h"
 #include "param_storage.h"
+#include "P14_UART.h"
 #include <stdbool.h>
 
 /* 全局變數定義 */
@@ -28,6 +29,12 @@ static BasicSystemBlock g_basicParams;
 static HardwareCalibBlock g_calibParams;
 static BloodGlucoseBlock g_bgParams;
 static TestRecord g_testRecord;
+
+/* 計時器函數 */
+static uint32_t GetTick(void)
+{
+    return SysTick->CNT;
+}
 
 /*********************************************************************
  * @fn      printBasicSystemInfo
@@ -280,9 +287,43 @@ int main(void)
     /* 打印測試記錄 */
     printTestRecords();
     
+    /* 初始化UART通訊 */
+    UART_Init();
+    printf("UART通訊已初始化\r\n");
+    
     /* 主循環 */
+    uint32_t lastTime = 0;
+    uint8_t bloodSampleSimulate = 0;
+    
     while(1)
     {
-        Delay_Ms(1000);
+        /* 處理UART接收到的數據 */
+        UART_ProcessData();
+        
+        /* 每隔2秒模擬一次測試 */
+        if(GetTick() - lastTime >= 2000)
+        {
+            lastTime = GetTick();
+            
+            if(!bloodSampleSimulate)
+            {
+                /* 模擬血液樣本準備好，可供檢測 */
+                bloodSampleReady = 1;
+                bloodSampleSimulate = 1;
+                
+                printf("血液樣本已準備就緒，開始檢測\r\n");
+                
+                /* 儲存一次測試 */
+                simulateTest();
+            }
+            else
+            {
+                /* 模擬血液樣本未準備好 */
+                bloodSampleReady = 0;
+                bloodSampleSimulate = 0;
+                
+                printf("血液樣本未準備就緒\r\n");
+            }
+        }
     }
 }

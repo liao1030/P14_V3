@@ -68,7 +68,9 @@
  * GLOBAL VARIABLES
  */
 
+// Globals used for connection handle and parameter update
 uint8_t Peripheral_TaskID = INVALID_TASK_ID; // Task ID for internal task/event processing
+static uint16_t gapProfileState = GAPROLE_INIT;
 
 /*********************************************************************
  * EXTERNAL VARIABLES
@@ -96,26 +98,25 @@ send_to_ble_state_t send_to_ble_state = SEND_TO_BLE_TO_SEND;
 
 blePaControlConfig_t pa_lna_ctl;
 
-//static uint8 Peripheral_TaskID = INVALID_TASK_ID;   // Task ID for internal task/event processing
-
-// GAP - SCAN RSP data (max size = 31 bytes)
-static uint8 scanRspData[] = {
-    // complete name
-    10, // length of this data
+// GAP Profile - Name attribute for SCAN RSP data
+static uint8_t scanRspData[] = {
+    0x09,
     GAP_ADTYPE_LOCAL_NAME_COMPLETE,
-    'P', '1', '4', '-', 'X', 'X', 'X', 'X', 'X', 'X',
-    // connection interval range
+    'P',
+    '1',
+    '4',
+    'H',
+    'M',
+    'D',
+    'B',
+    'L',
+    'E',
     0x05, // length of this data
     GAP_ADTYPE_SLAVE_CONN_INTERVAL_RANGE,
-    LO_UINT16(DEFAULT_DESIRED_MIN_CONN_INTERVAL), // 100ms
+    LO_UINT16(DEFAULT_DESIRED_MIN_CONN_INTERVAL),
     HI_UINT16(DEFAULT_DESIRED_MIN_CONN_INTERVAL),
-    LO_UINT16(DEFAULT_DESIRED_MAX_CONN_INTERVAL), // 1s
+    LO_UINT16(DEFAULT_DESIRED_MAX_CONN_INTERVAL),
     HI_UINT16(DEFAULT_DESIRED_MAX_CONN_INTERVAL),
-
-    // Tx power level
-    0x02, // length of this data
-    GAP_ADTYPE_POWER_LEVEL,
-    0 // 0dBm
 };
 
 // GAP - Advertisement data (max size = 31 bytes, though this is
@@ -139,7 +140,7 @@ static uint8 advertData[] = {
 static uint8 attDeviceName[GAP_DEVICE_NAME_LEN] = "P14-XXXXXX";
 
 // Connection item list
-static peripheralConnItem_t peripheralConnList;
+peripheralConnItem_t peripheralConnList;
 
 /*********************************************************************
  * LOCAL FUNCTIONS
@@ -288,7 +289,7 @@ uint32_t get_fattime(void)
  *          is called to process all events for the task.  Events
  *          include timers, messages and any other user defined events.
  *
- * @param   task_id - The TMOS assigned task ID.
+ * @param   task_id  - The TMOS assigned task ID.
  * @param   events - events to process.  This is a bit map and can
  *                   contain more than one event.
  *
@@ -297,8 +298,8 @@ uint32_t get_fattime(void)
 uint16 Peripheral_ProcessEvent(uint8 task_id, uint16 events)
 {
     static attHandleValueNoti_t noti;
-    //  VOID task_id; // TMOS required parameter that isn't used in this function
-
+    // TMOS required parameter that isn't used in this function
+    
     if(events & SYS_EVENT_MSG)
     {
         uint8 *pMsg;
@@ -319,9 +320,9 @@ uint16 Peripheral_ProcessEvent(uint8 task_id, uint16 events)
         GAPRole_PeripheralStartDevice(Peripheral_TaskID, &Peripheral_BondMgrCBs, &Peripheral_PeripheralCBs);
         return (events ^ SBP_START_DEVICE_EVT);
     }
+
     if(events & SBP_PARAM_UPDATE_EVT)
     {
-        // Send connect param update request
         GAPRole_PeripheralConnParamUpdateReq(peripheralConnList.connHandle,
                                              DEFAULT_DESIRED_MIN_CONN_INTERVAL,
                                              DEFAULT_DESIRED_MAX_CONN_INTERVAL,
@@ -329,22 +330,26 @@ uint16 Peripheral_ProcessEvent(uint8 task_id, uint16 events)
                                              DEFAULT_DESIRED_CONN_TIMEOUT,
                                              Peripheral_TaskID);
 
-        //        GAPRole_PeripheralConnParamUpdateReq( peripheralConnList.connHandle,
-        //                                              10,
-        //                                              20,
-        //                                              0,
-        //                                              400,
-        //                                              Peripheral_TaskID);
-
         return (events ^ SBP_PARAM_UPDATE_EVT);
     }
 
     if(events & UART_TO_BLE_SEND_EVT)
     {
-        // 處理從UART收到的數據並發送到BLE
         uart_to_ble_send();
         return (events ^ UART_TO_BLE_SEND_EVT);
     }
+    
+    if(events & PROTOCOL_TIMER_EVT)
+    {
+        // 調用協議處理層的定時器事件處理函數
+        protocol_timer_event();
+        
+        // 重新啟動定時器，以便定期檢查重試狀態
+        tmos_start_task(Peripheral_TaskID, PROTOCOL_TIMER_EVT, MS1_TO_SYSTEM_TIME(100));
+        
+        return (events ^ PROTOCOL_TIMER_EVT);
+    }
+
     // Discard unknown events
     return 0;
 }

@@ -1,17 +1,22 @@
 /********************************** (C) COPYRIGHT *******************************
- * File Name          : protocol_handler.h
+ * File Name          : P14_UART.h
  * Author             : HMD Team
  * Version            : V1.0
  * Date               : 2024/05/08
- * Description        : P14多功能生化儀讀數藍牙與UART通訊協議處理
+ * Description        : P14多功能生化儀讀數UART通訊處理
  *********************************************************************************
  * Copyright (c) 2024 HMD. All rights reserved.
  *******************************************************************************/
 
-#ifndef __PROTOCOL_HANDLER_H
-#define __PROTOCOL_HANDLER_H
+#ifndef __P14_UART_H
+#define __P14_UART_H
 
-#include "CH58x_common.h"
+#include "debug.h"
+#include <stdint.h>
+
+// 緩衝區大小
+#define UART_RX_BUFFER_SIZE    256
+#define UART_TX_BUFFER_SIZE    256
 
 // 協議常量定義
 #define PROTOCOL_START_MARKER    0xAA    // 起始標記
@@ -50,11 +55,11 @@
 #define ERR_RESULT_OUT_OF_RANGE  0x0F    // 檢測結果超出範圍
 
 // 檢測項目
-#define MEASURE_ITEM_GLV         0x0000  // 血糖
-#define MEASURE_ITEM_U           0x0001  // 尿酸
-#define MEASURE_ITEM_C           0x0002  // 總膽固醇
-#define MEASURE_ITEM_TG          0x0003  // 三酸甘油脂
-#define MEASURE_ITEM_GAV         0x0004  // 血糖
+#define MEASURE_ITEM_GLV         0x0000  // 血糖(GLV)
+#define MEASURE_ITEM_U           0x0001  // 尿酸(U)
+#define MEASURE_ITEM_C           0x0002  // 總膽固醇(C)
+#define MEASURE_ITEM_TG          0x0003  // 三酸甘油脂(TG)
+#define MEASURE_ITEM_GAV         0x0004  // 血糖(GAV)
 
 // 事件類型
 #define EVENT_NONE               0x0000  // 無
@@ -105,16 +110,29 @@ typedef struct {
     uint16_t temperature;        // 溫度
 } measure_result_t;
 
-// 函數聲明
-void protocol_init(void);
-void protocol_process_uart_data(uint8_t *data, uint16_t len);
-uint8_t protocol_send_command(uint8_t cmdId, uint8_t *data, uint8_t dataLen);
-uint8_t protocol_send_error(uint8_t originalCmdId, uint8_t errorCode);
-uint8_t protocol_calculate_checksum(uint8_t cmdId, uint8_t *data, uint8_t dataLen);
-void protocol_handle_ble_data(uint8_t *data, uint16_t len);
-void protocol_forward_to_ble(uint8_t cmdId, uint8_t *data, uint8_t dataLen);
-void protocol_retry_command(void);
-void protocol_timer_event(void);
-void on_uart_to_ble_send(uint8_t *data, uint16_t len);
+// 血液樣本狀態變量
+extern uint8_t bloodSampleReady;        // 血液樣本準備狀態
+extern uint8_t bloodCountdown;          // 血液樣本倒計時
+extern uint8_t sampleProcessActive;     // 樣本處理狀態
 
-#endif /* __PROTOCOL_HANDLER_H */ 
+/* 函數聲明 */
+void UART_Init(void);
+void UART_SendData(uint8_t *data, uint16_t len);
+uint8_t UART_CalculateChecksum(uint8_t cmdId, uint8_t *data, uint8_t dataLen);
+void UART_SendPacket(uint8_t cmdId, uint8_t *data, uint8_t dataLen);
+void UART_SendError(uint8_t originalCmdId, uint8_t errorCode);
+void UART_ProcessData(void);
+void UART_RxCallback(uint8_t *data, uint16_t len);
+
+// 處理具體協議命令的函數
+void UART_HandleSyncTime(uint8_t *data, uint8_t dataLen);
+void UART_HandleDeviceStatusRequest(void);
+void UART_HandleSetCodeEvent(uint8_t *data, uint8_t dataLen);
+void UART_HandleBloodSampleRequest(void);
+void UART_HandleResultRequest(void);
+void UART_HandleRawDataRequest(void);
+
+// 收到BLE傳過來的命令時可以直接轉發至CH32V203G8R6的功能
+void UART_ForwardBLECommand(uint8_t cmdId, uint8_t *data, uint8_t dataLen);
+
+#endif /* __P14_UART_H */ 
