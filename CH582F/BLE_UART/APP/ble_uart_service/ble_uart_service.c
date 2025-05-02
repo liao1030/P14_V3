@@ -51,16 +51,13 @@
 //{0x16,0x96,0x24,0x47,0xc6,0x23, 0x61,0xba,0xd9,0x4b,0x4d,0x1e,0x43,0x53,0x53,0x49};
 
 // ble_uart GATT Profile Service UUID
-CONST uint8 ble_uart_ServiceUUID[ATT_UUID_SIZE] =
-    {0x9F, 0xCA, 0xDC, 0x24, 0x0E, 0xE5, 0xA9, 0xE0, 0x93, 0xF3, 0xA3, 0xB5, 0x01, 0x00, 0x40, 0x6E};
+CONST uint8 ble_uart_ServiceUUID[ATT_BT_UUID_SIZE] = {0xF0, 0xFF};  // 改為0xFFF0服務UUID
 
-// Characteristic rx uuid
-CONST uint8 ble_uart_RxCharUUID[ATT_UUID_SIZE] =
-    {0x9F, 0xCA, 0xDC, 0x24, 0x0E, 0xE5, 0xA9, 0xE0, 0x93, 0xF3, 0xA3, 0xB5, 0x02, 0x00, 0x40, 0x6E};
+// Characteristic rx uuid (Write特性)
+CONST uint8 ble_uart_RxCharUUID[ATT_BT_UUID_SIZE] = {0xF2, 0xFF};   // 改為0xFFF2特性UUID
 
-// Characteristic tx uuid
-CONST uint8 ble_uart_TxCharUUID[ATT_UUID_SIZE] =
-    {0x9F, 0xCA, 0xDC, 0x24, 0x0E, 0xE5, 0xA9, 0xE0, 0x93, 0xF3, 0xA3, 0xB5, 0x03, 0x00, 0x40, 0x6E};
+// Characteristic tx uuid (Notify特性)
+CONST uint8 ble_uart_TxCharUUID[ATT_BT_UUID_SIZE] = {0xF1, 0xFF};   // 改為0xFFF1特性UUID
 
 /*********************************************************************
  * EXTERNAL VARIABLES
@@ -84,16 +81,14 @@ static ble_uart_ProfileChangeCB_t ble_uart_AppCBs = NULL;
 static CONST gattAttrType_t ble_uart_Service = {ATT_UUID_SIZE, ble_uart_ServiceUUID};
 
 // Profile Characteristic 1 Properties
-//static uint8 ble_uart_RxCharProps = GATT_PROP_WRITE_NO_RSP| GATT_PROP_WRITE;
-static uint8 ble_uart_RxCharProps = GATT_PROP_WRITE_NO_RSP;
+static uint8 ble_uart_RxCharProps = GATT_PROP_WRITE_NO_RSP | GATT_PROP_WRITE;  // 允許Write和Write Without Response
 
 // Characteristic 1 Value
 static uint8 ble_uart_RxCharValue[BLE_UART_RX_BUFF_SIZE];
 //static uint8 ble_uart_RxCharValue[1];
 
 // Profile Characteristic 2 Properties
-//static uint8 ble_uart_TxCharProps = GATT_PROP_NOTIFY| GATT_PROP_INDICATE;
-static uint8 ble_uart_TxCharProps = GATT_PROP_NOTIFY;
+static uint8 ble_uart_TxCharProps = GATT_PROP_NOTIFY;  // 使用Notify特性
 
 // Characteristic 2 Value
 static uint8 ble_uart_TxCharValue = 0;
@@ -114,30 +109,30 @@ static gattAttribute_t ble_uart_ProfileAttrTbl[] = {
         (uint8 *)&ble_uart_Service              /* pValue */
     },
 
-    // Characteristic 1 Declaration
+    // Characteristic 1 Declaration (Write)
     {
         {ATT_BT_UUID_SIZE, characterUUID},
         GATT_PERMIT_READ,
         0,
         &ble_uart_RxCharProps},
 
-    // Characteristic Value 1
+    // Characteristic Value 1 (Write)
     {
-        {ATT_UUID_SIZE, ble_uart_RxCharUUID},
+        {ATT_BT_UUID_SIZE, ble_uart_RxCharUUID},
         GATT_PERMIT_WRITE,
         0,
         &ble_uart_RxCharValue[0]},
 
-    // Characteristic 2 Declaration
+    // Characteristic 2 Declaration (Notify)
     {
         {ATT_BT_UUID_SIZE, characterUUID},
         GATT_PERMIT_READ,
         0,
         &ble_uart_TxCharProps},
 
-    // Characteristic Value 2
+    // Characteristic Value 2 (Notify)
     {
-        {ATT_UUID_SIZE, ble_uart_TxCharUUID},
+        {ATT_BT_UUID_SIZE, ble_uart_TxCharUUID},
         0,
         0,
         (uint8 *)&ble_uart_TxCharValue},
