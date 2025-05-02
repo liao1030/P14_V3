@@ -10,8 +10,10 @@ Archive member included to satisfy reference by file (symbol)
                               /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/rv32imacxw/ilp32/libgcc.a(muldf3.o) (__clzsi2)
 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/rv32imacxw/ilp32/libgcc.a(_clz.o)
                               /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/rv32imacxw/ilp32/libgcc.a(_clzsi2.o) (__clz_tab)
+/Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-memcpy.o)
+                              ./User/parameter/flash_parameter.o (memcpy)
 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-memset.o)
-                              ./User/parameter_code.o (memset)
+                              ./User/parameter/flash_parameter.o (memset)
 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-printf.o)
                               ./User/main.o (printf)
 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-puts.o)
@@ -56,8 +58,6 @@ Archive member included to satisfy reference by file (symbol)
                               /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-stdio.o) (_lseek_r)
 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-memchr.o)
                               /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-nano-vfprintf.o) (memchr)
-/Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-memcpy.o)
-                              /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-fvwrite.o) (memcpy)
 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-memmove.o)
                               /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-fvwrite.o) (memmove)
 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-mlock.o)
@@ -88,6 +88,75 @@ errno               0x4               /Applications/MounRiver Studio 2.app/Conte
 
 Discarded input sections
 
+ .text          0x0000000000000000        0x0 ./User/parameter/flash_parameter.o
+ .data          0x0000000000000000        0x0 ./User/parameter/flash_parameter.o
+ .bss           0x0000000000000000        0x0 ./User/parameter/flash_parameter.o
+ .text.CalculateChecksum
+                0x0000000000000000       0x1e ./User/parameter/flash_parameter.o
+ .text.IsParamBlockValid
+                0x0000000000000000       0x40 ./User/parameter/flash_parameter.o
+ .text.GetBlockOffset
+                0x0000000000000000       0x5e ./User/parameter/flash_parameter.o
+ .rodata.GetBlockOffset
+                0x0000000000000000       0x1c ./User/parameter/flash_parameter.o
+ .text.FlashWriteBuffer.part.2
+                0x0000000000000000       0x88 ./User/parameter/flash_parameter.o
+ .text.WriteParameterBlock
+                0x0000000000000000       0x50 ./User/parameter/flash_parameter.o
+ .text.FindParameterBlock.constprop.3
+                0x0000000000000000       0x60 ./User/parameter/flash_parameter.o
+ .text.GetActiveParameterBlock.part.1
+                0x0000000000000000       0x52 ./User/parameter/flash_parameter.o
+ .text.PARAM_ReadBlock
+                0x0000000000000000       0x5c ./User/parameter/flash_parameter.o
+ .text.PARAM_UpdateBlock
+                0x0000000000000000       0xcc ./User/parameter/flash_parameter.o
+ .text.PARAM_GetDateTime
+                0x0000000000000000       0x6a ./User/parameter/flash_parameter.o
+ .text.PARAM_UpdateDateTime
+                0x0000000000000000       0x94 ./User/parameter/flash_parameter.o
+ .text.PARAM_IncreaseTestCount
+                0x0000000000000000       0x38 ./User/parameter/flash_parameter.o
+ .text.PARAM_GetTestCount
+                0x0000000000000000       0x2a ./User/parameter/flash_parameter.o
+ .text.PARAM_GetStripParametersByStripType
+                0x0000000000000000       0x7a ./User/parameter/flash_parameter.o
+ .rodata.PARAM_GetStripParametersByStripType
+                0x0000000000000000       0x14 ./User/parameter/flash_parameter.o
+ .text.PARAM_GetMeasurementRangeByStripType
+                0x0000000000000000       0x88 ./User/parameter/flash_parameter.o
+ .rodata.PARAM_GetMeasurementRangeByStripType
+                0x0000000000000000       0x14 ./User/parameter/flash_parameter.o
+ .text.PARAM_GetTimingParametersByStripType
+                0x0000000000000000       0xf8 ./User/parameter/flash_parameter.o
+ .rodata.PARAM_GetTimingParametersByStripType
+                0x0000000000000000       0x14 ./User/parameter/flash_parameter.o
+ .text.PARAM_ResetToDefault
+                0x0000000000000000      0x1ce ./User/parameter/flash_parameter.o
+ .text.PARAM_Init
+                0x0000000000000000       0x30 ./User/parameter/flash_parameter.o
+ .text.PARAM_SaveTestRecord
+                0x0000000000000000       0xa8 ./User/parameter/flash_parameter.o
+ .text.PARAM_GetTestRecord
+                0x0000000000000000       0xb6 ./User/parameter/flash_parameter.o
+ .text.PARAM_GetTestRecordCount
+                0x0000000000000000       0x26 ./User/parameter/flash_parameter.o
+ .text.PARAM_EraseAllTestRecords
+                0x0000000000000000       0x52 ./User/parameter/flash_parameter.o
+ .rodata.PARAM_ResetToDefault.cst4
+                0x0000000000000000        0x4 ./User/parameter/flash_parameter.o
+ .sbss.g_activeBlockAddr
+                0x0000000000000000        0x4 ./User/parameter/flash_parameter.o
+ .debug_info    0x0000000000000000     0x23a8 ./User/parameter/flash_parameter.o
+ .debug_abbrev  0x0000000000000000      0x4d7 ./User/parameter/flash_parameter.o
+ .debug_loc     0x0000000000000000      0xee3 ./User/parameter/flash_parameter.o
+ .debug_aranges
+                0x0000000000000000       0xc8 ./User/parameter/flash_parameter.o
+ .debug_ranges  0x0000000000000000      0x2b8 ./User/parameter/flash_parameter.o
+ .debug_line    0x0000000000000000     0x217e ./User/parameter/flash_parameter.o
+ .debug_str     0x0000000000000000      0xf6b ./User/parameter/flash_parameter.o
+ .comment       0x0000000000000000       0x33 ./User/parameter/flash_parameter.o
+ .debug_frame   0x0000000000000000      0x348 ./User/parameter/flash_parameter.o
  .text          0x0000000000000000        0x0 ./User/ch32v20x_it.o
  .data          0x0000000000000000        0x0 ./User/ch32v20x_it.o
  .bss           0x0000000000000000        0x0 ./User/ch32v20x_it.o
@@ -115,6 +184,35 @@ Discarded input sections
                 0x0000000000000000       0x22 ./User/parameter_code.o
  .rodata.Parameter_Reset.str1.4
                 0x0000000000000000       0x23 ./User/parameter_code.o
+ .text          0x0000000000000000        0x0 ./User/parameter_code_sample.o
+ .data          0x0000000000000000        0x0 ./User/parameter_code_sample.o
+ .bss           0x0000000000000000        0x0 ./User/parameter_code_sample.o
+ .text.Parameter_Init_Sample
+                0x0000000000000000       0x34 ./User/parameter_code_sample.o
+ .text.Parameter_ReadSample
+                0x0000000000000000       0xde ./User/parameter_code_sample.o
+ .text.Parameter_UpdateSample
+                0x0000000000000000       0x56 ./User/parameter_code_sample.o
+ .text.SaveTestResultSample
+                0x0000000000000000       0x7e ./User/parameter_code_sample.o
+ .text.ReadTestRecordSample
+                0x0000000000000000       0x7e ./User/parameter_code_sample.o
+ .text.sample_main
+                0x0000000000000000       0x3e ./User/parameter_code_sample.o
+ .rodata.Parameter_ReadSample.str1.4
+                0x0000000000000000       0xab ./User/parameter_code_sample.o
+ .rodata.ReadTestRecordSample.str1.4
+                0x0000000000000000       0x60 ./User/parameter_code_sample.o
+ .debug_info    0x0000000000000000     0x118e ./User/parameter_code_sample.o
+ .debug_abbrev  0x0000000000000000      0x29e ./User/parameter_code_sample.o
+ .debug_loc     0x0000000000000000       0x3f ./User/parameter_code_sample.o
+ .debug_aranges
+                0x0000000000000000       0x48 ./User/parameter_code_sample.o
+ .debug_ranges  0x0000000000000000       0x38 ./User/parameter_code_sample.o
+ .debug_line    0x0000000000000000      0x795 ./User/parameter_code_sample.o
+ .debug_str     0x0000000000000000      0x981 ./User/parameter_code_sample.o
+ .comment       0x0000000000000000       0x33 ./User/parameter_code_sample.o
+ .debug_frame   0x0000000000000000       0xc8 ./User/parameter_code_sample.o
  .text          0x0000000000000000        0x0 ./User/system_ch32v20x.o
  .data          0x0000000000000000        0x0 ./User/system_ch32v20x.o
  .bss           0x0000000000000000        0x0 ./User/system_ch32v20x.o
@@ -1210,6 +1308,11 @@ Discarded input sections
  .text          0x0000000000000000        0x0 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/rv32imacxw/ilp32/libgcc.a(_clz.o)
  .data          0x0000000000000000        0x0 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/rv32imacxw/ilp32/libgcc.a(_clz.o)
  .bss           0x0000000000000000        0x0 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/rv32imacxw/ilp32/libgcc.a(_clz.o)
+ .text          0x0000000000000000        0x0 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-memcpy.o)
+ .data          0x0000000000000000        0x0 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-memcpy.o)
+ .bss           0x0000000000000000        0x0 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-memcpy.o)
+ .text.memcpy   0x0000000000000000       0xb2 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-memcpy.o)
+ .debug_frame   0x0000000000000000       0x20 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-memcpy.o)
  .data          0x0000000000000000        0x0 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-memset.o)
  .bss           0x0000000000000000        0x0 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-memset.o)
  .text          0x0000000000000000        0x0 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-printf.o)
@@ -1310,11 +1413,6 @@ Discarded input sections
  .text          0x0000000000000000        0x0 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-memchr.o)
  .data          0x0000000000000000        0x0 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-memchr.o)
  .bss           0x0000000000000000        0x0 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-memchr.o)
- .text          0x0000000000000000        0x0 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-memcpy.o)
- .data          0x0000000000000000        0x0 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-memcpy.o)
- .bss           0x0000000000000000        0x0 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-memcpy.o)
- .text.memcpy   0x0000000000000000       0xb2 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-memcpy.o)
- .debug_frame   0x0000000000000000       0x20 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-memcpy.o)
  .text          0x0000000000000000        0x0 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-memmove.o)
  .data          0x0000000000000000        0x0 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-memmove.o)
  .bss           0x0000000000000000        0x0 /Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V Embedded GCC/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imacxw/ilp32/libg_nano.a(lib_a-memmove.o)
@@ -1370,9 +1468,11 @@ RAM              0x0000000020000000 0x0000000000005000 xrw
 
 Linker script and memory map
 
+LOAD ./User/parameter/flash_parameter.o
 LOAD ./User/ch32v20x_it.o
 LOAD ./User/main.o
 LOAD ./User/parameter_code.o
+LOAD ./User/parameter_code_sample.o
 LOAD ./User/system_ch32v20x.o
 LOAD ./Startup/startup_ch32v20x_D6.o
 LOAD ./Peripheral/src/ch32v20x_adc.o
