@@ -19,6 +19,7 @@
 
 #include "debug.h"
 #include "parameter_code.h"
+#include "strip_detection.h"  // 引入試片類型判別頭文件
 
 /* Global typedef */
 
@@ -47,12 +48,32 @@ int main(void)
     Parameter_Init();
     printf("參數表初始化完成\r\n");
     
+    // 初始化試片類型判別功能
+    Strip_Detection_Init();
+    
     // 打印參數表信息
     Parameter_PrintInfo();
+    
+    printf("系統初始化完成，等待試片插入...\r\n");
     
     // 主循環
     while(1)
     {
         // 主要程式邏輯
+        // 根據試片狀態執行不同操作
+        switch(Strip_GetStatus()) {
+            case STRIP_STATUS_IDENTIFIED:
+                // 試片類型已識別，可以開始測試流程
+                printf("試片類型已識別，準備開始測試...\r\n");
+                // 這裡可以加入測試相關的程式碼
+                break;
+                
+            default:
+                // 其他狀態不需要特別處理
+                break;
+        }
+        
+        // 簡單延時，避免CPU負擔過重
+        Delay_Ms(10);
     }
 }

@@ -7,17 +7,20 @@
 C_SRCS += \
 ../APP/app_uart.c \
 ../APP/peripheral.c \
-../APP/peripheral_main.c 
+../APP/peripheral_main.c \
+../APP/strip_detection.c 
 
 C_DEPS += \
 ./APP/app_uart.d \
 ./APP/peripheral.d \
-./APP/peripheral_main.d 
+./APP/peripheral_main.d \
+./APP/strip_detection.d 
 
 OBJS += \
 ./APP/app_uart.o \
 ./APP/peripheral.o \
-./APP/peripheral_main.o 
+./APP/peripheral_main.o \
+./APP/strip_detection.o 
 
 
 

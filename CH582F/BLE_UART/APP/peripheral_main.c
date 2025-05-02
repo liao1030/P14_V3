@@ -17,6 +17,8 @@
 #include "gattprofile.h"
 #include "peripheral.h"
 #include "app_uart.h"
+// 引入試片偵測頭文件
+#include "strip_detection.h"
 
 /*********************************************************************
  * GLOBAL TYPEDEFS
@@ -42,6 +44,8 @@ void Main_Circulation()
     {
         TMOS_SystemProcess();
         app_uart_process();
+        // 檢查試片插入狀態（處理除彈跳）
+        Strip_CheckInsertionStatus();
     }
 }
 
@@ -61,11 +65,17 @@ int main(void)
     UART1_DefInit();
 #endif
     PRINT("%s\n", VER_LIB);
+    PRINT("多功能生化測試儀 - BLE啟動中...\n");
     CH58X_BLEInit();
     HAL_Init();
     GAPRole_PeripheralInit();
     Peripheral_Init();
     app_uart_init();
+    
+    // 初始化試片插入偵測功能
+    Strip_Detection_Init();
+    PRINT("試片插入偵測初始化完成\n");
+    
     Main_Circulation();
 }
 

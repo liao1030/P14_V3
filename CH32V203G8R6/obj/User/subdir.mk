@@ -9,6 +9,7 @@ C_SRCS += \
 ../User/main.c \
 ../User/parameter_code.c \
 ../User/parameter_code_sample.c \
+../User/strip_detection.c \
 ../User/system_ch32v20x.c 
 
 C_DEPS += \
@@ -16,6 +17,7 @@ C_DEPS += \
 ./User/main.d \
 ./User/parameter_code.d \
 ./User/parameter_code_sample.d \
+./User/strip_detection.d \
 ./User/system_ch32v20x.d 
 
 OBJS += \
@@ -23,6 +25,7 @@ OBJS += \
 ./User/main.o \
 ./User/parameter_code.o \
 ./User/parameter_code_sample.o \
+./User/strip_detection.o \
 ./User/system_ch32v20x.o 
 
 
