@@ -21,17 +21,17 @@ extern "C" {
 #include "stdint.h"
 
 /**
- * P14-BLE-UART Service UUID: 0xFFE0
- * Tx特性(通知) UUID: 0xFFE1
- * Rx特性(寫入) UUID: 0xFFE2
+ * P14-BLE-UART Service UUID: 0xFFF0
+ * Tx特性(通知) UUID: 0xFFF1
+ * Rx特性(寫入) UUID: 0xFFF2
  */
 
 // 服務定義
-#define BLE_UART_SERVICE_UUID    0xFFE0
+#define BLE_UART_SERVICE_UUID    0xFFF0
 
 // 特性定義
-#define BLE_UART_TX_CHAR_UUID    0xFFE1  // 通知特性
-#define BLE_UART_RX_CHAR_UUID    0xFFE2  // 寫入特性
+#define BLE_UART_TX_CHAR_UUID    0xFFF1  // 通知特性
+#define BLE_UART_RX_CHAR_UUID    0xFFF2  // 寫入特性
 
 // 接收緩衝區大小
 #define BLE_UART_RX_BUFF_SIZE    20  // 符合協議要求

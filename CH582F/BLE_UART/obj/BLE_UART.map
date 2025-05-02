@@ -1157,7 +1157,7 @@ Discarded input sections
  .data          0x0000000000000000        0x0 ./Profile/gattprofile.o
  .bss           0x0000000000000000        0x0 ./Profile/gattprofile.o
  .text.simpleProfile_ReadAttrCB
-                0x0000000000000000       0x7a ./Profile/gattprofile.o
+                0x0000000000000000       0x78 ./Profile/gattprofile.o
  .text.simpleProfile_WriteAttrCB
                 0x0000000000000000       0xbe ./Profile/gattprofile.o
  .text.simpleProfile_HandleConnStatusCB
@@ -1230,14 +1230,14 @@ Discarded input sections
                 0x0000000000000000        0x2 ./Profile/gattprofile.o
  .debug_info    0x0000000000000000     0x186f ./Profile/gattprofile.o
  .debug_abbrev  0x0000000000000000      0x38d ./Profile/gattprofile.o
- .debug_loc     0x0000000000000000      0xb29 ./Profile/gattprofile.o
+ .debug_loc     0x0000000000000000      0xb4a ./Profile/gattprofile.o
  .debug_aranges
                 0x0000000000000000       0x58 ./Profile/gattprofile.o
- .debug_ranges  0x0000000000000000      0x110 ./Profile/gattprofile.o
+ .debug_ranges  0x0000000000000000      0x120 ./Profile/gattprofile.o
  .debug_line    0x0000000000000000      0xb4d ./Profile/gattprofile.o
  .debug_str     0x0000000000000000      0xfab ./Profile/gattprofile.o
  .comment       0x0000000000000000       0x33 ./Profile/gattprofile.o
- .debug_frame   0x0000000000000000      0x130 ./Profile/gattprofile.o
+ .debug_frame   0x0000000000000000      0x138 ./Profile/gattprofile.o
  .text          0x0000000000000000        0x0 ./HAL/MCU.o
  .data          0x0000000000000000        0x0 ./HAL/MCU.o
  .bss           0x0000000000000000        0x0 ./HAL/MCU.o
