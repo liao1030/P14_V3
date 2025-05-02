@@ -20,25 +20,45 @@ extern "C" {
 //#include "att.h"
 #include "stdint.h"
 
-#define BLE_UART_RX_BUFF_SIZE    1
+/**
+ * P14-BLE-UART Service UUID: 0xFFE0
+ * Tx特性(通知) UUID: 0xFFE1
+ * Rx特性(寫入) UUID: 0xFFE2
+ */
 
-typedef enum
-{
-    BLE_UART_EVT_TX_NOTI_DISABLED = 1,
-    BLE_UART_EVT_TX_NOTI_ENABLED,
-    BLE_UART_EVT_BLE_DATA_RECIEVED,
+// 服務定義
+#define BLE_UART_SERVICE_UUID    0xFFE0
+
+// 特性定義
+#define BLE_UART_TX_CHAR_UUID    0xFFE1  // 通知特性
+#define BLE_UART_RX_CHAR_UUID    0xFFE2  // 寫入特性
+
+// 接收緩衝區大小
+#define BLE_UART_RX_BUFF_SIZE    20  // 符合協議要求
+
+/**
+ * BLE UART事件類型
+ */
+typedef enum {
+    BLE_UART_EVT_TX_NOTI_DISABLED,        // 通知已禁用
+    BLE_UART_EVT_TX_NOTI_ENABLED,         // 通知已啟用
+    BLE_UART_EVT_BLE_DATA_RECIEVED,       // 收到BLE數據
 } ble_uart_evt_type_t;
 
-typedef struct
-{
-    uint8_t const *p_data; /**< A pointer to the buffer with received data. */
-    uint16_t       length; /**< Length of received data. */
-} ble_uart_evt_rx_data_t;
+/**
+ * BLE UART數據結構
+ */
+typedef struct {
+    uint8_t const *p_data;  // 數據指針
+    uint16_t      length;   // 數據長度
+} ble_uart_data_t;
 
-typedef struct
-{
-    ble_uart_evt_type_t    type;
-    ble_uart_evt_rx_data_t data;
+/**
+ * BLE UART事件結構
+ */
+typedef struct {
+    ble_uart_evt_type_t type;         // 事件類型
+    ble_uart_data_t     data;         // 事件數據
 } ble_uart_evt_t;
 
 typedef void (*ble_uart_ProfileChangeCB_t)(uint16_t connection_handle, ble_uart_evt_t *p_evt);

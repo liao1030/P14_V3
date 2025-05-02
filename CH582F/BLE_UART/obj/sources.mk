@@ -26,6 +26,7 @@ SUBDIRS := \
 APP \
 APP/app_drv_fifo \
 APP/ble_uart_service \
+APP/include \
 HAL \
 Profile \
 RVMSIS \

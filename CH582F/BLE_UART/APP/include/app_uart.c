@@ -18,6 +18,7 @@
 #include "gattprofile.h"
 #include "peripheral.h"
 #include "app_uart.h"
+#include "protocol_handler.h"
 
 /*********************************************************************
  * MACROS
@@ -110,7 +111,7 @@ void app_uart_process(void)
 /*********************************************************************
  * @fn      app_uart_init
  *
- * @brief   init uart
+ * @brief   初始化UART
  *
  * @return  NULL
  */
@@ -121,20 +122,28 @@ void app_uart_init()
     app_drv_fifo_init(&app_uart_tx_fifo, app_uart_tx_buffer, APP_UART_TX_BUFFER_LENGTH);
     app_drv_fifo_init(&app_uart_rx_fifo, app_uart_rx_buffer, APP_UART_RX_BUFFER_LENGTH);
 
-    //uart tx io
+    // 配置UART1硬體連接
+    // CH32V203G8R6使用UART2通訊
+    // 配置PA2/ADC2/OP2O0 (Pin 11) 作為MCU_TX，連接到UART 1 Tx
     GPIOA_SetBits(bTXD3);
     GPIOA_ModeCfg(bTXD3, GPIO_ModeOut_PP_5mA);
 
-    //uart rx io
+    // 配置PA3/ADC3/OP1O0 (Pin 12) 作為MCU_RX，連接到UART 1 Rx
     GPIOA_SetBits(bRXD3);
     GPIOA_ModeCfg(bRXD3, GPIO_ModeIN_PU);
 
-    //uart3 init
+    // 初始化UART3，配置波特率為115200
     UART3_DefInit();
+    UART3_BaudRateCfg(115200);
 
-    //enable interupt
+    // 啟用中斷
     UART3_INTCfg(ENABLE, RB_IER_RECV_RDY | RB_IER_LINE_STAT);
     PFIC_EnableIRQ(UART3_IRQn);
+    
+    // 初始化協議處理模塊
+    protocol_init();
+    
+    PRINT("UART初始化完成，波特率115200\n");
 }
 
 /*********************************************************************
@@ -196,7 +205,7 @@ void UART3_IRQHandler(void)
 /*********************************************************************
  * @fn      on_bleuartServiceEvt
  *
- * @brief   ble uart service callback handler
+ * @brief   藍牙UART服務回調處理
  *
  * @return  NULL
  */
@@ -205,27 +214,54 @@ void on_bleuartServiceEvt(uint16_t connection_handle, ble_uart_evt_t *p_evt)
     switch(p_evt->type)
     {
         case BLE_UART_EVT_TX_NOTI_DISABLED:
-            PRINT("%02x:bleuart_EVT_TX_NOTI_DISABLED\r\n", connection_handle);
+            PRINT("%02x:藍牙通知已禁用\n", connection_handle);
             break;
+            
         case BLE_UART_EVT_TX_NOTI_ENABLED:
-            PRINT("%02x:bleuart_EVT_TX_NOTI_ENABLED\r\n", connection_handle);
+            PRINT("%02x:藍牙通知已啟用\n", connection_handle);
             break;
+            
         case BLE_UART_EVT_BLE_DATA_RECIEVED:
-            PRINT("BLE RX DATA len:%d\r\n", p_evt->data.length);
-
-            //for notify back test
-            //to ble
-            uint16_t to_write_length = p_evt->data.length;
-            app_drv_fifo_write(&app_uart_rx_fifo, (uint8_t *)p_evt->data.p_data, &to_write_length);
-            tmos_start_task(Peripheral_TaskID, UART_TO_BLE_SEND_EVT, 2);
-            //end of nofify back test
-
-            //ble to uart
-            app_uart_tx_data((uint8_t *)p_evt->data.p_data, p_evt->data.length);
-
+            PRINT("接收藍牙數據: %d字節\n", p_evt->data.length);
+            
+            // 將藍牙數據轉發至協議處理模塊
+            protocol_handle_ble_data((uint8_t *)p_evt->data.p_data, p_evt->data.length);
+            
             break;
+            
         default:
             break;
+    }
+}
+
+/*********************************************************************
+ * @fn      uart_to_ble_send
+ *
+ * @brief   處理從UART到BLE的數據發送
+ *
+ * @param   None
+ *
+ * @return  None
+ */
+void uart_to_ble_send(void)
+{
+    uint8_t data[BLE_BUFF_MAX_LEN - 4];
+    uint16_t read_len = 0;
+    
+    // 從UART接收FIFO讀取數據
+    app_drv_fifo_read(&app_uart_rx_fifo, data, &read_len);
+    
+    if (read_len > 0) {
+        // 將數據交給協議處理模塊
+        protocol_process_uart_data(data, read_len);
+        
+        // 記錄接收到的UART數據
+        PRINT("UART->BLE: ");
+        for (uint16_t i = 0; i < read_len && i < 16; i++) {
+            PRINT("%02X ", data[i]);
+        }
+        if (read_len > 16) PRINT("...");
+        PRINT("\n");
     }
 }
 

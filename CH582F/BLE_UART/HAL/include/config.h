@@ -76,7 +76,7 @@
  * 默认配置值
  */
 #ifndef BLE_MAC
-#define BLE_MAC                             FALSE
+#define BLE_MAC                             TRUE
 #endif
 #ifndef DCDC_ENABLE
 #define DCDC_ENABLE                         FALSE
@@ -127,7 +127,7 @@
 #define BLE_MEMHEAP_SIZE                    (1024*6)
 #endif
 #ifndef BLE_BUFF_MAX_LEN
-#define BLE_BUFF_MAX_LEN                    27
+#define BLE_BUFF_MAX_LEN                    27  // MTU=23，符合協議要求的20 bytes
 #endif
 #ifndef BLE_BUFF_NUM
 #define BLE_BUFF_NUM                        5

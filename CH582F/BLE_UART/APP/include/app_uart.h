@@ -21,8 +21,10 @@ extern "C" {
  * INCLUDES
  */
 
+#include "CONFIG.h"
 #include "app_drv_fifo.h"
 #include "ble_uart_service.h"
+#include "protocol_handler.h"
 
 /*********************************************************************
  * CONSTANTS
@@ -54,7 +56,12 @@ extern void app_uart_process(void);
 
 extern void app_uart_init(void);
 
+extern void app_uart_tx_data(uint8_t *data, uint16_t length);
+
 extern void on_bleuartServiceEvt(uint16_t connection_handle, ble_uart_evt_t *p_evt);
+
+// º¯”µÂ•Ã÷
+void uart_to_ble_send(void);
 
 /*********************************************************************
 *********************************************************************/

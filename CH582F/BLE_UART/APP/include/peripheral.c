@@ -78,6 +78,9 @@ uint8_t Peripheral_TaskID = INVALID_TASK_ID; // Task ID for internal task/event 
  * EXTERNAL FUNCTIONS
  */
 
+// 函數聲明
+extern void uart_to_ble_send(void);
+
 /*********************************************************************
  * LOCAL VARIABLES
  */
@@ -98,9 +101,9 @@ blePaControlConfig_t pa_lna_ctl;
 // GAP - SCAN RSP data (max size = 31 bytes)
 static uint8 scanRspData[] = {
     // complete name
-    15, // length of this data
+    10, // length of this data
     GAP_ADTYPE_LOCAL_NAME_COMPLETE,
-    'c', 'h', '5', '8', '3', '_', 'b', 'l', 'e', '_', 'u', 'a', 'r', 't',
+    'P', '1', '4', '-', 'X', 'X', 'X', 'X', 'X', 'X',
     // connection interval range
     0x05, // length of this data
     GAP_ADTYPE_SLAVE_CONN_INTERVAL_RANGE,
@@ -133,7 +136,7 @@ static uint8 advertData[] = {
     HI_UINT16(SIMPLEPROFILE_SERV_UUID)};
 
 // GAP GATT Attributes
-static uint8 attDeviceName[GAP_DEVICE_NAME_LEN] = "ch583_ble_uart";
+static uint8 attDeviceName[GAP_DEVICE_NAME_LEN] = "P14-XXXXXX";
 
 // Connection item list
 static peripheralConnItem_t peripheralConnList;
@@ -199,10 +202,18 @@ void Peripheral_Init()
         uint16 desired_min_interval = 6;
         uint16 desired_max_interval = 1000;
 
-        // Set the GAP Role Parameters
-        GAPRole_SetParameter(GAPROLE_ADVERT_ENABLED, sizeof(uint8), &initial_advertising_enable);
+        // 設置廣播間隔 (單位:0.625ms)
+        GAP_SetParamValue(TGAP_DISC_ADV_INT_MIN, DEFAULT_ADVERTISING_INTERVAL);
+        GAP_SetParamValue(TGAP_DISC_ADV_INT_MAX, DEFAULT_ADVERTISING_INTERVAL);
+        GAP_SetParamValue(TGAP_DISC_ADV_INT_MIN, DEFAULT_ADVERTISING_INTERVAL);
+        GAP_SetParamValue(TGAP_DISC_ADV_INT_MAX, DEFAULT_ADVERTISING_INTERVAL);
+
+        // 設置廣播/掃描響應數據
         GAPRole_SetParameter(GAPROLE_SCAN_RSP_DATA, sizeof(scanRspData), scanRspData);
         GAPRole_SetParameter(GAPROLE_ADVERT_DATA, sizeof(advertData), advertData);
+
+        // 設置廣播參數
+        GAPRole_SetParameter(GAPROLE_ADVERT_ENABLED, sizeof(uint8), &initial_advertising_enable);
         GAPRole_SetParameter(GAPROLE_MIN_CONN_INTERVAL, sizeof(uint16), &desired_min_interval);
         GAPRole_SetParameter(GAPROLE_MAX_CONN_INTERVAL, sizeof(uint16), &desired_max_interval);
     }
@@ -330,114 +341,8 @@ uint16 Peripheral_ProcessEvent(uint8 task_id, uint16 events)
 
     if(events & UART_TO_BLE_SEND_EVT)
     {
-        static uint16_t read_length = 0;
-        ;
-        uint8_t result = 0xff;
-        switch(send_to_ble_state)
-        {
-            case SEND_TO_BLE_TO_SEND:
-
-                //notify is not enabled
-                if(!ble_uart_notify_is_ready(peripheralConnList.connHandle))
-                {
-                    if(peripheralConnList.connHandle == GAP_CONNHANDLE_INIT)
-                    {
-                        //connection lost, flush rx fifo here
-                        app_drv_fifo_flush(&app_uart_rx_fifo);
-                    }
-                    break;
-                }
-                read_length = ATT_GetMTU(peripheralConnList.connHandle) - 3;
-
-                if(app_drv_fifo_length(&app_uart_rx_fifo) >= read_length)
-                {
-                    PRINT("FIFO_LEN:%d\r\n", app_drv_fifo_length(&app_uart_rx_fifo));
-                    result = app_drv_fifo_read(&app_uart_rx_fifo, to_test_buffer, &read_length);
-                    uart_to_ble_send_evt_cnt = 0;
-                }
-                else
-                {
-                    if(uart_to_ble_send_evt_cnt > 10)
-                    {
-                        result = app_drv_fifo_read(&app_uart_rx_fifo, to_test_buffer, &read_length);
-                        uart_to_ble_send_evt_cnt = 0;
-                    }
-                    else
-                    {
-                        tmos_start_task(Peripheral_TaskID, UART_TO_BLE_SEND_EVT, 4);
-                        uart_to_ble_send_evt_cnt++;
-                        PRINT("NO TIME OUT\r\n");
-                    }
-                }
-
-                if(APP_DRV_FIFO_RESULT_SUCCESS == result)
-                {
-                    noti.len = read_length;
-                    noti.pValue = GATT_bm_alloc(peripheralConnList.connHandle, ATT_HANDLE_VALUE_NOTI, noti.len, NULL, 0);
-                    if(noti.pValue != NULL)
-                    {
-                        tmos_memcpy(noti.pValue, to_test_buffer, noti.len);
-                        result = ble_uart_notify(peripheralConnList.connHandle, &noti, 0);
-                        if(result != SUCCESS)
-                        {
-                            PRINT("R1:%02x\r\n", result);
-                            send_to_ble_state = SEND_TO_BLE_SEND_FAILED;
-                            GATT_bm_free((gattMsg_t *)&noti, ATT_HANDLE_VALUE_NOTI);
-                            tmos_start_task(Peripheral_TaskID, UART_TO_BLE_SEND_EVT, 2);
-                        }
-                        else
-                        {
-                            send_to_ble_state = SEND_TO_BLE_TO_SEND;
-                            //app_fifo_write(&app_uart_tx_fifo,to_test_buffer,&read_length);
-                            //app_drv_fifo_write(&app_uart_tx_fifo,to_test_buffer,&read_length);
-                            read_length = 0;
-                            tmos_start_task(Peripheral_TaskID, UART_TO_BLE_SEND_EVT, 2);
-                        }
-                    }
-                    else
-                    {
-                        send_to_ble_state = SEND_TO_BLE_ALLOC_FAILED;
-                        tmos_start_task(Peripheral_TaskID, UART_TO_BLE_SEND_EVT, 2);
-                    }
-                }
-                else
-                {
-                    //send_to_ble_state = SEND_TO_BLE_FIFO_EMPTY;
-                }
-                break;
-            case SEND_TO_BLE_ALLOC_FAILED:
-            case SEND_TO_BLE_SEND_FAILED:
-
-                noti.len = read_length;
-                noti.pValue = GATT_bm_alloc(peripheralConnList.connHandle, ATT_HANDLE_VALUE_NOTI, noti.len, NULL, 0);
-                if(noti.pValue != NULL)
-                {
-                    tmos_memcpy(noti.pValue, to_test_buffer, noti.len);
-                    result = ble_uart_notify(peripheralConnList.connHandle, &noti, 0);
-                    if(result != SUCCESS)
-                    {
-                        PRINT("R2:%02x\r\n", result);
-                        send_to_ble_state = SEND_TO_BLE_SEND_FAILED;
-                        GATT_bm_free((gattMsg_t *)&noti, ATT_HANDLE_VALUE_NOTI);
-                        tmos_start_task(Peripheral_TaskID, UART_TO_BLE_SEND_EVT, 2);
-                    }
-                    else
-                    {
-                        send_to_ble_state = SEND_TO_BLE_TO_SEND;
-                        //app_drv_fifo_write(&app_uart_tx_fifo,to_test_buffer,&read_length);
-                        read_length = 0;
-                        tmos_start_task(Peripheral_TaskID, UART_TO_BLE_SEND_EVT, 2);
-                    }
-                }
-                else
-                {
-                    send_to_ble_state = SEND_TO_BLE_ALLOC_FAILED;
-                    tmos_start_task(Peripheral_TaskID, UART_TO_BLE_SEND_EVT, 2);
-                }
-                break;
-            default:
-                break;
-        }
+        // 處理從UART收到的數據並發送到BLE
+        uart_to_ble_send();
         return (events ^ UART_TO_BLE_SEND_EVT);
     }
     // Discard unknown events
@@ -585,8 +490,39 @@ static void peripheralStateNotificationCB(gapRole_States_t newState, gapRoleEven
     switch(newState & GAPROLE_STATE_ADV_MASK)
     {
         case GAPROLE_STARTED:
-            PRINT("Initialized..\n");
-            break;
+        {
+            uint8_t ownAddress[B_ADDR_LEN];
+            uint8_t systemId[DEVINFO_SYSTEM_ID_LEN];
+            uint8_t deviceName[GAP_DEVICE_NAME_LEN];
+
+            // 獲取本機MAC地址
+            GAPRole_GetParameter(GAPROLE_BD_ADDR, ownAddress);
+            
+            // 將MAC地址最後3字節轉換為設備名稱格式P14-XXXXXX
+            sprintf((char*)deviceName, "P14-%02X%02X%02X", ownAddress[2], ownAddress[1], ownAddress[0]);
+            
+            // 更新設備名稱
+            GGS_SetParameter(GGS_DEVICE_NAME_ATT, strlen((char*)deviceName), deviceName);
+            
+            // 更新掃描響應數據中的設備名稱
+            scanRspData[0] = strlen((char*)deviceName) + 1;  // 長度
+            memcpy(&scanRspData[2], deviceName, strlen((char*)deviceName));
+            GAPRole_SetParameter(GAPROLE_SCAN_RSP_DATA, sizeof(scanRspData), scanRspData);
+            
+            // 生成系統ID
+            systemId[0] = ownAddress[0];
+            systemId[1] = ownAddress[1];
+            systemId[2] = ownAddress[2];
+            systemId[3] = 0xFF;
+            systemId[4] = 0xFE;
+            systemId[5] = ownAddress[3];
+            systemId[6] = ownAddress[4];
+            systemId[7] = ownAddress[5];
+            
+            DevInfo_SetParameter(DEVINFO_SYSTEM_ID, DEVINFO_SYSTEM_ID_LEN, systemId);
+            PRINT("Peripheral started: %s\n", deviceName);
+        }
+        break;
 
         case GAPROLE_ADVERTISING:
             if(pEvent->gap.opcode == GAP_LINK_TERMINATED_EVENT)

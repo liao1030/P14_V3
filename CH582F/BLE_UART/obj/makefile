@@ -13,6 +13,7 @@ RM := rm -rf
 -include RVMSIS/subdir.mk
 -include Profile/subdir.mk
 -include HAL/subdir.mk
+-include APP/include/subdir.mk
 -include APP/ble_uart_service/subdir.mk
 -include APP/app_drv_fifo/subdir.mk
 -include APP/subdir.mk

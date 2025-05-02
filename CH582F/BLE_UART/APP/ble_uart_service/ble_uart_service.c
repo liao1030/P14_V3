@@ -38,29 +38,11 @@
 /*********************************************************************
  * GLOBAL VARIABLES
  */
-////ble_uart GATT Profile Service UUID
-//CONST uint8 ble_uart_ServiceUUID[ATT_UUID_SIZE] =
-//{0x55, 0xe4,0x05,0xd2,0xaf,0x9f,0xa9,0x8f,0xe5,0x4a,0x7d,0xfe,0x43,0x53,0x53,0x49};
 
-//// Characteristic rx uuid
-//CONST uint8 ble_uart_RxCharUUID[ATT_UUID_SIZE] =
-//{0xb3,0x9b,0x72,0x34,0xbe,0xec, 0xd4,0xa8,0xf4,0x43,0x41,0x88,0x43,0x53,0x53,0x49};
-
-//// Characteristic tx uuid
-//CONST uint8 ble_uart_TxCharUUID[ATT_UUID_SIZE] =
-//{0x16,0x96,0x24,0x47,0xc6,0x23, 0x61,0xba,0xd9,0x4b,0x4d,0x1e,0x43,0x53,0x53,0x49};
-
-// ble_uart GATT Profile Service UUID
-CONST uint8 ble_uart_ServiceUUID[ATT_UUID_SIZE] =
-    {0x9F, 0xCA, 0xDC, 0x24, 0x0E, 0xE5, 0xA9, 0xE0, 0x93, 0xF3, 0xA3, 0xB5, 0x01, 0x00, 0x40, 0x6E};
-
-// Characteristic rx uuid
-CONST uint8 ble_uart_RxCharUUID[ATT_UUID_SIZE] =
-    {0x9F, 0xCA, 0xDC, 0x24, 0x0E, 0xE5, 0xA9, 0xE0, 0x93, 0xF3, 0xA3, 0xB5, 0x02, 0x00, 0x40, 0x6E};
-
-// Characteristic tx uuid
-CONST uint8 ble_uart_TxCharUUID[ATT_UUID_SIZE] =
-    {0x9F, 0xCA, 0xDC, 0x24, 0x0E, 0xE5, 0xA9, 0xE0, 0x93, 0xF3, 0xA3, 0xB5, 0x03, 0x00, 0x40, 0x6E};
+// 使用16位UUID而非128位UUID
+static CONST uint16 ble_uart_ServiceUUID = BLE_UART_SERVICE_UUID;
+static CONST uint16 ble_uart_TxCharUUID  = BLE_UART_TX_CHAR_UUID;
+static CONST uint16 ble_uart_RxCharUUID  = BLE_UART_RX_CHAR_UUID;
 
 /*********************************************************************
  * EXTERNAL VARIABLES
@@ -81,24 +63,21 @@ static ble_uart_ProfileChangeCB_t ble_uart_AppCBs = NULL;
  */
 
 // Profile Service attribute
-static CONST gattAttrType_t ble_uart_Service = {ATT_UUID_SIZE, ble_uart_ServiceUUID};
+static CONST gattAttrType_t ble_uart_Service = {ATT_BT_UUID_SIZE, (uint8 *)&ble_uart_ServiceUUID};
 
-// Profile Characteristic 1 Properties
-//static uint8 ble_uart_RxCharProps = GATT_PROP_WRITE_NO_RSP| GATT_PROP_WRITE;
+// Profile Characteristic 1 Properties - RX特性
 static uint8 ble_uart_RxCharProps = GATT_PROP_WRITE_NO_RSP;
 
-// Characteristic 1 Value
+// 接收緩衝區（適配協議要求）
 static uint8 ble_uart_RxCharValue[BLE_UART_RX_BUFF_SIZE];
-//static uint8 ble_uart_RxCharValue[1];
 
-// Profile Characteristic 2 Properties
-//static uint8 ble_uart_TxCharProps = GATT_PROP_NOTIFY| GATT_PROP_INDICATE;
+// Profile Characteristic 2 Properties - TX特性
 static uint8 ble_uart_TxCharProps = GATT_PROP_NOTIFY;
 
-// Characteristic 2 Value
+// 發送數據值
 static uint8 ble_uart_TxCharValue = 0;
 
-// Simple Profile Characteristic 2 User Description
+// TX特性客戶端配置描述符
 static gattCharCfg_t ble_uart_TxCCCD[4];
 
 /*********************************************************************
@@ -114,41 +93,45 @@ static gattAttribute_t ble_uart_ProfileAttrTbl[] = {
         (uint8 *)&ble_uart_Service              /* pValue */
     },
 
-    // Characteristic 1 Declaration
+    // Characteristic 1 Declaration - RX特性聲明
     {
         {ATT_BT_UUID_SIZE, characterUUID},
         GATT_PERMIT_READ,
         0,
-        &ble_uart_RxCharProps},
+        &ble_uart_RxCharProps
+    },
 
-    // Characteristic Value 1
+    // Characteristic Value 1 - RX特性值
     {
-        {ATT_UUID_SIZE, ble_uart_RxCharUUID},
+        {ATT_BT_UUID_SIZE, (uint8 *)&ble_uart_RxCharUUID},
         GATT_PERMIT_WRITE,
         0,
-        &ble_uart_RxCharValue[0]},
+        &ble_uart_RxCharValue[0]
+    },
 
-    // Characteristic 2 Declaration
+    // Characteristic 2 Declaration - TX特性聲明
     {
         {ATT_BT_UUID_SIZE, characterUUID},
         GATT_PERMIT_READ,
         0,
-        &ble_uart_TxCharProps},
+        &ble_uart_TxCharProps
+    },
 
-    // Characteristic Value 2
+    // Characteristic Value 2 - TX特性值
     {
-        {ATT_UUID_SIZE, ble_uart_TxCharUUID},
+        {ATT_BT_UUID_SIZE, (uint8 *)&ble_uart_TxCharUUID},
         0,
         0,
-        (uint8 *)&ble_uart_TxCharValue},
+        (uint8 *)&ble_uart_TxCharValue
+    },
 
-    // Characteristic 2 User Description
+    // Characteristic 2 User Description - TX特性客戶端配置描述符
     {
         {ATT_BT_UUID_SIZE, clientCharCfgUUID},
         GATT_PERMIT_READ | GATT_PERMIT_WRITE,
         0,
-        (uint8 *)ble_uart_TxCCCD},
-
+        (uint8 *)ble_uart_TxCCCD
+    },
 };
 
 /*********************************************************************
@@ -256,66 +239,78 @@ static bStatus_t ble_uart_ReadAttrCB(uint16 connHandle, gattAttribute_t *pAttr,
 }
 
 /*********************************************************************
- * @fn      simpleProfile_WriteAttrCB
+ * @fn      ble_uart_WriteAttrCB
  *
- * @brief   Validate attribute data prior to a write operation
+ * @brief   寫入屬性回調
  *
- * @param   connHandle - connection message was received on
- * @param   pAttr - pointer to attribute
- * @param   pValue - pointer to data to be written
- * @param   len - length of data
- * @param   offset - offset of the first octet to be written
+ * @param   connHandle - 連接句柄
+ * @param   pAttr - 屬性
+ * @param   pValue - 數據
+ * @param   len - 長度
+ * @param   offset - 偏移
+ * @param   method - 方法
  *
- * @return  Success or Failure
+ * @return  狀態
  */
-
 static bStatus_t ble_uart_WriteAttrCB(uint16 connHandle, gattAttribute_t *pAttr,
                                       uint8 *pValue, uint16 len, uint16 offset, uint8 method)
 {
     bStatus_t status = SUCCESS;
-    //uint8 notifyApp = 0xFF;
-    // If attribute permissions require authorization to write, return error
-    if(gattPermitAuthorWrite(pAttr->permissions))
-    {
-        // Insufficient authorization
-        return (ATT_ERR_INSUFFICIENT_AUTHOR);
-    }
+    uint16 uuid;
 
+    // BLE UART RX特性
     if(pAttr->type.len == ATT_BT_UUID_SIZE)
     {
-        // 16-bit UUID
-        uint16 uuid = BUILD_UINT16(pAttr->type.uuid[0], pAttr->type.uuid[1]);
-        if(uuid == GATT_CLIENT_CHAR_CFG_UUID)
+        // 獲取UUID
+        uuid = BUILD_UINT16(pAttr->type.uuid[0], pAttr->type.uuid[1]);
+        if(uuid == ble_uart_RxCharUUID)
         {
-            status = GATTServApp_ProcessCCCWriteReq(connHandle, pAttr, pValue, len,
-                                                    offset, GATT_CLIENT_CFG_NOTIFY);
-            if(status == SUCCESS && ble_uart_AppCBs)
+            if(ble_uart_AppCBs != NULL)
             {
-                uint16         charCfg = BUILD_UINT16(pValue[0], pValue[1]);
                 ble_uart_evt_t evt;
-
-                //PRINT("CCCD set: [%d]\n", charCfg);
-                evt.type = (charCfg == GATT_CFG_NO_OPERATION) ? BLE_UART_EVT_TX_NOTI_DISABLED : BLE_UART_EVT_TX_NOTI_ENABLED;
+                evt.type = BLE_UART_EVT_BLE_DATA_RECIEVED;
+                evt.data.p_data = pValue;
+                evt.data.length = len;
+                
+                // 觸發回調
                 ble_uart_AppCBs(connHandle, &evt);
             }
+        }
+        else if(uuid == GATT_CLIENT_CHAR_CFG_UUID)
+        {
+            status = GATTServApp_ProcessCCCWriteReq(connHandle, pAttr, pValue, len,
+                                                     offset, GATT_CLIENT_CFG_NOTIFY);
+            if(status == SUCCESS)
+            {
+                // 獲取TX特性的客戶端配置描述符值
+                uint16 charCfg = BUILD_UINT16(pValue[0], pValue[1]);
+                
+                // 通知使能狀態變更
+                ble_uart_evt_t evt;
+                evt.type = (charCfg & GATT_CLIENT_CFG_NOTIFY) ? 
+                            BLE_UART_EVT_TX_NOTI_ENABLED : 
+                            BLE_UART_EVT_TX_NOTI_DISABLED;
+                    
+                // 觸發回調
+                if(ble_uart_AppCBs != NULL)
+                {
+                    ble_uart_AppCBs(connHandle, &evt);
+                }
+            }
+        }
+        else
+        {
+            // 不支持的請求
+            status = ATT_ERR_ATTR_NOT_FOUND;
         }
     }
     else
     {
-        // 128-bit UUID
-        if(pAttr->handle == ble_uart_ProfileAttrTbl[RAWPASS_RX_VALUE_HANDLE].handle)
-        {
-            if(ble_uart_AppCBs)
-            {
-                ble_uart_evt_t evt;
-                evt.type = BLE_UART_EVT_BLE_DATA_RECIEVED;
-                evt.data.length = (uint16_t)len;
-                evt.data.p_data = pValue;
-                ble_uart_AppCBs(connHandle, &evt);
-            }
-        }
+        // 不支持的請求
+        status = ATT_ERR_ATTR_NOT_FOUND;
     }
-    return (status);
+
+    return status;
 }
 
 /*********************************************************************
@@ -362,15 +357,15 @@ uint8 ble_uart_notify_is_ready(uint16 connHandle)
  */
 bStatus_t ble_uart_notify(uint16 connHandle, attHandleValueNoti_t *pNoti, uint8 taskId)
 {
-    //uint16 value = ble_uart_TxCCCD[0].value;
     uint16 value = GATTServApp_ReadCharCfg(connHandle, ble_uart_TxCCCD);
-    // If notifications enabled
+
+    // 檢查通知是否已啟用
     if(value & GATT_CLIENT_CFG_NOTIFY)
     {
-        // Set the handle
+        // 設置通知屬性句柄
         pNoti->handle = ble_uart_ProfileAttrTbl[RAWPASS_TX_VALUE_HANDLE].handle;
-
-        // Send the Indication
+        
+        // 發送通知
         return GATT_Notification(connHandle, pNoti, FALSE);
     }
     return bleIncorrectMode;
