@@ -7,18 +7,21 @@
 C_SRCS += \
 ../User/ch32v20x_it.c \
 ../User/main.c \
+../User/param_storage.c \
 ../User/param_table.c \
 ../User/system_ch32v20x.c 
 
 C_DEPS += \
 ./User/ch32v20x_it.d \
 ./User/main.d \
+./User/param_storage.d \
 ./User/param_table.d \
 ./User/system_ch32v20x.d 
 
 OBJS += \
 ./User/ch32v20x_it.o \
 ./User/main.o \
+./User/param_storage.o \
 ./User/param_table.o \
 ./User/system_ch32v20x.o 
 
