@@ -35,9 +35,9 @@
 | 項目 | 值 |
 |------|-----|
 | 裝置名稱 | P14-xxxxxx (xxxxxx為裝置MAC地址後6位) |
-| 服務UUID | 0xFFE0 |
-| 特性UUID (接收通知) | 0xFFE1 (可寫入，帶回應) |
-| 特性UUID (發送通知) | 0xFFE2 (帶通知) |
+| 服務UUID | 0xFFF0 |
+| 特性UUID (接收通知) | 0xFFF1 (NOTIFY) |
+| 特性UUID (發送通知) | 0xFFF2 (WRITE，WRITE NO RESPONSE) |
 | MTU大小 | 20 bytes |
 | 連接間隔 | 30-50ms |
 
@@ -51,8 +51,7 @@
 2. 識別目標裝置 (P14-xxxxxx)
 3. 建立連接
 4. 發現服務
-5. 啟用通知 (0xFFE2)
-6. 連接完成，開始資料交換
+5. 連接完成，開始資料交換
 
 ## UART通訊協議
 
