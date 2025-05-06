@@ -56,9 +56,9 @@ int main(void)
 {
     SetSysClock(CLK_SOURCE_PLL_60MHz);
 #ifdef DEBUG
-    GPIOA_SetBits(bTXD1);
-    GPIOA_ModeCfg(bTXD1, GPIO_ModeOut_PP_5mA);
-    UART1_DefInit();
+    GPIOB_SetBits(bTXD2);
+    GPIOB_ModeCfg(bTXD2, GPIO_ModeOut_PP_5mA);
+    UART2_DefInit();
 #endif
     PRINT("%s\n", VER_LIB);
     CH58X_BLEInit();
