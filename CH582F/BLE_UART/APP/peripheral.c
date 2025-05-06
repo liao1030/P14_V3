@@ -100,7 +100,7 @@ static uint8 scanRspData[] = {
     // complete name
     15, // length of this data
     GAP_ADTYPE_LOCAL_NAME_COMPLETE,
-    'c', 'h', '5', '8', '3', '_', 'b', 'l', 'e', '_', 'u', 'a', 'r', 't',
+    'P', '1', '4', '-', '0', '0', '0', '0', '2', '1', 0, 0, 0, 0,
     // connection interval range
     0x05, // length of this data
     GAP_ADTYPE_SLAVE_CONN_INTERVAL_RANGE,
@@ -133,7 +133,7 @@ static uint8 advertData[] = {
     HI_UINT16(SIMPLEPROFILE_SERV_UUID)};
 
 // GAP GATT Attributes
-static uint8 attDeviceName[GAP_DEVICE_NAME_LEN] = "ch583_ble_uart";
+static uint8 attDeviceName[GAP_DEVICE_NAME_LEN] = "P14-000021";
 
 // Connection item list
 static peripheralConnItem_t peripheralConnList;
