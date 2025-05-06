@@ -101,9 +101,9 @@ void app_uart_process(void)
     SYS_RecoverIrq(irq_status);
 
     //tx process
-    if(R8_UART3_TFC < UART_FIFO_SIZE)
+    if(R8_UART1_TFC < UART_FIFO_SIZE)
     {
-        app_drv_fifo_read_to_same_addr(&app_uart_tx_fifo, (uint8_t *)&R8_UART3_THR, UART_FIFO_SIZE - R8_UART3_TFC);
+        app_drv_fifo_read_to_same_addr(&app_uart_tx_fifo, (uint8_t *)&R8_UART1_THR, UART_FIFO_SIZE - R8_UART1_TFC);
     }
 }
 
@@ -122,19 +122,19 @@ void app_uart_init()
     app_drv_fifo_init(&app_uart_rx_fifo, app_uart_rx_buffer, APP_UART_RX_BUFFER_LENGTH);
 
     //uart tx io
-    GPIOA_SetBits(bTXD3);
-    GPIOA_ModeCfg(bTXD3, GPIO_ModeOut_PP_5mA);
+    GPIOA_SetBits(bTXD1);
+    GPIOA_ModeCfg(bTXD1, GPIO_ModeOut_PP_5mA);
 
     //uart rx io
-    GPIOA_SetBits(bRXD3);
-    GPIOA_ModeCfg(bRXD3, GPIO_ModeIN_PU);
+    GPIOA_SetBits(bRXD1);
+    GPIOA_ModeCfg(bRXD1, GPIO_ModeIN_PU);
 
-    //uart3 init
-    UART3_DefInit();
+    //uart1 init
+    UART1_DefInit();
 
     //enable interupt
-    UART3_INTCfg(ENABLE, RB_IER_RECV_RDY | RB_IER_LINE_STAT);
-    PFIC_EnableIRQ(UART3_IRQn);
+    UART1_INTCfg(ENABLE, RB_IER_RECV_RDY | RB_IER_LINE_STAT);
+    PFIC_EnableIRQ(UART1_IRQn);
 }
 
 /*********************************************************************
@@ -151,7 +151,7 @@ void app_uart_tx_data(uint8_t *data, uint16_t length)
 }
 
 /*********************************************************************
- * @fn      UART3_IRQHandler
+ * @fn      UART1_IRQHandler
  *
  * @brief   Not every uart reception will end with a UART_II_RECV_TOUT
  *          UART_II_RECV_TOUT can only be triggered when R8_UARTx_RFC is not 0
@@ -161,24 +161,24 @@ void app_uart_tx_data(uint8_t *data, uint16_t length)
  */
 __INTERRUPT
 __HIGH_CODE
-void UART3_IRQHandler(void)
+void UART1_IRQHandler(void)
 {
     uint16_t error;
-    switch(UART3_GetITFlag())
+    switch(UART1_GetITFlag())
     {
         case UART_II_LINE_STAT:
-            UART3_GetLinSTA();
+            UART1_GetLinSTA();
             break;
 
         case UART_II_RECV_RDY:
         case UART_II_RECV_TOUT:
-            error = app_drv_fifo_write_from_same_addr(&app_uart_rx_fifo, (uint8_t *)&R8_UART3_RBR, R8_UART3_RFC);
+            error = app_drv_fifo_write_from_same_addr(&app_uart_rx_fifo, (uint8_t *)&R8_UART1_RBR, R8_UART1_RFC);
             if(error != APP_DRV_FIFO_RESULT_SUCCESS)
             {
-                for(uint8_t i = 0; i < R8_UART3_RFC; i++)
+                for(uint8_t i = 0; i < R8_UART1_RFC; i++)
                 {
                     //fifo full,put to fifo black hole
-                    for_uart_rx_black_hole = R8_UART3_RBR;
+                    for_uart_rx_black_hole = R8_UART1_RBR;
                 }
             }
             uart_rx_flag = true;
