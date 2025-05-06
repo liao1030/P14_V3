@@ -19,6 +19,7 @@
 #include "debug.h"
 #include "param_code_table.h"
 #include "flash_param.h"
+#include "uart_protocol.h"
 
 /* Global typedef */
 
@@ -125,6 +126,10 @@ int main(void)
     /* 初始化參數代碼表 */
     printf("載入參數代碼表...\r\n");
     ParamCodeTable_Init();
+    
+    /* 初始化UART通訊協議 */
+    printf("初始化UART通訊協議...\r\n");
+    UART_Protocol_Init();
     
     /* 顯示參數信息 */
     PrintParamInfo();

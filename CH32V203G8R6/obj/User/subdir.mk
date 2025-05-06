@@ -9,21 +9,24 @@ C_SRCS += \
 ../User/flash_param.c \
 ../User/main.c \
 ../User/param_code_table.c \
-../User/system_ch32v20x.c 
+../User/system_ch32v20x.c \
+../User/uart_protocol.c 
 
 C_DEPS += \
 ./User/ch32v20x_it.d \
 ./User/flash_param.d \
 ./User/main.d \
 ./User/param_code_table.d \
-./User/system_ch32v20x.d 
+./User/system_ch32v20x.d \
+./User/uart_protocol.d 
 
 OBJS += \
 ./User/ch32v20x_it.o \
 ./User/flash_param.o \
 ./User/main.o \
 ./User/param_code_table.o \
-./User/system_ch32v20x.o 
+./User/system_ch32v20x.o \
+./User/uart_protocol.o 
 
 
 
