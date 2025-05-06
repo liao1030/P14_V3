@@ -18,6 +18,7 @@
 
 #include "debug.h"
 #include "param_code_table.h"
+#include "flash_param.h"
 
 /* Global typedef */
 
@@ -96,6 +97,7 @@ void PrintParamInfo(void)
 int main(void)
 {
     uint8_t currentMode;
+    FLASH_ParamResult_TypeDef paramResult;
     
     /* 初始化系統設置 */
     NVIC_PriorityGroupConfig(NVIC_PriorityGroup_1);
@@ -108,8 +110,20 @@ int main(void)
     printf("系統時鐘: %d MHz\r\n", SystemCoreClock / 1000000);
     printf("晶片ID: 0x%08x\r\n", DBGMCU_GetCHIPID());
     
+    /* 初始化Flash參數區 */
+    printf("初始化Flash參數區...\r\n");
+    paramResult = PARAM_Init();
+    if(paramResult != PARAM_SUCCESS)
+    {
+        printf("參數區初始化失敗，錯誤碼: %d\r\n", paramResult);  
+    }     
+    else
+    {
+        printf("參數區初始化成功\r\n");
+    }
+    
     /* 初始化參數代碼表 */
-    printf("初始化參數代碼表...\r\n");
+    printf("載入參數代碼表...\r\n");
     ParamCodeTable_Init();
     
     /* 顯示參數信息 */

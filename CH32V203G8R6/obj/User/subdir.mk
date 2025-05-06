@@ -6,18 +6,21 @@
 # Add inputs and outputs from these tool invocations to the build variables 
 C_SRCS += \
 ../User/ch32v20x_it.c \
+../User/flash_param.c \
 ../User/main.c \
 ../User/param_code_table.c \
 ../User/system_ch32v20x.c 
 
 C_DEPS += \
 ./User/ch32v20x_it.d \
+./User/flash_param.d \
 ./User/main.d \
 ./User/param_code_table.d \
 ./User/system_ch32v20x.d 
 
 OBJS += \
 ./User/ch32v20x_it.o \
+./User/flash_param.o \
 ./User/main.o \
 ./User/param_code_table.o \
 ./User/system_ch32v20x.o 
