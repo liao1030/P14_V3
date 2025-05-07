@@ -10,8 +10,16 @@ static uint8_t rxDataCount;            // 資料計數器
 static uint8_t txBuffer[PROTOCOL_MAX_PACKET_LEN]; // 發送緩衝區
 static TestRecord_TypeDef Test_Record; // 測試記錄
 
+/* DMA 接收緩衝區 */
+static uint8_t rxDMABuffer[PROTOCOL_MAX_PACKET_LEN];
+static volatile uint8_t dmaRxCompleteFlag = 0;  // DMA接收完成標志
+
 /* 通用錯誤響應數據 */
 static uint8_t errorData[2];
+
+/* 函數前向聲明 */
+static void UART_Process_Packet(void);
+static uint8_t UART_Find_Packet_In_Buffer(uint8_t *buffer, uint16_t size);
 
 /*********************************************************************
  * @fn      UART_Calculate_Checksum
@@ -36,6 +44,55 @@ uint8_t UART_Calculate_Checksum(uint8_t cmdId, uint8_t dataLen, uint8_t *data)
 }
 
 /*********************************************************************
+ * @fn      UART_Find_Packet_In_Buffer
+ *
+ * @brief   從DMA緩衝區中查找完整的數據包
+ *
+ * @param   buffer  - DMA緩衝區
+ *          size    - 緩衝區大小
+ *
+ * @return  找到完整數據包返回1，否則返回0
+ */
+static uint8_t UART_Find_Packet_In_Buffer(uint8_t *buffer, uint16_t size)
+{
+    uint16_t i = 0;
+    uint8_t dataLen = 0;
+    
+    // 尋找起始標記
+    while(i < size - PROTOCOL_HEADER_LEN - PROTOCOL_FOOTER_LEN)
+    {
+        if(buffer[i] == PROTOCOL_START_MARK)
+        {
+            // 獲取數據長度
+            dataLen = buffer[i + 2];
+            
+            // 檢查緩衝區是否有足夠的數據
+            if(i + PROTOCOL_HEADER_LEN + dataLen + PROTOCOL_FOOTER_LEN <= size)
+            {
+                // 檢查結束標記
+                if(buffer[i + PROTOCOL_HEADER_LEN + dataLen + 1] == PROTOCOL_END_MARK)
+                {
+                    // 複製數據到rxPacket
+                    rxPacket.startMark = buffer[i];
+                    rxPacket.cmdId = buffer[i + 1];
+                    rxPacket.dataLen = dataLen;
+                    memcpy(rxPacket.data, &buffer[i + 3], dataLen);
+                    rxPacket.checksum = buffer[i + PROTOCOL_HEADER_LEN + dataLen];
+                    rxPacket.endMark = buffer[i + PROTOCOL_HEADER_LEN + dataLen + 1];
+                    
+                    // 處理完整數據包
+                    UART_Process_Packet();
+                    return 1;
+                }
+            }
+        }
+        i++;
+    }
+    
+    return 0;
+}
+
+/*********************************************************************
  * @fn      UART_Protocol_Init
  *
  * @brief   初始化UART通訊協議
@@ -47,10 +104,12 @@ void UART_Protocol_Init(void)
     // 初始化UART2
     GPIO_InitTypeDef GPIO_InitStructure = {0};
     USART_InitTypeDef USART_InitStructure = {0};
+    DMA_InitTypeDef DMA_InitStructure = {0};
     
-    // 啟用UART2和GPIOA時鐘
+    // 啟用UART2、GPIOA和DMA1時鐘
     RCC_APB1PeriphClockCmd(RCC_APB1Periph_USART2, ENABLE);
     RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA, ENABLE);
+    RCC_AHBPeriphClockCmd(RCC_AHBPeriph_DMA1, ENABLE);
     
     // 設定UART2 Tx (PA2)
     GPIO_InitStructure.GPIO_Pin = GPIO_Pin_2;
@@ -72,16 +131,49 @@ void UART_Protocol_Init(void)
     USART_InitStructure.USART_Mode = USART_Mode_Rx | USART_Mode_Tx;
     USART_Init(USART2, &USART_InitStructure);
     
-    // 啟用UART2接收中斷
-    USART_ITConfig(USART2, USART_IT_RXNE, ENABLE);
+    // 配置DMA接收，UART2 Rx使用DMA1 Channel6
+    DMA_DeInit(DMA1_Channel6);
+    DMA_InitStructure.DMA_PeripheralBaseAddr = (uint32_t)&USART2->DATAR;
+    DMA_InitStructure.DMA_MemoryBaseAddr = (uint32_t)rxDMABuffer;
+    DMA_InitStructure.DMA_DIR = DMA_DIR_PeripheralSRC;
+    DMA_InitStructure.DMA_BufferSize = PROTOCOL_MAX_PACKET_LEN;
+    DMA_InitStructure.DMA_PeripheralInc = DMA_PeripheralInc_Disable;
+    DMA_InitStructure.DMA_MemoryInc = DMA_MemoryInc_Enable;
+    DMA_InitStructure.DMA_PeripheralDataSize = DMA_PeripheralDataSize_Byte;
+    DMA_InitStructure.DMA_MemoryDataSize = DMA_MemoryDataSize_Byte;
+    DMA_InitStructure.DMA_Mode = DMA_Mode_Circular;
+    DMA_InitStructure.DMA_Priority = DMA_Priority_High;
+    DMA_InitStructure.DMA_M2M = DMA_M2M_Disable;
+    DMA_Init(DMA1_Channel6, &DMA_InitStructure);
     
-    // 配置UART2中斷優先級
+    // 配置DMA中斷
+    DMA_ITConfig(DMA1_Channel6, DMA_IT_TC, ENABLE);
+    
+    // 配置DMA中斷優先級
     NVIC_InitTypeDef NVIC_InitStructure = {0};
+    NVIC_InitStructure.NVIC_IRQChannel = DMA1_Channel6_IRQn;
+    NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 1;
+    NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;
+    NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
+    NVIC_Init(&NVIC_InitStructure);
+    
+    // 啟用UART2 DMA接收
+    USART_DMACmd(USART2, USART_DMAReq_Rx, ENABLE);
+    
+    // 啟用DMA通道
+    DMA_Cmd(DMA1_Channel6, ENABLE);
+    
+    // 配置UART2中斷優先級 (保留UART中斷以處理錯誤和空閒檢測)
     NVIC_InitStructure.NVIC_IRQChannel = USART2_IRQn;
     NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 1;
     NVIC_InitStructure.NVIC_IRQChannelSubPriority = 1;
     NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
     NVIC_Init(&NVIC_InitStructure);
+    
+    // 啟用UART2接收和錯誤中斷，以及空閒中斷
+    USART_ITConfig(USART2, USART_IT_RXNE, DISABLE); // 禁用RXNE中斷，使用DMA代替
+    USART_ITConfig(USART2, USART_IT_IDLE, ENABLE);  // 啟用IDLE中斷，用於檢測數據幀結束
+    USART_ITConfig(USART2, USART_IT_PE | USART_IT_ERR, ENABLE); // 啟用奇偶校驗錯誤和其他錯誤中斷
     
     // 啟用UART2
     USART_Cmd(USART2, ENABLE);
@@ -89,6 +181,10 @@ void UART_Protocol_Init(void)
     // 初始化接收狀態機
     rxState = UART_RX_WAIT_START;
     rxDataCount = 0;
+    dmaRxCompleteFlag = 0;
+    
+    // 清空DMA接收緩衝區
+    memset(rxDMABuffer, 0, PROTOCOL_MAX_PACKET_LEN);
 }
 
 /*********************************************************************
@@ -295,17 +391,49 @@ void UART_Protocol_Process(uint8_t rxByte)
  */
 void USART2_IRQHandler(void)
 {
-    uint8_t rxByte;
+    /* 處理USART2空閒中斷，用於檢測一幀數據的接收完成 */
+    if(USART_GetITStatus(USART2, USART_IT_IDLE) != RESET)
+    {
+        /* 讀取USART2->STATR，再讀取USART2->DATAR清除IDLE中斷標誌 */
+        volatile uint8_t temp = USART2->STATR;
+        temp = USART2->DATAR;
+        (void)temp; // 避免編譯器警告
+        
+        /* 計算接收到的數據長度 */
+        uint16_t rxCount = PROTOCOL_MAX_PACKET_LEN - DMA_GetCurrDataCounter(DMA1_Channel6);
+        
+        /* 當接收數據長度大於最小有效數據包長度時，嘗試解析 */
+        if(rxCount >= (PROTOCOL_HEADER_LEN + PROTOCOL_FOOTER_LEN))
+        {
+            /* 設置DMA接收完成標志，在主循環中處理 */
+            dmaRxCompleteFlag = 1;
+        }
+    }
     
-    if(USART_GetITStatus(USART2, USART_IT_RXNE) != RESET) {
-        // 清除接收中斷標志
-        USART_ClearITPendingBit(USART2, USART_IT_RXNE);
+    /* 處理其他UART錯誤中斷 */
+    if(USART_GetITStatus(USART2, USART_IT_PE | USART_IT_FE | USART_IT_NE | USART_IT_ORE) != RESET)
+    {
+        /* 清除錯誤中斷標誌，避免無限中斷 */
+        USART_ClearITPendingBit(USART2, USART_IT_PE | USART_IT_FE | USART_IT_NE | USART_IT_ORE);
+    }
+}
+
+/*********************************************************************
+ * @fn      DMA1_Channel6_IRQHandler
+ *
+ * @brief   DMA1 Channel6（UART2接收）中斷處理函數
+ *
+ * @return  none
+ */
+void DMA1_Channel6_IRQHandler(void)
+{
+    if(DMA_GetITStatus(DMA1_IT_TC6))
+    {
+        /* 清除DMA傳輸完成中斷標誌 */
+        DMA_ClearITPendingBit(DMA1_IT_TC6);
         
-        // 讀取接收到的數據
-        rxByte = USART_ReceiveData(USART2);
-        
-        // 處理接收到的數據
-        UART_Protocol_Process(rxByte);
+        /* 設置DMA接收完成標志，在主循環中處理接收到的數據 */
+        dmaRxCompleteFlag = 1;
     }
 }
 
@@ -617,4 +745,30 @@ void UART_Handle_ReqRawData(uint8_t *data, uint8_t dataLen)
     
     // 發送RAW DATA響應
     UART_Send_Packet(CMD_RAW_DATA_ACK, response, 50);
+}
+
+/*********************************************************************
+ * @fn      UART_Check_DMA_Received_Data
+ *
+ * @brief   檢查並處理DMA接收到的數據
+ *
+ * @return  none
+ */
+void UART_Check_DMA_Received_Data(void)
+{
+    if(dmaRxCompleteFlag)
+    {
+        /* 清除DMA接收完成標志 */
+        dmaRxCompleteFlag = 0;
+        
+        /* 計算接收到的數據長度 */
+        uint16_t rxCount = PROTOCOL_MAX_PACKET_LEN - DMA_GetCurrDataCounter(DMA1_Channel6);
+        
+        /* 當接收數據長度大於最小有效數據包長度時，嘗試解析 */
+        if(rxCount >= (PROTOCOL_HEADER_LEN + PROTOCOL_FOOTER_LEN))
+        {
+            /* 在DMA緩衝區中尋找並處理完整數據包 */
+            UART_Find_Packet_In_Buffer(rxDMABuffer, rxCount);
+        }
+    }
 }

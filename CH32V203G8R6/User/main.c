@@ -153,6 +153,12 @@ int main(void)
     while(1)
     {
         /* 主循環處理 */
-        Delay_Ms(1000);
+        
+        /* 檢查DMA接收到的UART數據 */
+        UART_Check_DMA_Received_Data();
+        
+        /* 其他系統任務處理 */
+        
+        Delay_Ms(10); // 減少延遲時間以提高響應速度
     }
 }

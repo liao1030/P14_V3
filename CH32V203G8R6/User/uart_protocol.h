@@ -94,6 +94,7 @@ void UART_Protocol_Process(uint8_t rxByte);
 void UART_Send_Packet(uint8_t cmdId, uint8_t *data, uint8_t dataLen);
 void UART_Send_Error(uint8_t originalCmd, uint8_t errorCode);
 uint8_t UART_Calculate_Checksum(uint8_t cmdId, uint8_t dataLen, uint8_t *data);
+void UART_Check_DMA_Received_Data(void);  // 新增DMA接收處理函數
 
 /* 指令處理函數宣告 */
 void UART_Handle_SyncTime(uint8_t *data, uint8_t dataLen);
