@@ -212,14 +212,20 @@ int main(void)
     {
         if (ring_buffer.RemainCount > 0)
         {
-            printf("recv %d >>>\n", ring_buffer.RemainCount);
+            printf("UART Echo Test: %d bytes\r\n", ring_buffer.RemainCount);
+            
             while (ring_buffer.RemainCount > 0)
             {
-                printf("%c", ring_buffer_pop());
+                uint8_t data = ring_buffer_pop();
+                // 通過 USART2 將接收到的資料發送回去
+                USART_SendData(USART2, data);
+                // 等待發送完成
+                while(USART_GetFlagStatus(USART2, USART_FLAG_TXE) == RESET);
             }
-            printf("\n<<<\n");
+            
+            printf("Echo Complete\r\n");
         }
-        Delay_Ms(1000);
+        Delay_Ms(100);
     }
 }
 
