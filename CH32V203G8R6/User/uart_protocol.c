@@ -10,6 +10,10 @@ static uint8_t rxDataCount;            // 資料計數器
 static uint8_t txBuffer[PROTOCOL_MAX_PACKET_LEN]; // 發送緩衝區
 static TestRecord_TypeDef Test_Record; // 測試記錄
 
+/* DMA和環形緩衝區 */
+static UART_DMA_Control UART_DMA_Ctrl;
+static UART_Ring_Buffer ringBuffer;
+
 /* 通用錯誤響應數據 */
 static uint8_t errorData[2];
 
@@ -33,6 +37,120 @@ uint8_t UART_Calculate_Checksum(uint8_t cmdId, uint8_t dataLen, uint8_t *data)
     }
     
     return (uint8_t)(sum & 0xFF);
+}
+
+/*********************************************************************
+ * @fn      UART_RingBuffer_Push
+ *
+ * @brief   將數據推入環形緩衝區
+ *
+ * @param   buffer  - 數據緩衝區
+ *          len     - 數據長度
+ *
+ * @return  none
+ */
+void UART_RingBuffer_Push(uint8_t *buffer, uint16_t len)
+{
+    // 檢查緩衝區是否有足夠空間
+    const uint16_t bufferRemainCount = UART_RING_BUFFER_SIZE - ringBuffer.RemainCount;
+    if (bufferRemainCount < len) {
+        len = bufferRemainCount;  // 如果空間不足，僅推入能容納的數據
+    }
+
+    // 計算當前尾部到緩衝區末尾的空間
+    const uint16_t bufferSize = UART_RING_BUFFER_SIZE - ringBuffer.RecvPos;
+    if (bufferSize >= len) {
+        // 如果空間足夠，直接拷貢
+        memcpy(&(ringBuffer.Buffer[ringBuffer.RecvPos]), buffer, len);
+        ringBuffer.RecvPos += len;
+        if(ringBuffer.RecvPos >= UART_RING_BUFFER_SIZE) {
+            ringBuffer.RecvPos = 0;
+        }
+    } else {
+        // 如果需要環繞，分兩段拷貢
+        uint16_t otherSize = len - bufferSize;
+        memcpy(&(ringBuffer.Buffer[ringBuffer.RecvPos]), buffer, bufferSize);
+        memcpy(ringBuffer.Buffer, &(buffer[bufferSize]), otherSize);
+        ringBuffer.RecvPos = otherSize;
+    }
+    ringBuffer.RemainCount += len;
+}
+
+/*********************************************************************
+ * @fn      UART_RingBuffer_Pop
+ *
+ * @brief   從環形緩衝區取出一個字節
+ *
+ * @return  取出的字節數據
+ */
+uint8_t UART_RingBuffer_Pop(void)
+{
+    if(ringBuffer.RemainCount == 0) {
+        return 0; // 緩衝區無數據
+    }
+    
+    uint8_t data = ringBuffer.Buffer[ringBuffer.SendPos];
+    
+    ringBuffer.SendPos++;
+    if(ringBuffer.SendPos >= UART_RING_BUFFER_SIZE) {
+        ringBuffer.SendPos = 0;
+    }
+    ringBuffer.RemainCount--;
+    
+    return data;
+}
+
+/*********************************************************************
+ * @fn      UART_DMA_Init
+ *
+ * @brief   初始化UART DMA接收
+ *
+ * @return  none
+ */
+void UART_DMA_Init(void)
+{
+    DMA_InitTypeDef DMA_InitStructure = {0};
+    NVIC_InitTypeDef NVIC_InitStructure = {0};
+    
+    // 啟用DMA1時鐘
+    RCC_AHBPeriphClockCmd(RCC_AHBPeriph_DMA1, ENABLE);
+    
+    // 初始化DMA通道
+    DMA_DeInit(DMA1_Channel6);  // USART2_Rx是DMA1_Channel6
+    
+    DMA_InitStructure.DMA_PeripheralBaseAddr = (uint32_t)&USART2->DATAR;
+    DMA_InitStructure.DMA_MemoryBaseAddr = (uint32_t)UART_DMA_Ctrl.RxBuffer[0];
+    DMA_InitStructure.DMA_DIR = DMA_DIR_PeripheralSRC;
+    DMA_InitStructure.DMA_BufferSize = DMA_RX_BUFFER_SIZE;
+    DMA_InitStructure.DMA_PeripheralInc = DMA_PeripheralInc_Disable;
+    DMA_InitStructure.DMA_MemoryInc = DMA_MemoryInc_Enable;
+    DMA_InitStructure.DMA_PeripheralDataSize = DMA_PeripheralDataSize_Byte;
+    DMA_InitStructure.DMA_MemoryDataSize = DMA_MemoryDataSize_Byte;
+    DMA_InitStructure.DMA_Mode = DMA_Mode_Normal;
+    DMA_InitStructure.DMA_Priority = DMA_Priority_VeryHigh;
+    DMA_InitStructure.DMA_M2M = DMA_M2M_Disable;
+    
+    DMA_Init(DMA1_Channel6, &DMA_InitStructure);
+    
+    // 啟用DMA接收完成中斷
+    DMA_ITConfig(DMA1_Channel6, DMA_IT_TC, ENABLE);
+    
+    // 配置DMA中斷
+    NVIC_InitStructure.NVIC_IRQChannel = DMA1_Channel6_IRQn;
+    NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 1;
+    NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;
+    NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
+    NVIC_Init(&NVIC_InitStructure);
+    
+    // 初始化環形緩衝區和DMA控制結構
+    memset(&ringBuffer, 0, sizeof(UART_Ring_Buffer));
+    UART_DMA_Ctrl.CurrentBufferIndex = 0;
+    
+    // 啟用DMA通道
+    DMA_Cmd(DMA1_Channel6, ENABLE);
+    
+    // 啟用USART2的DMA接收
+    USART_DMACmd(USART2, USART_DMAReq_Rx, ENABLE);
 }
 
 /*********************************************************************
@@ -72,10 +190,7 @@ void UART_Protocol_Init(void)
     USART_InitStructure.USART_Mode = USART_Mode_Rx | USART_Mode_Tx;
     USART_Init(USART2, &USART_InitStructure);
     
-    // 啟用UART2接收中斷
-    USART_ITConfig(USART2, USART_IT_RXNE, ENABLE);
-    
-    // 配置UART2中斷優先級
+    // 配置USART2中斷優先級
     NVIC_InitTypeDef NVIC_InitStructure = {0};
     NVIC_InitStructure.NVIC_IRQChannel = USART2_IRQn;
     NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 1;
@@ -83,8 +198,14 @@ void UART_Protocol_Init(void)
     NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
     NVIC_Init(&NVIC_InitStructure);
     
+    // 啟用IDLE中斷
+    USART_ITConfig(USART2, USART_IT_IDLE, ENABLE);
+    
     // 啟用UART2
     USART_Cmd(USART2, ENABLE);
+    
+    // 初始化DMA
+    UART_DMA_Init();
     
     // 初始化接收狀態機
     rxState = UART_RX_WAIT_START;
@@ -220,13 +341,13 @@ static void UART_Process_Packet(void)
 /*********************************************************************
  * @fn      UART_Protocol_Process
  *
- * @brief   處理接收到的字節數據
+ * @brief   根據接收的字節數據處理協議
  *
  * @param   rxByte - 接收到的字節
  *
  * @return  none
  */
-void UART_Protocol_Process(uint8_t rxByte)
+static void UART_Protocol_ProcessByte(uint8_t rxByte)
 {
     switch(rxState) {
         case UART_RX_WAIT_START:
@@ -287,6 +408,35 @@ void UART_Protocol_Process(uint8_t rxByte)
 }
 
 /*********************************************************************
+ * @fn      UART_Process_Ring_Buffer
+ *
+ * @brief   處理環形緩衝區中的數據
+ *
+ * @return  none
+ */
+void UART_Process_Ring_Buffer(void)
+{
+    // 處理環形緩衝區中的所有數據
+    while(ringBuffer.RemainCount > 0) {
+        uint8_t byte = UART_RingBuffer_Pop();
+        UART_Protocol_ProcessByte(byte);
+    }
+}
+
+/*********************************************************************
+ * @fn      UART_Protocol_Process
+ *
+ * @brief   協議處理函數，在主循環中調用
+ *
+ * @return  none
+ */
+void UART_Protocol_Process(void)
+{
+    // 處理環形緩衝區中的數據
+    UART_Process_Ring_Buffer();
+}
+
+/*********************************************************************
  * @fn      USART2_IRQHandler
  *
  * @brief   USART2中斷處理函數
@@ -295,17 +445,69 @@ void UART_Protocol_Process(uint8_t rxByte)
  */
 void USART2_IRQHandler(void)
 {
-    uint8_t rxByte;
-    
-    if(USART_GetITStatus(USART2, USART_IT_RXNE) != RESET) {
-        // 清除接收中斷標志
-        USART_ClearITPendingBit(USART2, USART_IT_RXNE);
+    if(USART_GetITStatus(USART2, USART_IT_IDLE) != RESET) {
+        // IDLE中斷處理
+        uint16_t rxLen = DMA_RX_BUFFER_SIZE - DMA_GetCurrDataCounter(DMA1_Channel6);
+        uint8_t oldBufferIndex = UART_DMA_Ctrl.CurrentBufferIndex;
         
-        // 讀取接收到的數據
-        rxByte = USART_ReceiveData(USART2);
+        // 清除IDLE標誌，必須讀取USART2->DATAR才能清除，不能使用USART_ClearITPendingBit
+        uint8_t temp __attribute__((unused)) = USART_ReceiveData(USART2);
         
-        // 處理接收到的數據
-        UART_Protocol_Process(rxByte);
+        if(rxLen > 0) {
+            // 切換緩衝區
+            UART_DMA_Ctrl.CurrentBufferIndex = !oldBufferIndex;
+            
+            // 停止DMA
+            DMA_Cmd(DMA1_Channel6, DISABLE);
+            
+            // 重設DMA計數器
+            DMA_SetCurrDataCounter(DMA1_Channel6, DMA_RX_BUFFER_SIZE);
+            
+            // 設置新的緩衝區地址
+            DMA1_Channel6->MADDR = (uint32_t)UART_DMA_Ctrl.RxBuffer[UART_DMA_Ctrl.CurrentBufferIndex];
+            
+            // 重新啟用DMA
+            DMA_Cmd(DMA1_Channel6, ENABLE);
+            
+            // 將接收的數據放入環形緩衝區
+            UART_RingBuffer_Push(UART_DMA_Ctrl.RxBuffer[oldBufferIndex], rxLen);
+        }
+    }
+}
+
+/*********************************************************************
+ * @fn      DMA1_Channel6_IRQHandler
+ *
+ * @brief   DMA1 Channel6 中斷處理函數
+ *
+ * @return  none
+ */
+void DMA1_Channel6_IRQHandler(void)
+{
+    if(DMA_GetITStatus(DMA1_IT_TC6) != RESET) {
+        // DMA完成中斷處理
+        uint8_t oldBufferIndex = UART_DMA_Ctrl.CurrentBufferIndex;
+        
+        // 切換緩衝區
+        UART_DMA_Ctrl.CurrentBufferIndex = !oldBufferIndex;
+        
+        // 停止DMA
+        DMA_Cmd(DMA1_Channel6, DISABLE);
+        
+        // 重設DMA計數器
+        DMA_SetCurrDataCounter(DMA1_Channel6, DMA_RX_BUFFER_SIZE);
+        
+        // 設置新的緩衝區地址
+        DMA1_Channel6->MADDR = (uint32_t)UART_DMA_Ctrl.RxBuffer[UART_DMA_Ctrl.CurrentBufferIndex];
+        
+        // 重新啟用DMA
+        DMA_Cmd(DMA1_Channel6, ENABLE);
+        
+        // 將接收的數據放入環形緩衝區
+        UART_RingBuffer_Push(UART_DMA_Ctrl.RxBuffer[oldBufferIndex], DMA_RX_BUFFER_SIZE);
+        
+        // 清除中斷標志
+        DMA_ClearITPendingBit(DMA1_IT_TC6);
     }
 }
 

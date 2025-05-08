@@ -26,6 +26,7 @@
 /* Global define */
 
 /* Global Variable */
+/* 移除中斷處理函數原型，因為它們在uart_protocol.c中已定義 */
 
 /*********************************************************************
  * @fn      PrintParamInfo
@@ -128,7 +129,7 @@ int main(void)
     ParamCodeTable_Init();
     
     /* 初始化UART通訊協議 */
-    printf("初始化UART通訊協議...\r\n");
+    printf("初始化UART通訊協議 (IDLE+DMA)...\r\n");
     UART_Protocol_Init();
     
     /* 顯示參數信息 */
@@ -148,11 +149,19 @@ int main(void)
     }
     
     printf("系統初始化完成\r\n");
+    printf("UART通訊已啟用，支持不定長度封包傳輸\r\n");
     printf("========================================\r\n");
     
     while(1)
     {
         /* 主循環處理 */
-        Delay_Ms(1000);
+        
+        /* 處理UART協議數據 */
+        UART_Protocol_Process();
+        
+        /* 其他系統處理 */
+        Delay_Ms(10); // 短暫延遲，避免CPU佔用過高
     }
 }
+
+/* 移除中斷處理函數，因為它們在uart_protocol.c中已定義 */

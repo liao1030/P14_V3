@@ -14,6 +14,10 @@
 #define PROTOCOL_MAX_DATA_LEN    128   // 資料欄位最大長度
 #define PROTOCOL_MAX_PACKET_LEN  (PROTOCOL_HEADER_LEN + PROTOCOL_MAX_DATA_LEN + PROTOCOL_FOOTER_LEN)
 
+/* DMA緩衝區相關定義 */
+#define DMA_RX_BUFFER_SIZE      256    // DMA接收緩衝區大小
+#define UART_RING_BUFFER_SIZE   1024   // 環形緩衝區大小
+
 /* 通訊指令ID定義 */
 /* 接收指令 (從APP到Meter) */
 #define CMD_SYNC_TIME            0x01  // 同步時間
@@ -68,6 +72,20 @@ typedef struct {
     uint8_t Strip_Code;        // 試片批號碼
 } TestRecord_TypeDef;
 
+/* DMA控制結構體 */
+typedef struct {
+    uint8_t  RxBuffer[2][DMA_RX_BUFFER_SIZE];  // 雙緩衝區
+    volatile uint8_t CurrentBufferIndex;        // 當前使用的緩衝區索引
+} UART_DMA_Control;
+
+/* 環形緩衝區結構體 */
+typedef struct {
+    uint8_t          Buffer[UART_RING_BUFFER_SIZE];  // 環形緩衝區
+    volatile uint16_t RecvPos;                        // 接收位置
+    volatile uint16_t SendPos;                        // 發送位置
+    volatile uint16_t RemainCount;                    // 剩餘數據數量
+} UART_Ring_Buffer;
+
 /* 通訊協議結構體定義 */
 typedef struct {
     uint8_t startMark;           // 起始標記 (0xAA)
@@ -90,10 +108,14 @@ typedef enum {
 
 /* 功能函數宣告 */
 void UART_Protocol_Init(void);
-void UART_Protocol_Process(uint8_t rxByte);
+void UART_DMA_Init(void);
+void UART_Protocol_Process(void);
+void UART_Process_Ring_Buffer(void);
 void UART_Send_Packet(uint8_t cmdId, uint8_t *data, uint8_t dataLen);
 void UART_Send_Error(uint8_t originalCmd, uint8_t errorCode);
 uint8_t UART_Calculate_Checksum(uint8_t cmdId, uint8_t dataLen, uint8_t *data);
+void UART_RingBuffer_Push(uint8_t *buffer, uint16_t len);
+uint8_t UART_RingBuffer_Pop(void);
 
 /* 指令處理函數宣告 */
 void UART_Handle_SyncTime(uint8_t *data, uint8_t dataLen);
