@@ -13,7 +13,7 @@
 /*
  *@Note
  This example demonstrates receiving indeterminate length data via USART's IDLE interrupt and DMA.
- USART1_Tx(PA9), USART1_Rx(PA10).
+ USART2_Tx(PA2), USART2_Rx(PA3).
 
 
 */
@@ -21,8 +21,8 @@
 #include "debug.h"
 #include "string.h"
 
-void USART1_IRQHandler(void) __attribute__((interrupt("WCH-Interrupt-fast")));
-void DMA1_Channel5_IRQHandler(void) __attribute__((interrupt("WCH-Interrupt-fast")));
+void USART2_IRQHandler(void) __attribute__((interrupt("WCH-Interrupt-fast")));
+void DMA1_Channel6_IRQHandler(void) __attribute__((interrupt("WCH-Interrupt-fast")));
 
 // ring buffer size
 #define RING_BUFFER_LEN     (1024u)
@@ -30,7 +30,7 @@ void DMA1_Channel5_IRQHandler(void) __attribute__((interrupt("WCH-Interrupt-fast
 // The length of a single buffer used by DMA
 #define RX_BUFFER_LEN       (128u)
 
-#define USART_RX_CH         DMA1_Channel5
+#define USART_RX_CH         DMA1_Channel6
 
 
 
@@ -56,7 +56,7 @@ struct
 /*********************************************************************
  * @fn      USARTx_CFG
  *
- * @brief   Initializes the USART1 peripheral.
+ * @brief   Initializes the USART2 peripheral.
  *
  * @return  none
  */
@@ -66,14 +66,15 @@ void USARTx_CFG(uint32_t baudrate)
     USART_InitTypeDef USART_InitStructure = {0};
     NVIC_InitTypeDef  NVIC_InitStructure  = {0};
 
-    RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA | RCC_APB2Periph_GPIOB| RCC_APB2Periph_USART1, ENABLE);
+    RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA, ENABLE);
+    RCC_APB1PeriphClockCmd(RCC_APB1Periph_USART2, ENABLE);
 
-    /* USART1 TX-->A.9   RX-->A.10 */
-    GPIO_InitStructure.GPIO_Pin   = GPIO_Pin_9;
+    /* USART2 TX-->A.2   RX-->A.3 */
+    GPIO_InitStructure.GPIO_Pin   = GPIO_Pin_2;
     GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
     GPIO_InitStructure.GPIO_Mode  = GPIO_Mode_AF_PP;
     GPIO_Init(GPIOA, &GPIO_InitStructure);
-    GPIO_InitStructure.GPIO_Pin  = GPIO_Pin_10;
+    GPIO_InitStructure.GPIO_Pin  = GPIO_Pin_3;
     GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN_FLOATING;
     GPIO_Init(GPIOA, &GPIO_InitStructure);
 
@@ -84,23 +85,23 @@ void USARTx_CFG(uint32_t baudrate)
     USART_InitStructure.USART_HardwareFlowControl = USART_HardwareFlowControl_None;
     USART_InitStructure.USART_Mode                = USART_Mode_Tx | USART_Mode_Rx;
 
-    USART_Init(USART1, &USART_InitStructure);
-    USART_ITConfig(USART1, USART_IT_IDLE, ENABLE);
+    USART_Init(USART2, &USART_InitStructure);
+    USART_ITConfig(USART2, USART_IT_IDLE, ENABLE);
 
-    NVIC_InitStructure.NVIC_IRQChannel                   = USART1_IRQn;
+    NVIC_InitStructure.NVIC_IRQChannel                   = USART2_IRQn;
     NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 1;
     NVIC_InitStructure.NVIC_IRQChannelSubPriority        = 1;
     NVIC_InitStructure.NVIC_IRQChannelCmd                = ENABLE;
     NVIC_Init(&NVIC_InitStructure);
 
-    USART_Cmd(USART1, ENABLE);
+    USART_Cmd(USART2, ENABLE);
 }
 
 
 /*********************************************************************
  * @fn      DMA_INIT
  *
- * @brief   Configures the DMA for USART1.
+ * @brief   Configures the DMA for USART2.
  *
  * @return  none
  */
@@ -120,7 +121,7 @@ void DMA_INIT(void)
     DMA_InitStructure.DMA_Priority           = DMA_Priority_VeryHigh;
     DMA_InitStructure.DMA_M2M                = DMA_M2M_Disable;
 
-    DMA_InitStructure.DMA_PeripheralBaseAddr = (u32)(&USART1->DATAR);
+    DMA_InitStructure.DMA_PeripheralBaseAddr = (u32)(&USART2->DATAR);
     DMA_InitStructure.DMA_MemoryBaseAddr     = (u32)USART_DMA_CTRL.Rx_Buffer[0];
     DMA_InitStructure.DMA_DIR                = DMA_DIR_PeripheralSRC;
     DMA_InitStructure.DMA_BufferSize         = RX_BUFFER_LEN;
@@ -128,14 +129,14 @@ void DMA_INIT(void)
 
     DMA_ITConfig(USART_RX_CH, DMA_IT_TC, ENABLE);
 
-    NVIC_InitStructure.NVIC_IRQChannel                   = DMA1_Channel5_IRQn;
+    NVIC_InitStructure.NVIC_IRQChannel                   = DMA1_Channel6_IRQn;
     NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 1;
     NVIC_InitStructure.NVIC_IRQChannelSubPriority        = 1;
     NVIC_InitStructure.NVIC_IRQChannelCmd                = ENABLE;
     NVIC_Init(&NVIC_InitStructure);
 
     DMA_Cmd(USART_RX_CH, ENABLE);
-    USART_DMACmd(USART1, USART_DMAReq_Rx, ENABLE);
+    USART_DMACmd(USART2, USART_DMAReq_Rx, ENABLE);
 }
 
 
@@ -223,15 +224,15 @@ int main(void)
 }
 
 /*********************************************************************
- * @fn      USART1_IRQHandler
+ * @fn      USART2_IRQHandler
  *
- * @brief   This function handles USART1 global interrupt request.
+ * @brief   This function handles USART2 global interrupt request.
  *
  * @return  none
  */
-void USART1_IRQHandler(void)
+void USART2_IRQHandler(void)
 {
-    if (USART_GetITStatus(USART1, USART_IT_IDLE) != RESET)
+    if (USART_GetITStatus(USART2, USART_IT_IDLE) != RESET)
     {
         // IDLE
         uint16_t rxlen     = (RX_BUFFER_LEN - USART_RX_CH->CNTR);
@@ -245,19 +246,19 @@ void USART1_IRQHandler(void)
         USART_RX_CH->MADDR = (uint32_t)(USART_DMA_CTRL.Rx_Buffer[USART_DMA_CTRL.DMA_USE_BUFFER]);
         DMA_Cmd(USART_RX_CH, ENABLE);
 
-        USART_ReceiveData(USART1); // clear IDLE flag
+        USART_ReceiveData(USART2); // clear IDLE flag
         ring_buffer_push_huge(USART_DMA_CTRL.Rx_Buffer[oldbuffer], rxlen);
     }
 }
 
 /*********************************************************************
- * @fn      DMA1_Channel5_IRQHandler
+ * @fn      DMA1_Channel6_IRQHandler
  *
- * @brief   This function handles DMA1 Channel 5 global interrupt request.
+ * @brief   This function handles DMA1 Channel 6 global interrupt request.
  *
  * @return  none
  */
-void DMA1_Channel5_IRQHandler(void)
+void DMA1_Channel6_IRQHandler(void)
 {
     uint16_t rxlen     = RX_BUFFER_LEN;
     uint8_t  oldbuffer = USART_DMA_CTRL.DMA_USE_BUFFER;
@@ -273,5 +274,5 @@ void DMA1_Channel5_IRQHandler(void)
 
     ring_buffer_push_huge(USART_DMA_CTRL.Rx_Buffer[oldbuffer], rxlen);
 
-    DMA_ClearITPendingBit(DMA1_IT_TC5);
+    DMA_ClearITPendingBit(DMA1_IT_TC6);
 }
