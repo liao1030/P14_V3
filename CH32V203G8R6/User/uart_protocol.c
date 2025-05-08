@@ -394,19 +394,28 @@ void USART2_IRQHandler(void)
     /* 處理USART2空閒中斷，用於檢測一幀數據的接收完成 */
     if(USART_GetITStatus(USART2, USART_IT_IDLE) != RESET)
     {
-        /* 讀取USART2->STATR，再讀取USART2->DATAR清除IDLE中斷標誌 */
-        volatile uint8_t temp = USART2->STATR;
-        temp = USART2->DATAR;
+        /* 清除IDLE中斷標誌 */
+        volatile uint32_t temp = USART_GetFlagStatus(USART2, USART_FLAG_IDLE);
+        temp = USART_ReceiveData(USART2);
         (void)temp; // 避免編譯器警告
+        
+        /* 暫停DMA接收 */
+        DMA_Cmd(DMA1_Channel6, DISABLE);
         
         /* 計算接收到的數據長度 */
         uint16_t rxCount = PROTOCOL_MAX_PACKET_LEN - DMA_GetCurrDataCounter(DMA1_Channel6);
         
-        /* 當接收數據長度大於最小有效數據包長度時，嘗試解析 */
+        /* 當接收數據長度大於最小有效數據包長度時，設置標志在主循環中處理 */
         if(rxCount >= (PROTOCOL_HEADER_LEN + PROTOCOL_FOOTER_LEN))
         {
             /* 設置DMA接收完成標志，在主循環中處理 */
             dmaRxCompleteFlag = 1;
+        }
+        else
+        {
+            /* 如果數據長度不足，直接重置DMA繼續接收 */
+            DMA_SetCurrDataCounter(DMA1_Channel6, PROTOCOL_MAX_PACKET_LEN);
+            DMA_Cmd(DMA1_Channel6, ENABLE);
         }
     }
     
@@ -415,6 +424,11 @@ void USART2_IRQHandler(void)
     {
         /* 清除錯誤中斷標誌，避免無限中斷 */
         USART_ClearITPendingBit(USART2, USART_IT_PE | USART_IT_FE | USART_IT_NE | USART_IT_ORE);
+        
+        /* 發生錯誤時重置DMA接收 */
+        DMA_Cmd(DMA1_Channel6, DISABLE);
+        DMA_SetCurrDataCounter(DMA1_Channel6, PROTOCOL_MAX_PACKET_LEN);
+        DMA_Cmd(DMA1_Channel6, ENABLE);
     }
 }
 
@@ -770,5 +784,13 @@ void UART_Check_DMA_Received_Data(void)
             /* 在DMA緩衝區中尋找並處理完整數據包 */
             UART_Find_Packet_In_Buffer(rxDMABuffer, rxCount);
         }
+        
+        /* 清空DMA接收緩衝區 */
+        memset(rxDMABuffer, 0, PROTOCOL_MAX_PACKET_LEN);
+        
+        /* 重設DMA計數器並重新啟用DMA接收 */
+        DMA_Cmd(DMA1_Channel6, DISABLE);
+        DMA_SetCurrDataCounter(DMA1_Channel6, PROTOCOL_MAX_PACKET_LEN);
+        DMA_Cmd(DMA1_Channel6, ENABLE);
     }
 }
