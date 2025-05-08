@@ -506,3 +506,402 @@ const char* Unit_GetSymbol(Unit_TypeDef unit)
             return "?";
     }
 }
+
+/*********************************************************************
+ * @fn      PARAM_GetDateTime
+ *
+ * @brief   獲取參數表中儲存的日期時間。
+ *
+ * @param   year, month, date, hour, minute, second - 日期時間變數的指針
+ *
+ * @return  成功返回1，失敗返回0
+ */
+uint8_t PARAM_GetDateTime(uint8_t *year, uint8_t *month, uint8_t *date, 
+                         uint8_t *hour, uint8_t *minute, uint8_t *second)
+{
+    if(year == NULL || month == NULL || date == NULL || 
+       hour == NULL || minute == NULL || second == NULL)
+    {
+        return 0;
+    }
+    
+    *year = param_table[PARAM_YEAR];
+    *month = param_table[PARAM_MONTH];
+    *date = param_table[PARAM_DATE];
+    *hour = param_table[PARAM_HOUR];
+    *minute = param_table[PARAM_MINUTE];
+    *second = param_table[PARAM_SECOND];
+    
+    return 1;
+}
+
+/*********************************************************************
+ * @fn      PARAM_SetDateTime
+ *
+ * @brief   設置參數表中的日期時間。
+ *
+ * @param   year, month, date, hour, minute, second - 日期時間值
+ *
+ * @return  成功返回1，失敗返回0
+ */
+uint8_t PARAM_SetDateTime(uint8_t year, uint8_t month, uint8_t date, 
+                         uint8_t hour, uint8_t minute, uint8_t second)
+{
+    /* 檢查日期時間的有效性 */
+    if(year > 99 || month < 1 || month > 12 || date < 1 || date > 31 ||
+       hour > 23 || minute > 59 || second > 59)
+    {
+        return 0;
+    }
+    
+    param_table[PARAM_YEAR] = year;
+    param_table[PARAM_MONTH] = month;
+    param_table[PARAM_DATE] = date;
+    param_table[PARAM_HOUR] = hour;
+    param_table[PARAM_MINUTE] = minute;
+    param_table[PARAM_SECOND] = second;
+    
+    /* 更新校驗和 */
+    PARAM_UpdateChecksum();
+    
+    /* 將更新後的參數表保存到Flash */
+    PARAM_SaveToFlash();
+    
+    return 1;
+}
+
+/*********************************************************************
+ * @fn      PARAM_IncreaseTestCount
+ *
+ * @brief   增加測試計數器。
+ *
+ * @return  成功返回1，失敗返回0
+ */
+uint8_t PARAM_IncreaseTestCount(void)
+{
+    uint16_t count = PARAM_GetWord(PARAM_NOT);
+    count++;
+    PARAM_SetWord(PARAM_NOT, count);
+    
+    /* 更新校驗和 */
+    PARAM_UpdateChecksum();
+    
+    /* 將更新後的參數表保存到Flash */
+    PARAM_SaveToFlash();
+    
+    return 1;
+}
+
+/*********************************************************************
+ * @fn      PARAM_GetTestCount
+ *
+ * @brief   獲取測試計數器值。
+ *
+ * @return  測試計數器值
+ */
+uint16_t PARAM_GetTestCount(void)
+{
+    return PARAM_GetWord(PARAM_NOT);
+}
+
+/*********************************************************************
+ * @fn      PARAM_ReadBlock
+ *
+ * @brief   讀取一個參數區塊。
+ *
+ * @param   block - 區塊類型
+ *          data - 數據緩衝區
+ *          size - 數據大小
+ *
+ * @return  成功返回1，失敗返回0
+ */
+uint8_t PARAM_ReadBlock(BlockType_TypeDef block, void *data, uint16_t size)
+{
+    uint16_t start_addr = 0;
+    uint16_t block_size = 0;
+    
+    /* 參數檢查 */
+    if(data == NULL || block >= BLOCK_MAX)
+    {
+        return 0;
+    }
+    
+    /* 確定區塊的起始地址和大小 */
+    switch(block)
+    {
+        case BLOCK_BASIC_SYSTEM:
+            start_addr = 0;
+            block_size = 20;
+            break;
+        case BLOCK_HARDWARE_CALIB:
+            start_addr = 20;
+            block_size = 19;
+            break;
+        case BLOCK_BG_PARAMS:
+            start_addr = 39;
+            block_size = 174;
+            break;
+        case BLOCK_U_PARAMS:
+            start_addr = 213;
+            block_size = 142;
+            break;
+        case BLOCK_C_PARAMS:
+            start_addr = 355;
+            block_size = 142;
+            break;
+        case BLOCK_TG_PARAMS:
+            start_addr = 497;
+            block_size = 142;
+            break;
+        case BLOCK_RESERVED:
+            start_addr = 639;
+            block_size = 39;
+            break;
+        default:
+            return 0;
+    }
+    
+    /* 檢查數據大小是否超過區塊大小 */
+    if(size > block_size)
+    {
+        size = block_size;
+    }
+    
+    /* 複製參數數據 */
+    memcpy(data, &param_table[start_addr], size);
+    
+    return 1;
+}
+
+/*********************************************************************
+ * @fn      PARAM_UpdateBlock
+ *
+ * @brief   更新一個參數區塊。
+ *
+ * @param   block - 區塊類型
+ *          data - 數據緩衝區
+ *          size - 數據大小
+ *
+ * @return  成功返回1，失敗返回0
+ */
+uint8_t PARAM_UpdateBlock(BlockType_TypeDef block, void *data, uint16_t size)
+{
+    uint16_t start_addr = 0;
+    uint16_t block_size = 0;
+    
+    /* 參數檢查 */
+    if(data == NULL || block >= BLOCK_MAX)
+    {
+        return 0;
+    }
+    
+    /* 確定區塊的起始地址和大小 */
+    switch(block)
+    {
+        case BLOCK_BASIC_SYSTEM:
+            start_addr = 0;
+            block_size = 20;
+            break;
+        case BLOCK_HARDWARE_CALIB:
+            start_addr = 20;
+            block_size = 19;
+            break;
+        case BLOCK_BG_PARAMS:
+            start_addr = 39;
+            block_size = 174;
+            break;
+        case BLOCK_U_PARAMS:
+            start_addr = 213;
+            block_size = 142;
+            break;
+        case BLOCK_C_PARAMS:
+            start_addr = 355;
+            block_size = 142;
+            break;
+        case BLOCK_TG_PARAMS:
+            start_addr = 497;
+            block_size = 142;
+            break;
+        case BLOCK_RESERVED:
+            start_addr = 639;
+            block_size = 39;
+            break;
+        default:
+            return 0;
+    }
+    
+    /* 檢查數據大小是否超過區塊大小 */
+    if(size > block_size)
+    {
+        size = block_size;
+    }
+    
+    /* 更新參數數據 */
+    memcpy(&param_table[start_addr], data, size);
+    
+    /* 更新校驗和 */
+    PARAM_UpdateChecksum();
+    
+    /* 將更新後的參數表保存到Flash */
+    PARAM_SaveToFlash();
+    
+    return 1;
+}
+
+/*********************************************************************
+ * @fn      PARAM_GetStripParameters
+ *
+ * @brief   依據試片類型獲取試片參數。
+ *
+ * @param   type - 試片類型
+ *          ndl - 新試片檢測水平指針
+ *          udl - 已使用試片檢測水平指針
+ *          bloodIn - 血液檢測水平指針
+ *
+ * @return  成功返回1，失敗返回0
+ */
+uint8_t PARAM_GetStripParameters(StripType_TypeDef type, uint16_t *ndl, uint16_t *udl, uint16_t *bloodIn)
+{
+    uint16_t ndl_addr = 0;
+    uint16_t udl_addr = 0;
+    uint16_t bloodIn_addr = 0;
+    
+    /* 參數檢查 */
+    if(ndl == NULL || udl == NULL || bloodIn == NULL || type >= STRIP_TYPE_MAX)
+    {
+        return 0;
+    }
+    
+    /* 根據試片類型確定參數地址 */
+    switch(type)
+    {
+        case STRIP_TYPE_GLV:
+        case STRIP_TYPE_GAV:
+            ndl_addr = PARAM_BG_NDL;
+            udl_addr = PARAM_BG_UDL;
+            bloodIn_addr = PARAM_BG_BLOOD_IN;
+            break;
+        case STRIP_TYPE_U:
+            ndl_addr = PARAM_U_NDL;
+            udl_addr = PARAM_U_UDL;
+            bloodIn_addr = PARAM_U_BLOOD_IN;
+            break;
+        case STRIP_TYPE_C:
+            ndl_addr = PARAM_C_NDL;
+            udl_addr = PARAM_C_UDL;
+            bloodIn_addr = PARAM_C_BLOOD_IN;
+            break;
+        case STRIP_TYPE_TG:
+            ndl_addr = PARAM_TG_NDL;
+            udl_addr = PARAM_TG_UDL;
+            bloodIn_addr = PARAM_TG_BLOOD_IN;
+            break;
+        default:
+            return 0;
+    }
+    
+    /* 讀取參數值 */
+    *ndl = PARAM_GetWord(ndl_addr);
+    *udl = PARAM_GetWord(udl_addr);
+    *bloodIn = PARAM_GetWord(bloodIn_addr);
+    
+    return 1;
+}
+
+/*********************************************************************
+ * @fn      PARAM_GetTimingParameters
+ *
+ * @brief   依據試片類型獲取測試時序參數。
+ *
+ * @param   type - 試片類型
+ *          tpl - 測試間格指針
+ *          trd - 讀取延遲指針
+ *          evWidth - 工作電壓寬度指針
+ *          phase - 時序階段(1或2)
+ *
+ * @return  成功返回1，失敗返回0
+ */
+uint8_t PARAM_GetTimingParameters(StripType_TypeDef type, uint16_t *tpl, uint16_t *trd, uint16_t *evWidth, uint8_t phase)
+{
+    uint16_t tpl_addr = 0;
+    uint16_t trd_addr = 0;
+    uint16_t evWidth_addr = 0;
+    
+    /* 參數檢查 */
+    if(tpl == NULL || trd == NULL || evWidth == NULL || 
+       type >= STRIP_TYPE_MAX || (phase != 1 && phase != 2))
+    {
+        return 0;
+    }
+    
+    /* 根據試片類型和時序階段確定參數地址 */
+    switch(type)
+    {
+        case STRIP_TYPE_GLV:
+        case STRIP_TYPE_GAV:
+            if(phase == 1)
+            {
+                tpl_addr = PARAM_BG_TPL1;
+                trd_addr = PARAM_BG_TRD1;
+                evWidth_addr = PARAM_BG_EVWIDTH1;
+            }
+            else
+            {
+                tpl_addr = PARAM_BG_TPL2;
+                trd_addr = PARAM_BG_TRD2;
+                evWidth_addr = PARAM_BG_EVWIDTH2;
+            }
+            break;
+        case STRIP_TYPE_U:
+            if(phase == 1)
+            {
+                tpl_addr = PARAM_U_TPL1;
+                trd_addr = PARAM_U_TRD1;
+                evWidth_addr = PARAM_U_EVWIDTH1;
+            }
+            else
+            {
+                tpl_addr = PARAM_U_TPL2;
+                trd_addr = PARAM_U_TRD2;
+                evWidth_addr = PARAM_U_EVWIDTH2;
+            }
+            break;
+        case STRIP_TYPE_C:
+            if(phase == 1)
+            {
+                tpl_addr = PARAM_C_TPL1;
+                trd_addr = PARAM_C_TRD1;
+                evWidth_addr = PARAM_C_EVWIDTH1;
+            }
+            else
+            {
+                tpl_addr = PARAM_C_TPL2;
+                trd_addr = PARAM_C_TRD2;
+                evWidth_addr = PARAM_C_EVWIDTH2;
+            }
+            break;
+        case STRIP_TYPE_TG:
+            if(phase == 1)
+            {
+                tpl_addr = PARAM_TG_TPL1;
+                trd_addr = PARAM_TG_TRD1;
+                evWidth_addr = PARAM_TG_EVWIDTH1;
+            }
+            else
+            {
+                tpl_addr = PARAM_TG_TPL2;
+                trd_addr = PARAM_TG_TRD2;
+                evWidth_addr = PARAM_TG_EVWIDTH2;
+            }
+            break;
+        default:
+            return 0;
+    }
+    
+    /* 讀取參數值 */
+    *tpl = PARAM_GetWord(tpl_addr);
+    *trd = PARAM_GetWord(trd_addr);
+    *evWidth = PARAM_GetWord(evWidth_addr);
+    
+    return 1;
+}
