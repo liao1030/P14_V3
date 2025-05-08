@@ -22,7 +22,7 @@
 //#define SYSCLK_FREQ_48MHz_HSE  48000000
 //#define SYSCLK_FREQ_56MHz_HSE  56000000
 //#define SYSCLK_FREQ_72MHz_HSE  72000000
-//#define SYSCLK_FREQ_96MHz_HSE  96000000
+#define SYSCLK_FREQ_96MHz_HSE  96000000
 //#define SYSCLK_FREQ_120MHz_HSE  120000000
 //#define SYSCLK_FREQ_144MHz_HSE  144000000
 //#define SYSCLK_FREQ_HSI    HSI_VALUE
@@ -31,7 +31,7 @@
 //#define SYSCLK_FREQ_72MHz_HSI  72000000
 //#define SYSCLK_FREQ_96MHz_HSI  96000000
 //#define SYSCLK_FREQ_120MHz_HSI  120000000
-#define SYSCLK_FREQ_144MHz_HSI  144000000
+//#define SYSCLK_FREQ_144MHz_HSI  144000000
 
 /* Clock Definitions */
 #ifdef SYSCLK_FREQ_HSE
@@ -205,7 +205,7 @@ void SystemCoreClockUpdate (void)
  */
 static void SetSysClock(void)
 {
-  //GPIO_IPD_Unused();
+ //GPIO_IPD_Unused();
 #ifdef SYSCLK_FREQ_HSE
     SetSysClockToHSE();
 #elif defined SYSCLK_FREQ_48MHz_HSE
