@@ -20,6 +20,7 @@
 
 #include "debug.h"
 #include "string.h"
+#include "param_table.h"
 
 void USART2_IRQHandler(void) __attribute__((interrupt("WCH-Interrupt-fast")));
 void DMA1_Channel6_IRQHandler(void) __attribute__((interrupt("WCH-Interrupt-fast")));
@@ -108,7 +109,7 @@ void USARTx_CFG(uint32_t baudrate)
 void DMA_INIT(void)
 {
     DMA_InitTypeDef  DMA_InitStructure  = {0};
-    NVIC_InitTypeDef NVIC_InitStructure = {0};
+    NVIC_InitTypeDef NVIC_InitStructure  = {0};
 
     RCC_AHBPeriphClockCmd(RCC_AHBPeriph_DMA1, ENABLE);
 
@@ -207,9 +208,28 @@ int main(void)
     DMA_INIT();
     printf("SystemClk:%d\r\n", SystemCoreClock);
     printf("This is an example\r\n");
+    
+    /* 初始化參數表 */
+    PARAM_Init();
+    printf("Parameter Table Initialized\r\n");
+    
+    /* 顯示一些基本系統資訊 */
+    printf("Model No: %d\r\n", PARAM_GetByte(PARAM_MODEL_NO));
+    printf("FW Version: %d.%d\r\n", PARAM_GetByte(PARAM_FW_NO)/10, PARAM_GetByte(PARAM_FW_NO)%10);
+    printf("Parameter Table Version: %d\r\n", PARAM_GetWord(PARAM_CODE_TABLE_V));
+    printf("Test Count: %d\r\n", PARAM_GetWord(PARAM_NOT));
+    
+    /* 顯示當前設定的試片類型 */
+    StripType_TypeDef stripType = (StripType_TypeDef)PARAM_GetByte(PARAM_STRIP_TYPE);
+    printf("Strip Type: %s\r\n", StripType_GetName(stripType));
+    
+    /* 顯示當前設定的單位 */
+    Unit_TypeDef unit = (Unit_TypeDef)PARAM_GetByte(PARAM_MGDL);
+    printf("Unit: %s\r\n", Unit_GetSymbol(unit));
 
     while (1)
     {
+        //UART回傳接收到的資料，直到接收緩衝區為空（測試用，正式版要Comment）
         if (ring_buffer.RemainCount > 0)
         {
             printf("UART Echo Test: %d bytes\r\n", ring_buffer.RemainCount);
