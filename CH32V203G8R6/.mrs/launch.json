@@ -4,8 +4,8 @@
 		{
 			"type": "mrs-debugger",
 			"request": "launch",
-			"name": "USART_Idle_Recv",
-			"cwd": "/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/EVT_Example/USART_Idle_Recv",
+			"name": "CH32V203G8R6",
+			"cwd": "/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH32V203G8R6",
 			"openOCDCfg": {
 				"useLocalOpenOCD": true,
 				"executable": "/Applications/MounRiver Studio 2.app/Contents/Resources/app/resources/darwin/components/WCH/OpenOCD/OpenOCD/bin/openocd",
@@ -39,8 +39,8 @@
 					"additionalCommands": []
 				},
 				"loadedFiles": {
-					"executableFile": "/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/EVT_Example/USART_Idle_Recv/obj/USART_Idle_Recv.elf",
-					"symbolFile": "/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/EVT_Example/USART_Idle_Recv/obj/USART_Idle_Recv.elf",
+					"executableFile": "/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH32V203G8R6/obj/CH32V203G8R6.elf",
+					"symbolFile": "/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH32V203G8R6/obj/CH32V203G8R6.elf",
 					"executableFileOffset": 0,
 					"symbolFileOffset": 0
 				},
