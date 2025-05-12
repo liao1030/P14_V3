@@ -21,6 +21,7 @@
 #include "debug.h"
 #include "string.h"
 #include "param_table.h"
+#include "uart_protocol.h"
 
 void USART2_IRQHandler(void) __attribute__((interrupt("WCH-Interrupt-fast")));
 void DMA1_Channel6_IRQHandler(void) __attribute__((interrupt("WCH-Interrupt-fast")));
@@ -213,6 +214,10 @@ int main(void)
     PARAM_Init();
     printf("Parameter Table Initialized\r\n");
     
+    /* 初始化UART通訊協議 */
+    UART_Protocol_Init();
+    printf("UART Protocol Initialized\r\n");
+    
     /* 顯示一些基本系統資訊 */
     printf("Model No: %d\r\n", PARAM_GetByte(PARAM_MODEL_NO));
     printf("FW Version: %d.%d\r\n", PARAM_GetByte(PARAM_FW_NO)/10, PARAM_GetByte(PARAM_FW_NO)%10);
@@ -229,23 +234,27 @@ int main(void)
 
     while (1)
     {
-        //UART回傳接收到的資料，直到接收緩衝區為空（測試用，正式版要Comment）
-        if (ring_buffer.RemainCount > 0)
-        {
-            printf("UART Echo Test: %d bytes\r\n", ring_buffer.RemainCount);
+        // 處理UART協議資料
+        UART_Protocol_Process();
+        
+        // /* 測試環境可以保留以下程式碼，以便於偵錯 */
+        // if (ring_buffer.RemainCount > 0)
+        // {
+        //     printf("UART Echo Test: %d bytes\r\n", ring_buffer.RemainCount);
             
-            while (ring_buffer.RemainCount > 0)
-            {
-                uint8_t data = ring_buffer_pop();
-                // 通過 USART2 將接收到的資料發送回去
-                USART_SendData(USART2, data);
-                // 等待發送完成
-                while(USART_GetFlagStatus(USART2, USART_FLAG_TXE) == RESET);
-            }
+        //     while (ring_buffer.RemainCount > 0)
+        //     {
+        //         uint8_t data = ring_buffer_pop();
+        //         // 通過 USART2 將接收到的資料發送回去
+        //         USART_SendData(USART2, data);
+        //         // 等待發送完成
+        //         while(USART_GetFlagStatus(USART2, USART_FLAG_TXE) == RESET);
+        //     }
             
-            printf("Echo Complete\r\n");
-        }
-        Delay_Ms(100);
+        //     printf("Echo Complete\r\n");
+        // }
+        
+        Delay_Ms(10); // 減少延遲時間以增加處理速度
     }
 }
 
@@ -274,6 +283,21 @@ void USART2_IRQHandler(void)
 
         USART_ReceiveData(USART2); // clear IDLE flag
         ring_buffer_push_huge(USART_DMA_CTRL.Rx_Buffer[oldbuffer], rxlen);
+        
+        // 如果接收到資料，呼叫UART協議處理函數
+        uint8_t i;
+        for(i = 0; i < rxlen; i++)
+        {
+            UART2_Receive_Byte_ISR(USART_DMA_CTRL.Rx_Buffer[oldbuffer][i]);
+        }
+    }
+    
+    // 檢查是否有接收到資料
+    if (USART_GetITStatus(USART2, USART_IT_RXNE) != RESET)
+    {
+        // 讀取接收到的位元組並處理
+        uint8_t data = USART_ReceiveData(USART2);
+        UART2_Receive_Byte_ISR(data);
     }
 }
 
@@ -299,6 +323,13 @@ void DMA1_Channel6_IRQHandler(void)
     DMA_Cmd(USART_RX_CH, ENABLE);
 
     ring_buffer_push_huge(USART_DMA_CTRL.Rx_Buffer[oldbuffer], rxlen);
+    
+    // 處理DMA接收到的資料
+    uint8_t i;
+    for(i = 0; i < rxlen; i++)
+    {
+        UART2_Receive_Byte_ISR(USART_DMA_CTRL.Rx_Buffer[oldbuffer][i]);
+    }
 
     DMA_ClearITPendingBit(DMA1_IT_TC6);
 }
