@@ -139,18 +139,19 @@ void StripDetect_Init(tmosTaskID task_id)
     StripDetect_TaskID = task_id;
     
     // 初始化GPIO引腳
-    GPIOB_ModeCfg(STRIP_DETECT_3_PIN, GPIO_ModeIN_PU);    // 配置Strip_Detect_3為上拉輸入
-    GPIOA_ModeCfg(STRIP_DETECT_5_PIN, GPIO_ModeIN_PU);    // 配置Strip_Detect_5為上拉輸入
+    GPIOB_ModeCfg(STRIP_DETECT_3_PIN, GPIO_ModeIN_Floating);    // 配置Strip_Detect_3為浮空输入
+    GPIOA_ModeCfg(STRIP_DETECT_5_PIN, GPIO_ModeIN_Floating);    // 配置Strip_Detect_5為浮空输入
     GPIOB_ModeCfg(T3_IN_SEL_PIN, GPIO_ModeOut_PP_5mA);    // 配置T3_IN_SEL為推挽輸出
     GPIOA_ModeCfg(V2P5_ENABLE_PIN, GPIO_ModeOut_PP_5mA);  // 配置V2P5_ENABLE為推挽輸出
     
     // 設定初始狀態
-    GPIOB_ResetBits(T3_IN_SEL_PIN);                // T3_IN_SEL輸出低電平，預設關閉T3電極
-    GPIOA_SetBits(V2P5_ENABLE_PIN);                // V2P5_ENABLE輸出高電平，啟用供電給CH32V203
-    
+    GPIOB_SetBits(T3_IN_SEL_PIN);                // T3_IN_SEL輸出高電平，預設關閉T3電極
+    GPIOA_SetBits(V2P5_ENABLE_PIN);              // V2P5_ENABLE輸出高電平，供電給CH32V203
+
     // 配置中斷
     GPIOB_ITModeCfg(STRIP_DETECT_3_PIN, GPIO_ITMode_FallEdge); // Strip_Detect_3下降沿中斷
     GPIOA_ITModeCfg(STRIP_DETECT_5_PIN, GPIO_ITMode_FallEdge); // Strip_Detect_5下降沿中斷
+    
     
     // 啟用中斷
     PFIC_EnableIRQ(GPIO_B_IRQn);
@@ -290,13 +291,13 @@ void StripDetect_SetStripType(uint8_t type)
         switch(type) {
             case STRIP_TYPE_GAV:
                 // GAV試片需要開啟T3電極
-                GPIOB_SetBits(T3_IN_SEL_PIN);
+                GPIOB_ResetBits(T3_IN_SEL_PIN);
                 PRINT("GAV Strip Confirmed, T3 Enabled\n");
                 break;
                 
             default:
                 // 其他試片類型使用WE電極，保持T3關閉
-                GPIOB_ResetBits(T3_IN_SEL_PIN);
+                GPIOB_SetBits(T3_IN_SEL_PIN);
                 PRINT("Strip Type %d Confirmed, T3 Disabled\n", type);
                 break;
         }
