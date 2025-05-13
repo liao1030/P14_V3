@@ -20,6 +20,7 @@
 #include "ble_uart_service.h"
 #include "app_drv_fifo.h"
 #include "app_uart.h"
+#include "StripDetect.h"
 
 /*********************************************************************
  * MACROS
@@ -326,6 +327,12 @@ uint16 Peripheral_ProcessEvent(uint8 task_id, uint16 events)
         //                                              Peripheral_TaskID);
 
         return (events ^ SBP_PARAM_UPDATE_EVT);
+    }
+    
+    // ÌŽÀíÔ‡Æ¬‚ÉœyÊÂ¼þ
+    if(events & STRIP_DETECT_EVT)
+    {
+        return StripDetect_ProcessEvent(task_id, events);
     }
 
     if(events & UART_TO_BLE_SEND_EVT)

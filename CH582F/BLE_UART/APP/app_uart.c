@@ -18,6 +18,7 @@
 #include "gattprofile.h"
 #include "peripheral.h"
 #include "app_uart.h"
+#include "StripDetect.h"
 
 /*********************************************************************
  * MACROS
@@ -81,6 +82,9 @@ static uint8_t app_uart_rx_buffer[APP_UART_RX_BUFFER_LENGTH] = {0};
 /*********************************************************************
  * PUBLIC FUNCTIONS
  */
+
+// 函數前置聲明
+static void process_uart_mcu_protocol(uint8_t *data, uint16_t len);
 
 /*********************************************************************
  * @fn      app_uart_process
@@ -222,9 +226,76 @@ void on_bleuartServiceEvt(uint16_t connection_handle, ble_uart_evt_t *p_evt)
 
             //ble to uart
             app_uart_tx_data((uint8_t *)p_evt->data.p_data, p_evt->data.length);
+            
+            // 處理接收到的BLE數據
+            process_uart_mcu_protocol((uint8_t *)p_evt->data.p_data, p_evt->data.length);
 
             break;
         default:
+            break;
+    }
+}
+
+/*********************************************************************
+ * @fn      send_to_uart_mcu
+ *
+ * @brief   發送數據到MCU (CH32V203G8R6)
+ *
+ * @param   buf - 待發送的數據緩衝區
+ * @param   len - 數據長度
+ *
+ * @return  發送結果
+ */
+uint8_t send_to_uart_mcu(uint8_t *buf, uint16_t len)
+{
+    app_drv_fifo_write(&app_uart_tx_fifo, buf, &len);
+    UART1_SendString(buf, len);
+    return APP_DRV_FIFO_RESULT_SUCCESS;
+}
+
+/*********************************************************************
+ * @fn      process_uart_mcu_protocol
+ *
+ * @brief   處理來自MCU的通訊協議數據
+ *
+ * @param   data - 接收到的數據
+ *          len - 數據長度
+ *
+ * @return  none
+ */
+static void process_uart_mcu_protocol(uint8_t *data, uint16_t len)
+{
+    // 最基本的通訊協議處理
+    if (len < 5) return; // 包頭(1) + 指令(1) + 長度(1) + 數據(N) + 校驗(1) + 包尾(1)
+    
+    if (data[0] != 0xAA || data[len-1] != 0x55) return; // 判斷包頭包尾
+    
+    uint8_t cmd = data[1];       // 獲取指令
+    uint8_t dataLen = data[2];   // 獲取數據長度
+    
+    // 簡單的校驗和檢查
+    uint8_t checksum = 0;
+    for(uint8_t i = 1; i < len-2; i++) {
+        checksum += data[i];
+    }
+    
+    if (checksum != data[len-2]) {
+        PRINT("Checksum Error\n");
+        return;
+    }
+    
+    // 根據不同指令進行處理
+    switch(cmd) {
+        case 0xA0: // 試片類型回應指令
+            if (dataLen == 1) {
+                uint8_t stripType = data[3]; // 獲取試片類型
+                StripDetect_SetStripType(stripType);
+                PRINT("MCU set Strip Type: %d\n", stripType);
+            }
+            break;
+            
+        default:
+            PRINT("Unknown command: 0x%02X\n", cmd);
             break;
     }
 }

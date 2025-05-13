@@ -12,6 +12,7 @@
 #include "debug.h"
 #include "string.h"
 #include "param_table.h"
+#include "strip_detect.h"
 
 /* 全局變數 */
 static uint8_t rx_buffer[MAX_PACKET_SIZE];
@@ -202,44 +203,62 @@ uint8_t UART_SendPacket(uint8_t cmdId, uint8_t *data, uint8_t length)
  */
 uint8_t UART_ProcessPacket(uint8_t *packet, uint16_t length)
 {
-    /* 檢查封包頭尾標記 */
+    /* 檢查是否有完整的封包 */
     if(packet[0] != PROTOCOL_START_MARK || packet[length-1] != PROTOCOL_END_MARK)
     {
-        UART_SendErrorAck(0, ERR_DATA_FORMAT);
         return 0;
     }
     
     /* 驗證校驗和 */
     if(!UART_VerifyChecksum(packet, length))
     {
+        /* 校驗錯誤，發送錯誤回應 */
         UART_SendErrorAck(packet[1], ERR_CHECKSUM_ERROR);
         return 0;
     }
     
+    /* 解析封包 */
     uint8_t cmdId = packet[1];
     uint8_t dataLen = packet[2];
     uint8_t *data = &packet[3];
     
-    /* 根據指令ID分發處理 */
+    /* 根據命令ID處理不同的指令 */
     switch(cmdId)
     {
         case CMD_SYNC_TIME:
-            return UART_ProcessSyncTime(data, dataLen);
-            
+            /* 同步時間指令 */
+            UART_ProcessSyncTime(data, dataLen);
+            break;
+        
         case CMD_GET_STATUS:
-            return UART_ProcessGetStatus(data, dataLen);
-            
+            /* 請求裝置狀態指令 */
+            UART_ProcessGetStatus(data, dataLen);
+            break;
+        
         case CMD_SET_PARAM:
-            return UART_ProcessSetParam(data, dataLen);
-            
+            /* 設置參數指令 */
+            UART_ProcessSetParam(data, dataLen);
+            break;
+        
         case CMD_CHECK_BLOOD:
-            return UART_ProcessCheckBlood(data, dataLen);
-            
+            /* 檢測血液狀態指令 */
+            UART_ProcessCheckBlood(data, dataLen);
+            break;
+        
         case CMD_GET_RESULT:
-            return UART_ProcessGetResult(data, dataLen);
-            
+            /* 請求測試結果指令 */
+            UART_ProcessGetResult(data, dataLen);
+            break;
+        
         case CMD_GET_RAW_DATA:
-            return UART_ProcessGetRawData(data, dataLen);
+            /* 請求RAW DATA指令 */
+            UART_ProcessGetRawData(data, dataLen);
+            break;
+            
+        case CMD_STRIP_INSERTED:
+            /* 試片插入通知 */
+            UART_ProcessStripInsertedCmd(data, dataLen);
+            break;
             
         default:
             /* 不支援的指令 */
@@ -838,4 +857,56 @@ void UART2_Receive_Byte_ISR(uint8_t byte)
         state = 0;
         rx_index = 0;
     }
+}
+
+/*********************************************************************
+ * @fn      UART_ProcessStripInsertedCmd
+ *
+ * @brief   處理試片插入通知命令
+ *
+ * @param   data - 數據指針
+ * @param   length - 數據長度
+ *
+ * @return  處理結果 (0=失敗, 1=成功)
+ */
+uint8_t UART_ProcessStripInsertedCmd(uint8_t *data, uint8_t length)
+{
+    /* 讀取試片Pin3和Pin5的狀態（如果有提供） */
+    if (length >= 2) {
+        uint8_t pin3Status = data[0];
+        uint8_t pin5Status = data[1];
+        
+        /* 設置試片腳位狀態 */
+        STRIP_DETECT_SetPinStatus(pin3Status, pin5Status);
+        
+        /* 觸發插入處理 */
+        STRIP_DETECT_HandleInsertedEvent();
+        
+        printf("Strip inserted notification received. Pin3=%d, Pin5=%d\r\n", 
+               pin3Status, pin5Status);
+    } else {
+        printf("Strip inserted notification without pin status\r\n");
+        STRIP_DETECT_HandleInsertedEvent();
+    }
+    
+    return 1;
+}
+
+/*********************************************************************
+ * @fn      UART_SendStripTypeAck
+ *
+ * @brief   發送試片類型回應
+ *
+ * @param   stripType - 判斷的試片類型
+ *
+ * @return  是否成功發送
+ */
+uint8_t UART_SendStripTypeAck(StripType_TypeDef stripType)
+{
+    uint8_t data[1];
+    data[0] = stripType;
+    
+    printf("Sending strip type ack: %s\r\n", StripType_GetName(stripType));
+    
+    return UART_SendPacket(CMD_STRIP_TYPE_ACK, data, 1);
 }

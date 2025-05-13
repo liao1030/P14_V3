@@ -1,0 +1,18 @@
+/*********************************************************************
+ * @fn      UART_SendStripTypeAck
+ *
+ * @brief   發送試片類型回應
+ *
+ * @param   stripType - 判斷的試片類型
+ *
+ * @return  是否成功發送
+ */
+uint8_t UART_SendStripTypeAck(StripType_TypeDef stripType)
+{
+    uint8_t data[1];
+    data[0] = stripType;
+    
+    printf("Sending strip type ack: %s\r\n", StripType_GetName(stripType));
+    
+    return UART_SendPacket(CMD_STRIP_TYPE_ACK, data, 1);
+}

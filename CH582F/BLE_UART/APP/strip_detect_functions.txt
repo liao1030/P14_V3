@@ -1,0 +1,27 @@
+/*********************************************************************
+ * @fn      StripDetect_SendInsertInfo
+ *
+ * @brief   發送試片插入狀態資訊到MCU
+ *
+ * @param   pin3Status - Strip_Detect_3腳位狀態
+ * @param   pin5Status - Strip_Detect_5腳位狀態
+ *
+ * @return  none
+ */
+static void StripDetect_SendInsertInfo(uint8_t pin3Status, uint8_t pin5Status)
+{
+    uint8_t buf[6];
+    
+    /* 組裝消息包 */
+    buf[0] = 0xAA;                // 起始標記
+    buf[1] = PROTOCOL_STRIP_INSERTED;  // 試片插入通知命令
+    buf[2] = 0x02;                // 長度為2
+    buf[3] = pin3Status;          // 第3腳狀態
+    buf[4] = pin5Status;          // 第5腳狀態
+    buf[5] = (buf[1] + buf[2] + buf[3] + buf[4]) % 256;  // 校驗和
+    
+    /* 發送到MCU */
+    send_to_uart_mcu(buf, 6);
+    
+    PRINT("Strip Insert Info Sent. Pin3=%d, Pin5=%d\n", pin3Status, pin5Status);
+}

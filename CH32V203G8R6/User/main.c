@@ -22,6 +22,7 @@
 #include "string.h"
 #include "param_table.h"
 #include "uart_protocol.h"
+#include "strip_detect.h"
 
 void USART2_IRQHandler(void) __attribute__((interrupt("WCH-Interrupt-fast")));
 void DMA1_Channel6_IRQHandler(void) __attribute__((interrupt("WCH-Interrupt-fast")));
@@ -218,6 +219,9 @@ int main(void)
     UART_Protocol_Init();
     printf("UART Protocol Initialized\r\n");
     
+    /* 初始化試片偵測相關設置 */
+    STRIP_DETECT_Init();
+    
     /* 顯示一些基本系統資訊 */
     printf("Model No: %d\r\n", PARAM_GetByte(PARAM_MODEL_NO));
     printf("FW Version: %d.%d\r\n", PARAM_GetByte(PARAM_FW_NO)/10, PARAM_GetByte(PARAM_FW_NO)%10);
@@ -236,6 +240,9 @@ int main(void)
     {
         // 處理UART協議資料
         UART_Protocol_Process();
+        
+        // 處理試片偵測相關任務
+        STRIP_DETECT_Process();
         
         // /* 測試環境可以保留以下程式碼，以便於偵錯 */
         // if (ring_buffer.RemainCount > 0)

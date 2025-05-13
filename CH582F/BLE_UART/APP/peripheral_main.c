@@ -17,6 +17,7 @@
 #include "gattprofile.h"
 #include "peripheral.h"
 #include "app_uart.h"
+#include "StripDetect.h"
 
 /*********************************************************************
  * GLOBAL TYPEDEFS
@@ -66,6 +67,10 @@ int main(void)
     GAPRole_PeripheralInit();
     Peripheral_Init();
     app_uart_init();
+    
+    // 初始化試片偵測功能
+    StripDetect_Init(Peripheral_TaskID);
+    
     Main_Circulation();
 }
 
