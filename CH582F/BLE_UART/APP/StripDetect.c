@@ -257,7 +257,7 @@ uint16_t StripDetect_ProcessEvent(tmosTaskID task_id, uint16_t events)
  */
 static void StripDetect_SendMessage(uint8_t msgType, uint8_t stripType)
 {
-    uint8_t buf[5];
+    uint8_t buf[6];
     
     // 組裝消息包
     buf[0] = 0xAA;                // 起始標記
@@ -265,9 +265,10 @@ static void StripDetect_SendMessage(uint8_t msgType, uint8_t stripType)
     buf[2] = 0x01;                // 長度為1
     buf[3] = stripType;           // 試片類型
     buf[4] = (buf[1] + buf[2] + buf[3]) % 256;  // 校驗和
+    buf[5] = 0x55;                // 結束標記
     
     // 發送到MCU
-    send_to_uart_mcu(buf, 5);
+    send_to_uart_mcu(buf, 6);
 }
 
 /*********************************************************************
@@ -347,7 +348,7 @@ uint8_t StripDetect_GetStripType(void)
  */
 static void StripDetect_SendInsertInfo(uint8_t pin3Status, uint8_t pin5Status)
 {
-    uint8_t buf[6];
+    uint8_t buf[7];
     
     /* 組裝消息包 */
     buf[0] = 0xAA;                // 起始標記
@@ -356,9 +357,10 @@ static void StripDetect_SendInsertInfo(uint8_t pin3Status, uint8_t pin5Status)
     buf[3] = pin3Status;          // 第3腳狀態
     buf[4] = pin5Status;          // 第5腳狀態
     buf[5] = (buf[1] + buf[2] + buf[3] + buf[4]) % 256;  // 校驗和
+    buf[6] = 0x55;                // 結束標記
     
     /* 發送到MCU */
-    send_to_uart_mcu(buf, 6);
+    send_to_uart_mcu(buf, 7);
     
     PRINT("Strip Insert Info Sent. Pin3=%d, Pin5=%d\n", pin3Status, pin5Status);
 }
