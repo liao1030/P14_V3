@@ -148,7 +148,7 @@ void StripDetect_Init(tmosTaskID task_id)
     
     // 設定初始狀態
     GPIOB_SetBits(T3_IN_SEL_PIN);                // T3_IN_SEL輸出高電平，預設關閉T3電極
-    GPIOA_SetBits(V2P5_ENABLE_PIN);              // V2P5_ENABLE輸出高電平，供電給CH32V203
+    GPIOA_ResetBits(V2P5_ENABLE_PIN);              // V2P5_ENABLE輸出低電平，不供電給CH32V203
 
     // 配置中斷
     GPIOB_ITModeCfg(STRIP_DETECT_3_PIN, GPIO_ITMode_FallEdge); // Strip_Detect_3下降沿中斷
@@ -210,7 +210,10 @@ uint16_t StripDetect_ProcessEvent(tmosTaskID task_id, uint16_t events)
                 stripState.pin3Status = stablePin3Status;
                 stripState.pin5Status = stablePin5Status;
                 
-                // 發送試片插入消息給MCU
+                // 試片插入時，V2P5_ENABLE輸出高電平，供電給CH32V203
+                GPIOA_SetBits(V2P5_ENABLE_PIN);
+
+                 // 發送試片插入消息給MCU
                 StripDetect_SendInsertInfo(stablePin3Status, stablePin5Status);
                 
                 // 設定等待MCU回應
@@ -241,6 +244,10 @@ uint16_t StripDetect_ProcessEvent(tmosTaskID task_id, uint16_t events)
                 stripState.stripType = STRIP_TYPE_UNKNOWN;
                 stripState.isTypeDetected = false;
                 stripState.isWaitingForMCUResponse = false;
+                
+                // 試片拔出時，V2P5_ENABLE輸出低電平，不供電給CH32V203
+                GPIOA_ResetBits(V2P5_ENABLE_PIN);
+                
                 PRINT("Strip Removed\n");
             }
         }
@@ -285,6 +292,10 @@ static void StripDetect_PeriodicCheck(void)
             stripState.stripType = STRIP_TYPE_UNKNOWN;
             stripState.isTypeDetected = false;
             stripState.isWaitingForMCUResponse = false;
+            
+            // 試片拔出時，V2P5_ENABLE輸出低電平，不供電給CH32V203
+            GPIOA_ResetBits(V2P5_ENABLE_PIN);
+            
             PRINT("Strip Removed (Periodic Check)\n");
         }
     }
@@ -298,7 +309,10 @@ static void StripDetect_PeriodicCheck(void)
             stripState.pin3Status = currentPin3Status;
             stripState.pin5Status = currentPin5Status;
             
-            // 發送試片插入消息給MCU
+            // 試片插入時，V2P5_ENABLE輸出高電平，供電給CH32V203
+            GPIOA_SetBits(V2P5_ENABLE_PIN);
+
+             // 發送試片插入消息給MCU
             StripDetect_SendInsertInfo(currentPin3Status, currentPin5Status);
             
             // 設定等待MCU回應
