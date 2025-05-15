@@ -21,6 +21,7 @@
  * MACROS
  */
 #define STRIP_DEBOUNCE_TIME     50    // 除彈跳時間，單位毫秒
+#define STRIP_CHECK_INTERVAL    500   // 定期檢查間隔，單位毫秒
 
 // 試片插入引腳定義
 #define STRIP_DETECT_3_PIN      GPIO_Pin_11
@@ -86,6 +87,7 @@ static tmosTaskID StripDetect_TaskID = INVALID_TASK_ID;
  */
 static void StripDetect_SendMessage(uint8_t msgType, uint8_t stripType);
 static void StripDetect_SendInsertInfo(uint8_t pin3Status, uint8_t pin5Status);
+static void StripDetect_PeriodicCheck(void);
 
 /*********************************************************************
  * @fn      debounce_pin_status
@@ -156,6 +158,9 @@ void StripDetect_Init(tmosTaskID task_id)
     // 啟用中斷
     PFIC_EnableIRQ(GPIO_B_IRQn);
     PFIC_EnableIRQ(GPIO_A_IRQn);
+    
+    // 啟動定期檢查任務
+    tmos_start_task(StripDetect_TaskID, STRIP_PERIODIC_CHECK_EVT, STRIP_CHECK_INTERVAL);
     
     PRINT("Strip Detect Module Initialized\n");
 }
@@ -241,8 +246,48 @@ uint16_t StripDetect_ProcessEvent(tmosTaskID task_id, uint16_t events)
         return (events ^ STRIP_DETECT_EVT);
     }
     
+    if(events & STRIP_PERIODIC_CHECK_EVT)
+    {
+        // 執行定期檢查
+        StripDetect_PeriodicCheck();
+        
+        return (events ^ STRIP_PERIODIC_CHECK_EVT);
+    }
+    
     // 返回未處理事件
     return 0;
+}
+
+/*********************************************************************
+ * @fn      StripDetect_PeriodicCheck
+ *
+ * @brief   定期檢查試片狀態
+ *
+ * @param   none
+ *
+ * @return  none
+ */
+static void StripDetect_PeriodicCheck(void)
+{
+    // 讀取當前狀態
+    uint8_t currentPin3Status = GPIOB_ReadPortPin(STRIP_DETECT_3_PIN) ? 1 : 0;
+    uint8_t currentPin5Status = GPIOA_ReadPortPin(STRIP_DETECT_5_PIN) ? 1 : 0;
+    
+    // 兩個引腳都是高電平，試片可能已拔出
+    if (currentPin3Status == 1 && currentPin5Status == 1) 
+    {
+        if(stripState.isStripInserted) 
+        {
+            // 試片拔出
+            stripState.isStripInserted = false;
+            stripState.stripType = STRIP_TYPE_UNKNOWN;
+            stripState.isTypeDetected = false;
+            stripState.isWaitingForMCUResponse = false;
+            PRINT("Strip Removed (Periodic Check)\n");
+        }
+    }
+    // 重新啟動定期檢查
+    tmos_start_task(StripDetect_TaskID, STRIP_PERIODIC_CHECK_EVT, STRIP_CHECK_INTERVAL);
 }
 
 /*********************************************************************
