@@ -141,8 +141,8 @@ void StripDetect_Init(tmosTaskID task_id)
     StripDetect_TaskID = task_id;
     
     // 初始化GPIO引腳
-    GPIOB_ModeCfg(STRIP_DETECT_3_PIN, GPIO_ModeIN_Floating);    // 配置Strip_Detect_3為浮空输入
-    GPIOA_ModeCfg(STRIP_DETECT_5_PIN, GPIO_ModeIN_Floating);    // 配置Strip_Detect_5為浮空输入
+    GPIOB_ModeCfg(STRIP_DETECT_3_PIN, GPIO_ModeIN_Floating);    // 配置Strip_Detect_3為浮空输入(已由外部上拉)
+    GPIOA_ModeCfg(STRIP_DETECT_5_PIN, GPIO_ModeIN_Floating);    // 配置Strip_Detect_5為浮空输入(已由外部上拉)
     GPIOB_ModeCfg(T3_IN_SEL_PIN, GPIO_ModeOut_PP_5mA);    // 配置T3_IN_SEL為推挽輸出
     GPIOA_ModeCfg(V2P5_ENABLE_PIN, GPIO_ModeOut_PP_5mA);  // 配置V2P5_ENABLE為推挽輸出
     
@@ -152,8 +152,7 @@ void StripDetect_Init(tmosTaskID task_id)
 
     // 配置中斷
     GPIOB_ITModeCfg(STRIP_DETECT_3_PIN, GPIO_ITMode_FallEdge); // Strip_Detect_3下降沿中斷
-    GPIOA_ITModeCfg(STRIP_DETECT_5_PIN, GPIO_ITMode_FallEdge); // Strip_Detect_5下降沿中斷
-    
+    GPIOA_ITModeCfg(STRIP_DETECT_5_PIN, GPIO_ITMode_FallEdge); // Strip_Detect_5下降沿中斷    
     
     // 啟用中斷
     PFIC_EnableIRQ(GPIO_B_IRQn);
@@ -161,6 +160,9 @@ void StripDetect_Init(tmosTaskID task_id)
     
     // 啟動定期檢查任務
     tmos_start_task(StripDetect_TaskID, STRIP_PERIODIC_CHECK_EVT, STRIP_CHECK_INTERVAL);
+    
+    // 立即檢查一次試片狀態，以防系統啟動時已插入試片
+    tmos_start_task(StripDetect_TaskID, STRIP_DETECT_EVT, 1);
     
     PRINT("Strip Detect Module Initialized\n");
 }
@@ -273,7 +275,7 @@ static void StripDetect_PeriodicCheck(void)
     uint8_t currentPin3Status = GPIOB_ReadPortPin(STRIP_DETECT_3_PIN) ? 1 : 0;
     uint8_t currentPin5Status = GPIOA_ReadPortPin(STRIP_DETECT_5_PIN) ? 1 : 0;
     
-    // 兩個引腳都是高電平，試片可能已拔出
+    // 檢查試片拔出情況 - 兩個引腳都是高電平，試片可能已拔出
     if (currentPin3Status == 1 && currentPin5Status == 1) 
     {
         if(stripState.isStripInserted) 
@@ -286,6 +288,38 @@ static void StripDetect_PeriodicCheck(void)
             PRINT("Strip Removed (Periodic Check)\n");
         }
     }
+    // 檢查試片插入情況 - 至少有一個引腳為低電平，試片可能已插入
+    else if (currentPin3Status == 0 || currentPin5Status == 0)
+    {
+        if(!stripState.isStripInserted)
+        {
+            // 第一次偵測到試片插入
+            stripState.isStripInserted = true;
+            stripState.pin3Status = currentPin3Status;
+            stripState.pin5Status = currentPin5Status;
+            
+            // 發送試片插入消息給MCU
+            StripDetect_SendInsertInfo(currentPin3Status, currentPin5Status);
+            
+            // 設定等待MCU回應
+            stripState.isWaitingForMCUResponse = true;
+            
+            PRINT("Strip Inserted (Periodic Check)! Pin3: %d, Pin5: %d\n", currentPin3Status, currentPin5Status);
+            
+            // 根據Pin3和Pin5的狀態預判試片類型
+            if(currentPin3Status == 0 && currentPin5Status == 1) {
+                // 可能是GLV或U型試片
+                PRINT("Possible Strip Type: GLV or U\n");
+            } else if(currentPin3Status == 0 && currentPin5Status == 0) {
+                // 可能是C型試片
+                PRINT("Possible Strip Type: C\n");
+            } else if(currentPin3Status == 1 && currentPin5Status == 0) {
+                // 可能是TG或GAV型試片
+                PRINT("Possible Strip Type: TG or GAV\n");
+            }
+        }
+    }
+    
     // 重新啟動定期檢查
     tmos_start_task(StripDetect_TaskID, STRIP_PERIODIC_CHECK_EVT, STRIP_CHECK_INTERVAL);
 }
