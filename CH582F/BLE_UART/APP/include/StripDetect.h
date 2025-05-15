@@ -26,6 +26,7 @@ extern "C" {
 // 任務事件定義
 #define STRIP_DETECT_EVT                 0x0020
 #define STRIP_PERIODIC_CHECK_EVT         0x0040
+#define STRIP_SEND_MESSAGE_EVT           0x0080
 
 // 試片類型定義
 #define STRIP_TYPE_GLV                   0x00
