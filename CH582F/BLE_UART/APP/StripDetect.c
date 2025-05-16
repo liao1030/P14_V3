@@ -21,7 +21,7 @@
  * MACROS
  */
 #define STRIP_DEBOUNCE_TIME     50    // 除彈跳時間，單位毫秒
-#define STRIP_CHECK_INTERVAL    500   // 定期檢查間隔，單位毫秒
+#define STRIP_CHECK_INTERVAL    100   // 定期檢查間隔，單位毫秒，縮短間隔以提高響應速度
 
 // 試片插入引腳定義
 #define STRIP_DETECT_3_PIN      GPIO_Pin_11
@@ -149,22 +149,12 @@ void StripDetect_Init(tmosTaskID task_id)
     // 設定初始狀態
     GPIOB_SetBits(T3_IN_SEL_PIN);                // T3_IN_SEL輸出高電平，預設關閉T3電極
     GPIOA_SetBits(V2P5_ENABLE_PIN);              // V2P5_ENABLE輸出高電平，供電給CH32V203
-
-    // 配置中斷
-    GPIOB_ITModeCfg(STRIP_DETECT_3_PIN, GPIO_ITMode_FallEdge); // Strip_Detect_3下降沿中斷
-    GPIOA_ITModeCfg(STRIP_DETECT_5_PIN, GPIO_ITMode_FallEdge); // Strip_Detect_5下降沿中斷    
     
-    // 啟用中斷
-    PFIC_EnableIRQ(GPIO_B_IRQn);
-    PFIC_EnableIRQ(GPIO_A_IRQn);
-    
-    // 啟動定期檢查任務
+    // 不再使用中斷，改為定期輪詢
+    // 啟動定期檢查任務，間隔時間縮短以增加響應速度
     tmos_start_task(StripDetect_TaskID, STRIP_PERIODIC_CHECK_EVT, STRIP_CHECK_INTERVAL);
     
-    // 立即檢查一次試片狀態，以防系統啟動時已插入試片
-    tmos_start_task(StripDetect_TaskID, STRIP_DETECT_EVT, 1);
-    
-    PRINT("Strip Detect Module Initialized\n");
+    PRINT("Strip Detect Module Initialized (Poll Mode)\n");
 }
 
 /*********************************************************************
@@ -179,79 +169,13 @@ void StripDetect_Init(tmosTaskID task_id)
  */
 uint16_t StripDetect_ProcessEvent(tmosTaskID task_id, uint16_t events)
 {
-    if(events & STRIP_DETECT_EVT)
-    {
-        // 除彈跳處理
-        static uint8_t lastPin3Status = 1;
-        static uint8_t lastPin5Status = 1;
-        static uint8_t debounceCount3 = 0;
-        static uint8_t debounceCount5 = 0;
-        
-        // 讀取當前狀態
-        uint8_t currentPin3Status = GPIOB_ReadPortPin(STRIP_DETECT_3_PIN) ? 1 : 0;
-        uint8_t currentPin5Status = GPIOA_ReadPortPin(STRIP_DETECT_5_PIN) ? 1 : 0;
-        
-        // 除彈跳處理
-        uint8_t stablePin3Status = debounce_pin_status(currentPin3Status, lastPin3Status, &debounceCount3, 3);
-        uint8_t stablePin5Status = debounce_pin_status(currentPin5Status, lastPin5Status, &debounceCount5, 3);
-        
-        // 更新上次狀態
-        lastPin3Status = currentPin3Status;
-        lastPin5Status = currentPin5Status;
-        
-        // 防止偶發性幹擾，再次確認試片插入狀態
-        if(stablePin3Status == 0 || stablePin5Status == 0) 
-        {
-            // 至少有一個引腳被拉低，確認試片插入
-            if(!stripState.isStripInserted) 
-            {
-                // 第一次偵測到試片插入
-                stripState.isStripInserted = true;
-                stripState.pin3Status = stablePin3Status;
-                stripState.pin5Status = stablePin5Status;
-                
-                // 發送試片插入消息給MCU
-                StripDetect_SendInsertInfo(stablePin3Status, stablePin5Status);
-                
-                // 設定等待MCU回應
-                stripState.isWaitingForMCUResponse = true;
-                
-                PRINT("Strip Inserted! Pin3: %d, Pin5: %d\n", stablePin3Status, stablePin5Status);
-                
-                // 根據Pin3和Pin5的狀態預判試片類型
-                if(stablePin3Status == 0 && stablePin5Status == 1) {
-                    // 可能是GLV或U型試片
-                    PRINT("Possible Strip Type: GLV or U\n");
-                } else if(stablePin3Status == 0 && stablePin5Status == 0) {
-                    // 可能是C型試片
-                    PRINT("Possible Strip Type: C\n");
-                } else if(stablePin3Status == 1 && stablePin5Status == 0) {
-                    // 可能是TG或GAV型試片
-                    PRINT("Possible Strip Type: TG or GAV\n");
-                }
-            }
-        }
-        else 
-        {
-            // 兩個引腳都是高電平，試片可能已拔出
-            if(stripState.isStripInserted) 
-            {
-                // 試片拔出
-                stripState.isStripInserted = false;
-                stripState.stripType = STRIP_TYPE_UNKNOWN;
-                stripState.isTypeDetected = false;
-                stripState.isWaitingForMCUResponse = false;
-                PRINT("Strip Removed\n");
-            }
-        }
-        
-        return (events ^ STRIP_DETECT_EVT);
-    }
-    
     if(events & STRIP_PERIODIC_CHECK_EVT)
     {
         // 執行定期檢查
         StripDetect_PeriodicCheck();
+        
+        // 重新啟動定期檢查
+        tmos_start_task(StripDetect_TaskID, STRIP_PERIODIC_CHECK_EVT, STRIP_CHECK_INTERVAL);
         
         return (events ^ STRIP_PERIODIC_CHECK_EVT);
     }
@@ -271,57 +195,85 @@ uint16_t StripDetect_ProcessEvent(tmosTaskID task_id, uint16_t events)
  */
 static void StripDetect_PeriodicCheck(void)
 {
+    // 靜態變數保存上次狀態以實現軟件除彈跳
+    static uint8_t lastPin3Status = 1;
+    static uint8_t lastPin5Status = 1;
+    static uint8_t debounceCount3 = 0;
+    static uint8_t debounceCount5 = 0;
+    static uint8_t insertDebounceCount = 0;
+    static uint8_t removeDebounceCount = 0;
+    
     // 讀取當前狀態
     uint8_t currentPin3Status = GPIOB_ReadPortPin(STRIP_DETECT_3_PIN) ? 1 : 0;
     uint8_t currentPin5Status = GPIOA_ReadPortPin(STRIP_DETECT_5_PIN) ? 1 : 0;
     
-    // 檢查試片拔出情況 - 兩個引腳都是高電平，試片可能已拔出
-    if (currentPin3Status == 1 && currentPin5Status == 1) 
+    // 除彈跳處理
+    uint8_t stablePin3Status = debounce_pin_status(currentPin3Status, lastPin3Status, &debounceCount3, 3);
+    uint8_t stablePin5Status = debounce_pin_status(currentPin5Status, lastPin5Status, &debounceCount5, 3);
+    
+    // 更新上次狀態
+    lastPin3Status = currentPin3Status;
+    lastPin5Status = currentPin5Status;
+    
+    // 檢查試片插入情況 - 至少有一個引腳為低電平，試片可能已插入
+    if (stablePin3Status == 0 || stablePin5Status == 0)
     {
-        if(stripState.isStripInserted) 
+        // 增加插入除彈跳計數
+        if (insertDebounceCount < 5) {
+            insertDebounceCount++;
+        }
+        // 重置拔出除彈跳計數
+        removeDebounceCount = 0;
+        
+        // 確認試片穩定插入
+        if (insertDebounceCount >= 3 && !stripState.isStripInserted)
+        {
+            // 第一次偵測到試片插入
+            stripState.isStripInserted = true;
+            stripState.pin3Status = stablePin3Status;
+            stripState.pin5Status = stablePin5Status;
+            
+            // 發送試片插入消息給MCU
+            StripDetect_SendInsertInfo(stablePin3Status, stablePin5Status);
+            
+            // 設定等待MCU回應
+            stripState.isWaitingForMCUResponse = true;
+            
+            PRINT("Strip Inserted (Polling)! Pin3: %d, Pin5: %d\n", stablePin3Status, stablePin5Status);
+            
+            // 根據Pin3和Pin5的狀態預判試片類型
+            if(stablePin3Status == 0 && stablePin5Status == 1) {
+                // 可能是GLV或U型試片
+                PRINT("Possible Strip Type: GLV or U\n");
+            } else if(stablePin3Status == 0 && stablePin5Status == 0) {
+                // 可能是C型試片
+                PRINT("Possible Strip Type: C\n");
+            } else if(stablePin3Status == 1 && stablePin5Status == 0) {
+                // 可能是TG或GAV型試片
+                PRINT("Possible Strip Type: TG or GAV\n");
+            }
+        }
+    }
+    else // 兩個引腳都是高電平，試片可能已拔出
+    {
+        // 增加拔出除彈跳計數
+        if (removeDebounceCount < 5) {
+            removeDebounceCount++;
+        }
+        // 重置插入除彈跳計數
+        insertDebounceCount = 0;
+        
+        // 確認試片穩定拔出
+        if (removeDebounceCount >= 3 && stripState.isStripInserted) 
         {
             // 試片拔出
             stripState.isStripInserted = false;
             stripState.stripType = STRIP_TYPE_UNKNOWN;
             stripState.isTypeDetected = false;
             stripState.isWaitingForMCUResponse = false;
-            PRINT("Strip Removed (Periodic Check)\n");
+            PRINT("Strip Removed (Polling)\n");
         }
     }
-    // 檢查試片插入情況 - 至少有一個引腳為低電平，試片可能已插入
-    else if (currentPin3Status == 0 || currentPin5Status == 0)
-    {
-        if(!stripState.isStripInserted)
-        {
-            // 第一次偵測到試片插入
-            stripState.isStripInserted = true;
-            stripState.pin3Status = currentPin3Status;
-            stripState.pin5Status = currentPin5Status;
-            
-            // 發送試片插入消息給MCU
-            StripDetect_SendInsertInfo(currentPin3Status, currentPin5Status);
-            
-            // 設定等待MCU回應
-            stripState.isWaitingForMCUResponse = true;
-            
-            PRINT("Strip Inserted (Periodic Check)! Pin3: %d, Pin5: %d\n", currentPin3Status, currentPin5Status);
-            
-            // 根據Pin3和Pin5的狀態預判試片類型
-            if(currentPin3Status == 0 && currentPin5Status == 1) {
-                // 可能是GLV或U型試片
-                PRINT("Possible Strip Type: GLV or U\n");
-            } else if(currentPin3Status == 0 && currentPin5Status == 0) {
-                // 可能是C型試片
-                PRINT("Possible Strip Type: C\n");
-            } else if(currentPin3Status == 1 && currentPin5Status == 0) {
-                // 可能是TG或GAV型試片
-                PRINT("Possible Strip Type: TG or GAV\n");
-            }
-        }
-    }
-    
-    // 重新啟動定期檢查
-    tmos_start_task(StripDetect_TaskID, STRIP_PERIODIC_CHECK_EVT, STRIP_CHECK_INTERVAL);
 }
 
 /*********************************************************************
@@ -442,56 +394,6 @@ static void StripDetect_SendInsertInfo(uint8_t pin3Status, uint8_t pin5Status)
     send_to_uart_mcu(buf, 7);
     
     PRINT("Strip Insert Info Sent. Pin3=%d, Pin5=%d\n", pin3Status, pin5Status);
-}
-
-/*********************************************************************
- * @fn      GPIOB_IRQHandler
- *
- * @brief   GPIOB中斷處理函數
- *
- * @return  none
- */
-__INTERRUPT
-__HIGH_CODE
-void GPIOB_IRQHandler(void)
-{
-    // 檢查是否為Strip_Detect_3引腳觸發的中斷
-    if(GPIOB_ReadITFlagBit(STRIP_DETECT_3_PIN))
-    {
-        // 清除中斷標誌
-        GPIOB_ClearITFlagBit(STRIP_DETECT_3_PIN);
-        
-        // 記錄時間戳
-        stripState.insertTimeStamp = GetSysClock() / 1000;
-        
-        // 啟動除彈跳任務
-        tmos_start_task(StripDetect_TaskID, STRIP_DETECT_EVT, STRIP_DEBOUNCE_TIME);
-    }
-}
-
-/*********************************************************************
- * @fn      GPIOA_IRQHandler
- *
- * @brief   GPIOA中斷處理函數
- *
- * @return  none
- */
-__INTERRUPT
-__HIGH_CODE
-void GPIOA_IRQHandler(void)
-{
-    // 檢查是否為Strip_Detect_5引腳觸發的中斷
-    if(GPIOA_ReadITFlagBit(STRIP_DETECT_5_PIN))
-    {
-        // 清除中斷標誌
-        GPIOA_ClearITFlagBit(STRIP_DETECT_5_PIN);
-        
-        // 記錄時間戳
-        stripState.insertTimeStamp = GetSysClock() / 1000;
-        
-        // 啟動除彈跳任務
-        tmos_start_task(StripDetect_TaskID, STRIP_DETECT_EVT, STRIP_DEBOUNCE_TIME);
-    }
 }
 
 /*********************************************************************
