@@ -347,6 +347,24 @@ uint16 Peripheral_ProcessEvent(uint8 task_id, uint16 events)
                 //notify is not enabled
                 if(!ble_uart_notify_is_ready(peripheralConnList.connHandle))
                 {
+                    // 即使藍牙Notify沒有準備好，也要處理UART接收到的數據
+                    read_length = 64; // 使用一個合理的緩衝大小
+                    
+                    if(app_drv_fifo_length(&app_uart_rx_fifo) > 0)
+                    {
+                        result = app_drv_fifo_read(&app_uart_rx_fifo, to_test_buffer, &read_length);
+                        
+                        // 處理接收到的UART數據
+                        if(result == APP_DRV_FIFO_RESULT_SUCCESS && read_length > 0) {
+                            process_uart_mcu_protocol(to_test_buffer, read_length);
+                        }
+                        
+                        // 如果還有數據，繼續處理
+                        if(app_drv_fifo_length(&app_uart_rx_fifo) > 0) {
+                            tmos_start_task(Peripheral_TaskID, UART_TO_BLE_SEND_EVT, 2);
+                        }
+                    }
+                    
                     if(peripheralConnList.connHandle == GAP_CONNHANDLE_INIT)
                     {
                         //connection lost, flush rx fifo here
