@@ -215,9 +215,9 @@ uint16_t StripDetect_ProcessEvent(tmosTaskID task_id, uint16_t events)
                 // 試片插入時，V2P5_ENABLE輸出高電平，供電給CH32V203
                 GPIOA_SetBits(V2P5_ENABLE_PIN);
 
-                // 啟動延遲任務，等待500ms後發送試片插入消息給MCU
+                // 啟動延遲任務，等待1000ms後發送試片插入消息給MCU
                 // 改用tmos_start_task代替tmos_start_reload_task
-                tmos_start_task(StripDetect_TaskID, STRIP_SEND_MESSAGE_EVT, MS1_TO_SYSTEM_TIME(500));
+                tmos_start_task(StripDetect_TaskID, STRIP_SEND_MESSAGE_EVT, MS1_TO_SYSTEM_TIME(1000));
                 
                 // 設定等待MCU回應
                 stripState.isWaitingForMCUResponse = true;
@@ -329,9 +329,9 @@ static void StripDetect_PeriodicCheck(void)
             // 試片插入時，V2P5_ENABLE輸出高電平，供電給CH32V203
             GPIOA_SetBits(V2P5_ENABLE_PIN);
 
-            // 啟動延遲任務，等待500ms後發送試片插入消息給MCU
+            // 啟動延遲任務，等待1000ms後發送試片插入消息給MCU
             // 改用tmos_start_task代替tmos_start_reload_task
-            tmos_start_task(StripDetect_TaskID, STRIP_SEND_MESSAGE_EVT, MS1_TO_SYSTEM_TIME(500));
+            tmos_start_task(StripDetect_TaskID, STRIP_SEND_MESSAGE_EVT, MS1_TO_SYSTEM_TIME(1000));
             
             // 設定等待MCU回應
             stripState.isWaitingForMCUResponse = true;

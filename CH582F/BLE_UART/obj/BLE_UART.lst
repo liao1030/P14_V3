@@ -10069,14 +10069,14 @@ StripDetect_ProcessEvent():
     3bb8:	0a872783          	lw	a5,168(a4) # 400010a8 <_eusrstack+0x1fff90a8>
     3bbc:	6691                	lui	a3,0x4
 /Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:220
-                tmos_start_task(StripDetect_TaskID, STRIP_SEND_MESSAGE_EVT, MS1_TO_SYSTEM_TIME(500));
-    3bbe:	32000613          	li	a2,800
+                tmos_start_task(StripDetect_TaskID, STRIP_SEND_MESSAGE_EVT, MS1_TO_SYSTEM_TIME(1000));
+    3bbe:	64000613          	li	a2,1600
 /Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:216
                 GPIOA_SetBits(V2P5_ENABLE_PIN);
     3bc2:	8fd5                	or	a5,a5,a3
     3bc4:	0af72423          	sw	a5,168(a4)
 /Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:220
-                tmos_start_task(StripDetect_TaskID, STRIP_SEND_MESSAGE_EVT, MS1_TO_SYSTEM_TIME(500));
+                tmos_start_task(StripDetect_TaskID, STRIP_SEND_MESSAGE_EVT, MS1_TO_SYSTEM_TIME(1000));
     3bc8:	08000593          	li	a1,128
     3bcc:	8151c503          	lbu	a0,-2027(gp) # 200024dd <StripDetect_TaskID>
     3bd0:	77d000ef          	jal	ra,4b4c <tmos_start_task>
@@ -10298,8 +10298,8 @@ StripDetect_PeriodicCheck():
     3d40:	8fd5                	or	a5,a5,a3
     3d42:	0af72423          	sw	a5,168(a4)
 /Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:334
-            tmos_start_task(StripDetect_TaskID, STRIP_SEND_MESSAGE_EVT, MS1_TO_SYSTEM_TIME(500));
-    3d46:	32000613          	li	a2,800
+            tmos_start_task(StripDetect_TaskID, STRIP_SEND_MESSAGE_EVT, MS1_TO_SYSTEM_TIME(1000));
+    3d46:	64000613          	li	a2,1600
     3d4a:	08000593          	li	a1,128
     3d4e:	5ff000ef          	jal	ra,4b4c <tmos_start_task>
 /Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:339
