@@ -148,7 +148,7 @@ void StripDetect_Init(tmosTaskID task_id)
     
     // 設定初始狀態
     GPIOB_SetBits(T3_IN_SEL_PIN);                // T3_IN_SEL輸出高電平，預設關閉T3電極
-    GPIOA_ResetBits(V2P5_ENABLE_PIN);              // V2P5_ENABLE輸出低電平，不供電給CH32V203
+    GPIOA_SetBits(V2P5_ENABLE_PIN);              // V2P5_ENABLE輸出高電平，供電給CH32V203
 
     // 配置中斷
     GPIOB_ITModeCfg(STRIP_DETECT_3_PIN, GPIO_ITMode_FallEdge); // Strip_Detect_3下降沿中斷

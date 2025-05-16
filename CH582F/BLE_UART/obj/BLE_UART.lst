@@ -9882,7 +9882,7 @@ StripDetect_Init():
     3a9a:	400017b7          	lui	a5,0x40001
     3a9e:	0c87a703          	lw	a4,200(a5) # 400010c8 <_eusrstack+0x1fff90c8>
 /Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:151
-    GPIOA_ResetBits(V2P5_ENABLE_PIN);              // V2P5_ENABLE輸出低電平，不供電給CH32V203
+    GPIOA_SetBits(V2P5_ENABLE_PIN);              // V2P5_ENABLE輸出高電平，供電給CH32V203
     3aa2:	6691                	lui	a3,0x4
 /Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:154
     GPIOB_ITModeCfg(STRIP_DETECT_3_PIN, GPIO_ITMode_FallEdge); // Strip_Detect_3下降沿中斷
@@ -9892,15 +9892,15 @@ StripDetect_Init():
     3aa8:	40076713          	ori	a4,a4,1024
     3aac:	0ce7a423          	sw	a4,200(a5)
 /Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:151
-    GPIOA_ResetBits(V2P5_ENABLE_PIN);              // V2P5_ENABLE輸出低電平，不供電給CH32V203
-    3ab0:	0ac7a703          	lw	a4,172(a5)
+    GPIOA_SetBits(V2P5_ENABLE_PIN);              // V2P5_ENABLE輸出高電平，供電給CH32V203
+    3ab0:	0a87a703          	lw	a4,168(a5)
 /Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:154
     GPIOB_ITModeCfg(STRIP_DETECT_3_PIN, GPIO_ITMode_FallEdge); // Strip_Detect_3下降沿中斷
     3ab4:	4589                	li	a1,2
 /Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:151
-    GPIOA_ResetBits(V2P5_ENABLE_PIN);              // V2P5_ENABLE輸出低電平，不供電給CH32V203
+    GPIOA_SetBits(V2P5_ENABLE_PIN);              // V2P5_ENABLE輸出高電平，供電給CH32V203
     3ab6:	8f55                	or	a4,a4,a3
-    3ab8:	0ae7a623          	sw	a4,172(a5)
+    3ab8:	0ae7a423          	sw	a4,168(a5)
 /Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:154
     GPIOB_ITModeCfg(STRIP_DETECT_3_PIN, GPIO_ITMode_FallEdge); // Strip_Detect_3下降沿中斷
     3abc:	c56ff0ef          	jal	ra,2f12 <GPIOB_ITModeCfg>
