@@ -330,7 +330,7 @@ uint16 Peripheral_ProcessEvent(uint8 task_id, uint16 events)
     }
     
     // ÌŽÀíÔ‡Æ¬‚ÉœyÊÂ¼þ
-    if(events & STRIP_DETECT_EVT || events & STRIP_PERIODIC_CHECK_EVT || events & STRIP_SEND_MESSAGE_EVT)
+    if(events & STRIP_PERIODIC_CHECK_EVT || events & STRIP_SEND_MESSAGE_EVT)
     {
         return StripDetect_ProcessEvent(task_id, events);
     }
