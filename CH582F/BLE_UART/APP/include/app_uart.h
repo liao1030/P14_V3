@@ -56,6 +56,9 @@ extern void app_uart_init(void);
 
 extern void on_bleuartServiceEvt(uint16_t connection_handle, ble_uart_evt_t *p_evt);
 
+// 處理來自MCU的通訊協議數據
+extern void process_uart_mcu_protocol(uint8_t *data, uint16_t len);
+
 /*********************************************************************
 *********************************************************************/
 

@@ -272,6 +272,9 @@ static void StripDetect_PeriodicCheck(void)
             // 試片拔出時，V2P5_ENABLE輸出低電平，不供電給CH32V203
             GPIOA_ResetBits(V2P5_ENABLE_PIN);
             
+            // 試片拔除時，T3_IN_SEL輸出高電平，關閉T3電極
+            GPIOB_SetBits(T3_IN_SEL_PIN);
+            
             PRINT("Strip Removed (Polling)\n");
         }
     }

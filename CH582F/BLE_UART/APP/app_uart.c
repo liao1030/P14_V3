@@ -84,7 +84,7 @@ static uint8_t app_uart_rx_buffer[APP_UART_RX_BUFFER_LENGTH] = {0};
  */
 
 // 函數前置聲明
-static void process_uart_mcu_protocol(uint8_t *data, uint16_t len);
+void process_uart_mcu_protocol(uint8_t *data, uint16_t len);
 
 /*********************************************************************
  * @fn      app_uart_process
@@ -263,7 +263,7 @@ uint8_t send_to_uart_mcu(uint8_t *buf, uint16_t len)
  *
  * @return  none
  */
-static void process_uart_mcu_protocol(uint8_t *data, uint16_t len)
+void process_uart_mcu_protocol(uint8_t *data, uint16_t len)
 {
     // 最基本的通訊協議處理
     if (len < 5) return; // 包頭(1) + 指令(1) + 長度(1) + 數據(N) + 校驗(1) + 包尾(1)

@@ -361,6 +361,11 @@ uint16 Peripheral_ProcessEvent(uint8 task_id, uint16 events)
                     PRINT("FIFO_LEN:%d\r\n", app_drv_fifo_length(&app_uart_rx_fifo));
                     result = app_drv_fifo_read(&app_uart_rx_fifo, to_test_buffer, &read_length);
                     uart_to_ble_send_evt_cnt = 0;
+                    
+                    // 處理接收到的UART數據
+                    if(result == APP_DRV_FIFO_RESULT_SUCCESS && read_length > 0) {
+                        process_uart_mcu_protocol(to_test_buffer, read_length);
+                    }
                 }
                 else
                 {
@@ -368,6 +373,11 @@ uint16 Peripheral_ProcessEvent(uint8 task_id, uint16 events)
                     {
                         result = app_drv_fifo_read(&app_uart_rx_fifo, to_test_buffer, &read_length);
                         uart_to_ble_send_evt_cnt = 0;
+                        
+                        // 處理接收到的UART數據
+                        if(result == APP_DRV_FIFO_RESULT_SUCCESS && read_length > 0) {
+                            process_uart_mcu_protocol(to_test_buffer, read_length);
+                        }
                     }
                     else
                     {
