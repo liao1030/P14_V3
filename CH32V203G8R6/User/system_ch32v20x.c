@@ -22,10 +22,11 @@
 //#define SYSCLK_FREQ_48MHz_HSE  48000000
 //#define SYSCLK_FREQ_56MHz_HSE  56000000
 //#define SYSCLK_FREQ_72MHz_HSE  72000000
-#define SYSCLK_FREQ_96MHz_HSE  96000000
+//#define SYSCLK_FREQ_96MHz_HSE  96000000
 //#define SYSCLK_FREQ_120MHz_HSE  120000000
 //#define SYSCLK_FREQ_144MHz_HSE  144000000
 //#define SYSCLK_FREQ_HSI    HSI_VALUE
+#define SYSCLK_FREQ_16MHz_HSI  16000000
 //#define SYSCLK_FREQ_48MHz_HSI  48000000
 //#define SYSCLK_FREQ_56MHz_HSI  56000000
 //#define SYSCLK_FREQ_72MHz_HSI  72000000
@@ -48,6 +49,8 @@ uint32_t SystemCoreClock         = SYSCLK_FREQ_96MHz_HSE;        /* System Clock
 uint32_t SystemCoreClock         = SYSCLK_FREQ_120MHz_HSE;        /* System Clock Frequency (Core Clock) */
 #elif defined SYSCLK_FREQ_144MHz_HSE
 uint32_t SystemCoreClock         = SYSCLK_FREQ_144MHz_HSE;        /* System Clock Frequency (Core Clock) */
+#elif defined SYSCLK_FREQ_16MHz_HSI
+uint32_t SystemCoreClock         = SYSCLK_FREQ_16MHz_HSI;        /* System Clock Frequency (Core Clock) */
 #elif defined SYSCLK_FREQ_48MHz_HSI
 uint32_t SystemCoreClock         = SYSCLK_FREQ_48MHz_HSI;        /* System Clock Frequency (Core Clock) */
 #elif defined SYSCLK_FREQ_56MHz_HSI
@@ -85,6 +88,8 @@ static void SetSysClockTo96_HSE( void );
 static void SetSysClockTo120_HSE( void );
 #elif defined SYSCLK_FREQ_144MHz_HSE
 static void SetSysClockTo144_HSE( void );
+#elif defined SYSCLK_FREQ_16MHz_HSI
+static void SetSysClockTo16_HSI( void );
 #elif defined SYSCLK_FREQ_48MHz_HSI
 static void SetSysClockTo48_HSI( void );
 #elif defined SYSCLK_FREQ_56MHz_HSI
@@ -220,6 +225,8 @@ static void SetSysClock(void)
     SetSysClockTo120_HSE();
 #elif defined SYSCLK_FREQ_144MHz_HSE
     SetSysClockTo144_HSE();
+#elif defined SYSCLK_FREQ_16MHz_HSI
+    SetSysClockTo16_HSI();
 #elif defined SYSCLK_FREQ_48MHz_HSI
     SetSysClockTo48_HSI();
 #elif defined SYSCLK_FREQ_56MHz_HSI
@@ -983,5 +990,41 @@ static void SetSysClockTo144_HSI(void)
     }
 }
 
+#elif defined SYSCLK_FREQ_16MHz_HSI
+
+/*********************************************************************
+ * @fn      SetSysClockTo16_HSI
+ *
+ * @brief   Sets System clock frequency to 16MHz and configure HCLK, PCLK2 and PCLK1 prescalers.
+ *
+ * @return  none
+ */
+static void SetSysClockTo16_HSI(void)
+{
+    /* HCLK = SYSCLK */
+    RCC->CFGR0 |= (uint32_t)RCC_HPRE_DIV1;
+    /* PCLK2 = HCLK */
+    RCC->CFGR0 |= (uint32_t)RCC_PPRE2_DIV1;
+    /* PCLK1 = HCLK */
+    RCC->CFGR0 |= (uint32_t)RCC_PPRE1_DIV1;
+
+    /*  PLL configuration: PLLCLK = HSI * 2 = 16 MHz */
+    RCC->CFGR0 &= (uint32_t)((uint32_t)~(RCC_PLLSRC | RCC_PLLXTPRE | RCC_PLLMULL));
+    RCC->CFGR0 |= (uint32_t)(RCC_PLLSRC_HSI_Div2 | RCC_PLLMULL2);
+
+    /* Enable PLL */
+    RCC->CTLR |= RCC_PLLON;
+    /* Wait till PLL is ready */
+    while((RCC->CTLR & RCC_PLLRDY) == 0)
+    {
+    }
+    /* Select PLL as system clock source */
+    RCC->CFGR0 &= (uint32_t)((uint32_t)~(RCC_SW));
+    RCC->CFGR0 |= (uint32_t)RCC_SW_PLL;
+    /* Wait till PLL is used as system clock source */
+    while ((RCC->CFGR0 & (uint32_t)RCC_SWS) != (uint32_t)0x08)
+    {
+    }
+}
 
 #endif
