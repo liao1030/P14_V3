@@ -10,6 +10,8 @@
 
 #include "strip_detect.h"
 #include "uart_protocol.h"
+#include "param_utils.h"
+#include "param_code_table.h"
 
 /* Ë½ÓÐ×ƒ”µ¶¨Áx */
 static StripDetectInfo_TypeDef stripInfo = {

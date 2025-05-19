@@ -8,6 +8,8 @@ C_SRCS += \
 ../User/ch32v20x_it.c \
 ../User/main.c \
 ../User/param_table.c \
+../User/param_table_example.c \
+../User/param_utils.c \
 ../User/strip_detect.c \
 ../User/system_ch32v20x.c \
 ../User/uart_protocol.c \
@@ -17,6 +19,8 @@ C_DEPS += \
 ./User/ch32v20x_it.d \
 ./User/main.d \
 ./User/param_table.d \
+./User/param_table_example.d \
+./User/param_utils.d \
 ./User/strip_detect.d \
 ./User/system_ch32v20x.d \
 ./User/uart_protocol.d \
@@ -26,6 +30,8 @@ OBJS += \
 ./User/ch32v20x_it.o \
 ./User/main.o \
 ./User/param_table.o \
+./User/param_table_example.o \
+./User/param_utils.o \
 ./User/strip_detect.o \
 ./User/system_ch32v20x.o \
 ./User/uart_protocol.o \

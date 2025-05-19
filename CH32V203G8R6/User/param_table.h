@@ -1,260 +1,420 @@
-/********************************** (C) COPYRIGHT *******************************
+/********************************** (C) COPYRIGHT  *******************************
  * File Name          : param_table.h
- * Author             : HMD Team
+ * Author             : HMD Technical Team
  * Version            : V1.0.0
- * Date               : 2025/05/08
- * Description        : 多功能生化測試儀參數代碼表
-*********************************************************************************
-* Copyright (c) 2025 HMD Biomedical.
+ * Date               : 2025/05/19
+ * Description        : 多功能生化測試儀參數表頭文件
+ * Copyright (c) 2025 Healthynamics Biotech Co., Ltd.
 *******************************************************************************/
 
 #ifndef __PARAM_TABLE_H
 #define __PARAM_TABLE_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #include "ch32v20x.h"
+#include <stdint.h>
 
-/* 參數表大小定義 */
-#define PARAM_TABLE_SIZE      678    // 總參數大小（0~677）
+/* Flash參數區域定義 */
+#define PARAM_AREA_A_ADDR          ((uint32_t)0x0800D000)   // 參數表主要儲存區域地址
+#define PARAM_AREA_B_ADDR          ((uint32_t)0x0800E000)   // 參數表備份區域地址
+#define TEST_RECORD_AREA_ADDR      ((uint32_t)0x0800F000)   // 測試記錄區域地址
 
-/* 系統基本參數地址定義 */
-#define PARAM_LBT             0      // 低電池閾值
-#define PARAM_OBT             1      // 電池耗盡閾值
-#define PARAM_FACTORY         2      // 儀器操作模式
-#define PARAM_MODEL_NO        3      // 產品型號
-#define PARAM_FW_NO           4      // 韌體版本號
-#define PARAM_NOT             5      // 測試次數 (2 bytes)
-#define PARAM_CODE_TABLE_V    7      // 代碼表版本號 (2 bytes)
+#define PARAM_AREA_SIZE            ((uint32_t)0x1000)       // 參數區大小 (4KB)
+#define FLASH_PAGE_SIZE            ((uint32_t)0x400)        // Flash頁大小 (1KB)
 
-/* 時間設定參數地址定義 */
-#define PARAM_YEAR            9      // 年份設定
-#define PARAM_MONTH           10     // 月份設定
-#define PARAM_DATE            11     // 日期設定
-#define PARAM_HOUR            12     // 小時設定
-#define PARAM_MINUTE          13     // 分鐘設定
-#define PARAM_SECOND          14     // 秒數設定
+/* 魔術數字和版本定義 */
+#define PARAM_MAGIC                ((uint16_t)0xA55A)       // 參數區魔術數字
+#define PARAM_VERSION              ((uint16_t)0x0001)       // 參數表版本號
 
-/* 測試條件參數地址定義 */
-#define PARAM_TLL             15     // 操作溫度範圍下限
-#define PARAM_TLH             16     // 操作溫度範圍上限
-#define PARAM_MGDL            17     // 濃度單位設定
-#define PARAM_EVENT           18     // 量測事件類型
-#define PARAM_STRIP_TYPE      19     // 測試項目
-
-/* 硬體校準參數地址定義 */
-#define PARAM_EV_T3_TRG       20     // EV_T3觸發電壓 (2 bytes)
-#define PARAM_EV_WORKING      22     // 濃度工作電壓
-#define PARAM_EV_T3           23     // 血液測濃電極電壓
-#define PARAM_DACO            24     // DAC偏移補償
-#define PARAM_DACDO           25     // DAC校正管理參數
-#define PARAM_CC211NODONE     26     // CC211正常完成
-#define PARAM_CAL_TOL         27     // OPS/OPI校準容差
-#define PARAM_OPS             28     // OPA校準斜率 (4 bytes)
-#define PARAM_OPI             32     // OPA校準截距 (4 bytes)
-#define PARAM_QCT             36     // QCT校準測試低位元組
-#define PARAM_TOFFSET         37     // 溫度校準偏移
-#define PARAM_BOFFSET         38     // 電池校準偏移
-
-/* 血糖(GLV/GAV)專用參數地址定義 */
-#define PARAM_BG_CSU_TOL      39     // 試片檢查容差
-#define PARAM_BG_NDL          40     // 新試片測濃水平 (2 bytes)
-#define PARAM_BG_UDL          42     // 已使用試片測濃水平 (2 bytes)
-#define PARAM_BG_BLOOD_IN     44     // 血液測濃水平 (2 bytes)
-#define PARAM_BG_STRIP_LOT    46     // 試片批號 (16 bytes)
-#define PARAM_BG_L            62     // 血糖值下限
-#define PARAM_BG_H            63     // 血糖值上限
-#define PARAM_BG_T3_E37       64     // T3 ADV超E37閾值 (2 bytes)
-/* 血糖測試時序參數 */
-#define PARAM_BG_TPL1         66     // 測試間格1 (2 bytes)
-#define PARAM_BG_TRD1         68     // 讀取延遲1 (2 bytes)
-#define PARAM_BG_EVWIDTH1     70     // 工作電壓寬度1 (2 bytes)
-#define PARAM_BG_TPL2         72     // 測試間格2 (2 bytes)
-#define PARAM_BG_TRD2         74     // 讀取延遲2 (2 bytes)
-#define PARAM_BG_EVWIDTH2     76     // 工作電壓寬度2 (2 bytes)
-/* 血糖標準品曲線參數 */
-#define PARAM_BG_CAL_A1       78     // 標準品曲線係數A1 (4 bytes)
-#define PARAM_BG_CAL_B1       82     // 標準品曲線係數B1 (4 bytes)
-#define PARAM_BG_CAL_C1       86     // 標準品曲線係數C1 (4 bytes)
-/* 血糖溫度補償參數 */
-#define PARAM_BG_TEMP_A1      90     // 溫度補償係數A1 (4 bytes)
-#define PARAM_BG_TEMP_B1      94     // 溫度補償係數B1 (4 bytes)
-#define PARAM_BG_TEMP_C1      98     // 溫度補償係數C1 (4 bytes)
-/* 血糖血量補償參數 */
-#define PARAM_BG_BLOOD_A1     102    // 血量補償係數A1 (4 bytes)
-#define PARAM_BG_BLOOD_B1     106    // 血量補償係數B1 (4 bytes)
-#define PARAM_BG_BLOOD_C1     110    // 血量補償係數C1 (4 bytes)
-/* 血糖測試參數保留區 */
-#define PARAM_BG_RESERVED     114    // 保留區 (99 bytes)
-
-/* 尿酸(U)專用參數地址定義 */
-#define PARAM_U_CSU_TOL       213    // 試片檢查容差
-#define PARAM_U_NDL           214    // 新試片測濃水平 (2 bytes)
-#define PARAM_U_UDL           216    // 已使用試片測濃水平 (2 bytes)
-#define PARAM_U_BLOOD_IN      218    // 血液測濃水平 (2 bytes)
-#define PARAM_U_STRIP_LOT     220    // 試片批號 (16 bytes)
-#define PARAM_U_L             236    // 尿酸值下限
-#define PARAM_U_H             237    // 尿酸值上限
-#define PARAM_U_T3_E37        238    // T3 ADV超E37閾值 (2 bytes)
-/* 尿酸測試時序參數 */
-#define PARAM_U_TPL1          240    // 測試間格1 (2 bytes)
-#define PARAM_U_TRD1          242    // 讀取延遲1 (2 bytes)
-#define PARAM_U_EVWIDTH1      244    // 工作電壓寬度1 (2 bytes)
-#define PARAM_U_TPL2          246    // 測試間格2 (2 bytes)
-#define PARAM_U_TRD2          248    // 讀取延遲2 (2 bytes)
-#define PARAM_U_EVWIDTH2      250    // 工作電壓寬度2 (2 bytes)
-/* 尿酸標準品曲線參數 */
-#define PARAM_U_CAL_A1        252    // 標準品曲線係數A1 (4 bytes)
-#define PARAM_U_CAL_B1        256    // 標準品曲線係數B1 (4 bytes)
-#define PARAM_U_CAL_C1        260    // 標準品曲線係數C1 (4 bytes)
-/* 尿酸溫度補償參數 */
-#define PARAM_U_TEMP_A1       264    // 溫度補償係數A1 (4 bytes)
-#define PARAM_U_TEMP_B1       268    // 溫度補償係數B1 (4 bytes)
-#define PARAM_U_TEMP_C1       272    // 溫度補償係數C1 (4 bytes)
-/* 尿酸血量補償參數 */
-#define PARAM_U_BLOOD_A1      276    // 血量補償係數A1 (4 bytes)
-#define PARAM_U_BLOOD_B1      280    // 血量補償係數B1 (4 bytes)
-#define PARAM_U_BLOOD_C1      284    // 血量補償係數C1 (4 bytes)
-/* 尿酸測試參數保留區 */
-#define PARAM_U_RESERVED      288    // 保留區 (67 bytes)
-
-/* 總膽固醇(C)專用參數地址定義 */
-#define PARAM_C_CSU_TOL       355    // 試片檢查容差
-#define PARAM_C_NDL           356    // 新試片測濃水平 (2 bytes)
-#define PARAM_C_UDL           358    // 已使用試片測濃水平 (2 bytes)
-#define PARAM_C_BLOOD_IN      360    // 血液測濃水平 (2 bytes)
-#define PARAM_C_STRIP_LOT     362    // 試片批號 (16 bytes)
-#define PARAM_C_L             378    // 總膽固醇值下限
-#define PARAM_C_H             379    // 總膽固醇值上限 (2 bytes)
-#define PARAM_C_T3_E37        381    // T3 ADV超E37閾值 (2 bytes)
-/* 總膽固醇測試時序參數 */
-#define PARAM_C_TPL1          383    // 測試間格1 (2 bytes)
-#define PARAM_C_TRD1          385    // 讀取延遲1 (2 bytes)
-#define PARAM_C_EVWIDTH1      387    // 工作電壓寬度1 (2 bytes)
-#define PARAM_C_TPL2          389    // 測試間格2 (2 bytes)
-#define PARAM_C_TRD2          391    // 讀取延遲2 (2 bytes)
-#define PARAM_C_EVWIDTH2      393    // 工作電壓寬度2 (2 bytes)
-/* 總膽固醇標準品曲線參數 */
-#define PARAM_C_CAL_A1        395    // 標準品曲線係數A1 (4 bytes)
-#define PARAM_C_CAL_B1        399    // 標準品曲線係數B1 (4 bytes)
-#define PARAM_C_CAL_C1        403    // 標準品曲線係數C1 (4 bytes)
-/* 總膽固醇溫度補償參數 */
-#define PARAM_C_TEMP_A1       407    // 溫度補償係數A1 (4 bytes)
-#define PARAM_C_TEMP_B1       411    // 溫度補償係數B1 (4 bytes)
-#define PARAM_C_TEMP_C1       415    // 溫度補償係數C1 (4 bytes)
-/* 總膽固醇血量補償參數 */
-#define PARAM_C_BLOOD_A1      419    // 血量補償係數A1 (4 bytes)
-#define PARAM_C_BLOOD_B1      423    // 血量補償係數B1 (4 bytes)
-#define PARAM_C_BLOOD_C1      427    // 血量補償係數C1 (4 bytes)
-/* 總膽固醇測試參數保留區 */
-#define PARAM_C_RESERVED      431    // 保留區 (66 bytes)
-
-/* 三酸甘油脂(TG)專用參數地址定義 */
-#define PARAM_TG_CSU_TOL      497    // 試片檢查容差
-#define PARAM_TG_NDL          498    // 新試片測濃水平 (2 bytes)
-#define PARAM_TG_UDL          500    // 已使用試片測濃水平 (2 bytes)
-#define PARAM_TG_BLOOD_IN     502    // 血液測濃水平 (2 bytes)
-#define PARAM_TG_STRIP_LOT    504    // 試片批號 (16 bytes)
-#define PARAM_TG_L            520    // 三酸甘油脂值下限
-#define PARAM_TG_H            521    // 三酸甘油脂值上限 (2 bytes)
-#define PARAM_TG_T3_E37       523    // T3 ADV超E37閾值 (2 bytes)
-/* 三酸甘油脂測試時序參數 */
-#define PARAM_TG_TPL1         525    // 測試間格1 (2 bytes)
-#define PARAM_TG_TRD1         527    // 讀取延遲1 (2 bytes)
-#define PARAM_TG_EVWIDTH1     529    // 工作電壓寬度1 (2 bytes)
-#define PARAM_TG_TPL2         531    // 測試間格2 (2 bytes)
-#define PARAM_TG_TRD2         533    // 讀取延遲2 (2 bytes)
-#define PARAM_TG_EVWIDTH2     535    // 工作電壓寬度2 (2 bytes)
-/* 三酸甘油脂標準品曲線參數 */
-#define PARAM_TG_CAL_A1       537    // 標準品曲線係數A1 (4 bytes)
-#define PARAM_TG_CAL_B1       541    // 標準品曲線係數B1 (4 bytes)
-#define PARAM_TG_CAL_C1       545    // 標準品曲線係數C1 (4 bytes)
-/* 三酸甘油脂溫度補償參數 */
-#define PARAM_TG_TEMP_A1      549    // 溫度補償係數A1 (4 bytes)
-#define PARAM_TG_TEMP_B1      553    // 溫度補償係數B1 (4 bytes)
-#define PARAM_TG_TEMP_C1      557    // 溫度補償係數C1 (4 bytes)
-/* 三酸甘油脂血量補償參數 */
-#define PARAM_TG_BLOOD_A1     561    // 血量補償係數A1 (4 bytes)
-#define PARAM_TG_BLOOD_B1     565    // 血量補償係數B1 (4 bytes)
-#define PARAM_TG_BLOOD_C1     569    // 血量補償係數C1 (4 bytes)
-/* 三酸甘油脂測試參數保留區 */
-#define PARAM_TG_RESERVED     573    // 保留區 (66 bytes)
-
-/* 保留區域 */
-#define PARAM_RESERVED        639    // 系統保留 (37 bytes)
-
-/* 校驗區域 */
-#define PARAM_SUM_L           676    // 校驗和低位元組
-#define PARAM_SUM_H           677    // 校驗和高位元組
-#define PARAM_CRC16           675    // CRC16校驗位元組
-
-/* 試片類型定義 */
+/* 參數表錯誤碼 */
 typedef enum {
-    STRIP_TYPE_GLV = 0,   // 血糖試片(正常)
-    STRIP_TYPE_U,         // 尿酸試片
-    STRIP_TYPE_C,         // 總膽固醇試片
-    STRIP_TYPE_TG,        // 三酸甘油脂試片
-    STRIP_TYPE_GAV,       // 血糖試片(高精度)
-    STRIP_TYPE_MAX
+    PARAM_OK = 0,                  // 操作成功
+    PARAM_ERR_INVALID_AREA,        // 無效的參數區
+    PARAM_ERR_FLASH_WRITE,         // Flash寫入錯誤
+    PARAM_ERR_CRC,                 // CRC校驗錯誤
+    PARAM_ERR_INVALID_PARAM,       // 無效參數
+    PARAM_ERR_NOT_INITIALIZED      // 參數未初始化
+} ParamError_TypeDef;
+
+/* 參數區域標識 */
+typedef enum {
+    PARAM_AREA_MAIN = 0,           // 主參數區
+    PARAM_AREA_BACKUP              // 備份參數區
+} ParamArea_TypeDef;
+
+/* 測試項目類型 */
+typedef enum {
+    STRIP_TYPE_GLV = 0,            // 血糖 (GLV)
+    STRIP_TYPE_U = 1,              // 尿酸 (U)
+    STRIP_TYPE_C = 2,              // 總膽固醇 (C)
+    STRIP_TYPE_TG = 3,             // 三酸甘油脂 (TG) 
+    STRIP_TYPE_GAV = 4,            // 血糖 (GAV)
+    STRIP_TYPE_MAX                 // 最大試片類型數（無效類型）
 } StripType_TypeDef;
 
-/* 單位定義 */
-typedef enum {
-    UNIT_MMOL_L = 0,      // mmol/L
-    UNIT_MG_DL,           // mg/dL
-    UNIT_GM_DL,           // g/dL
-    UNIT_MAX
-} Unit_TypeDef;
+#pragma pack(1)  // 確保結構體緊密封裝
 
-/* 事件類型定義 */
-typedef enum {
-    EVENT_GEN = 0,        // 一般測試
-    EVENT_AC,             // 餐前測試
-    EVENT_PC,             // 餐後測試
-    EVENT_QC1,            // 品管液1
-    EVENT_QC2,            // 品管液2
-    EVENT_QC3,            // 品管液3
-    EVENT_MAX
-} Event_TypeDef;
+/* 參數表頭部結構 */
+typedef struct {
+    uint16_t magic;                // 魔術數字 (0xA55A)，表示有效的參數區
+    uint16_t version;              // 參數表版本號，對應 Code_Table_V
+    uint32_t writeCounter;         // 寫入次數計數器
+    uint32_t timestamp;            // 最後更新時間戳記
+} ParameterHeader;
 
-/* 功能區塊定義 */
-typedef enum {
-    BLOCK_BASIC_SYSTEM = 0,    // 基本系統參數
-    BLOCK_HARDWARE_CALIB,      // 硬體校準參數
-    BLOCK_BG_PARAMS,           // 血糖參數
-    BLOCK_U_PARAMS,            // 尿酸參數
-    BLOCK_C_PARAMS,            // 總膽固醇參數
-    BLOCK_TG_PARAMS,           // 三酸甘油脂參數
-    BLOCK_RESERVED,            // 保留區
-    BLOCK_MAX
-} BlockType_TypeDef;
+/* 基本系統參數區塊 */
+typedef struct {
+    // 系統基本參數 (9個參數)
+    uint8_t lbt;                   // 低電池閾值
+    uint8_t obt;                   // 電池耗盡閾值
+    uint8_t factory;               // 儀器操作模式
+    uint8_t modelNo;               // 產品型號
+    uint8_t fwNo;                  // 韌體版本號
+    uint16_t testCount;            // 測試次數
+    uint16_t codeTableVer;         // 代碼表版本
+    
+    // 時間設定參數 (6個參數)
+    uint8_t year;                  // 年份設定 (0-99 for 2000-2099)
+    uint8_t month;                 // 月份設定 (1-12)
+    uint8_t date;                  // 日期設定 (1-31)
+    uint8_t hour;                  // 小時設定 (0-23)
+    uint8_t minute;                // 分鐘設定 (0-59)
+    uint8_t second;                // 秒數設定 (0-59)
+    
+    // 測試環境參數 (5個參數)
+    uint8_t tempLowLimit;          // 操作溫度下限
+    uint8_t tempHighLimit;         // 操作溫度上限
+    uint8_t measureUnit;           // 測量單位設定
+    uint8_t defaultEvent;          // 預設事件
+    uint8_t stripType;             // 測試項目類型
+} BasicSystemBlock;
 
-/* 功能函數聲明 */
-void PARAM_Init(void);
-uint8_t PARAM_GetByte(uint16_t addr);
-void PARAM_SetByte(uint16_t addr, uint8_t value);
-uint16_t PARAM_GetWord(uint16_t addr);
-void PARAM_SetWord(uint16_t addr, uint16_t value);
-float PARAM_GetFloat(uint16_t addr);
-void PARAM_SetFloat(uint16_t addr, float value);
-void PARAM_GetString(uint16_t addr, uint8_t *buffer, uint8_t length);
-void PARAM_SetString(uint16_t addr, uint8_t *buffer, uint8_t length);
-uint8_t PARAM_VerifyChecksum(void);
-void PARAM_UpdateChecksum(void);
-void PARAM_SaveToFlash(void);
-void PARAM_LoadFromFlash(void);
-void PARAM_SetDefault(void);
-const char* StripType_GetName(StripType_TypeDef type);
-const char* Unit_GetSymbol(Unit_TypeDef unit);
+/* 硬體校準參數區塊 */
+typedef struct {
+    uint16_t evT3Trigger;          // EV_T3觸發電壓
+    uint8_t evWorking;             // 測量工作電極電壓
+    uint8_t evT3;                  // 血液檢測電極電壓
+    uint8_t calTolerance;          // OPS/OPI校準容差
+    float ops;                     // OPA校準斜率
+    float opi;                     // OPA校準截距
+    uint8_t qct;                   // QCT校準測試低位元組
+    int8_t tempOffset;             // 溫度校準偏移
+    int8_t batteryOffset;          // 電池校準偏移
+} HardwareCalibBlock;
 
-/* 高級功能函數聲明 */
-uint8_t PARAM_GetDateTime(uint8_t *year, uint8_t *month, uint8_t *date, 
-                         uint8_t *hour, uint8_t *minute, uint8_t *second);
-uint8_t PARAM_SetDateTime(uint8_t year, uint8_t month, uint8_t date, 
-                         uint8_t hour, uint8_t minute, uint8_t second);
-uint8_t PARAM_IncreaseTestCount(void);
-uint16_t PARAM_GetTestCount(void);
-uint8_t PARAM_ReadBlock(BlockType_TypeDef block, void *data, uint16_t size);
-uint8_t PARAM_UpdateBlock(BlockType_TypeDef block, void *data, uint16_t size);
-uint8_t PARAM_GetStripParameters(StripType_TypeDef type, uint16_t *ndl, uint16_t *udl, uint16_t *bloodIn);
-uint8_t PARAM_GetTimingParameters(StripType_TypeDef type, uint16_t *tpl, uint16_t *trd, uint16_t *evWidth, uint8_t phase);
+/* 血糖(GLV)專用參數區塊 */
+typedef struct {
+    // 試片參數 (12個參數)
+    uint8_t glvCsuTolerance;       // 試片檢查容差
+    uint16_t glvNdl;               // 新試片檢測水平
+    uint16_t glvUdl;               // 已使用試片檢測水平
+    uint16_t glvBloodIn;           // 血液檢測水平
+    uint16_t glvEvWBackground;     // W電極背景值
+    uint16_t glvEvWPwmDuty;        // W電極PWM占空比
+    uint8_t glvCountDownTime;      // 倒數時間
+    
+    // 測量範圍參數 (2個參數)
+    uint8_t glvL;                  // 血糖值下限
+    uint8_t glvH;                  // 血糖值上限
+    
+    // 測試時序參數 (12個參數)
+    uint16_t glvTPL1;              // 時間脈衝低 (第一組)
+    uint16_t glvTRD1;              // 原始數據時間 (第一組)
+    uint16_t glvEVWidth1;          // 燃燒時間 (第一組)
+    uint16_t glvTPL2;              // 時間脈衝低 (第二組)
+    uint16_t glvTRD2;              // 原始數據時間 (第二組)
+    uint16_t glvEVWidth2;          // 燃燒時間 (第二組)
+    
+    // 計算式補償參數 (110個參數)
+    uint8_t glvS2;                 // 試片補償參數
+    uint8_t glvI2;                 // 試片補償參數
+    uint8_t glvSq;                 // 品管液QC補償參數Sq
+    uint8_t glvIq;                 // 品管液QC補償參數Iq
+    float glvSr;                   // OPA硬體迴路補償(斜率)
+    float glvIr;                   // OPA硬體迴路補償(截距)
+    uint16_t glvGLU[7];            // 多段校正參數(量測分段點)
+    uint16_t glvGOAL[7];           // 多段校正參數(目標值分段點)
+    uint8_t glvS3[30];             // 試片補償參數S3(1-30)
+    uint8_t glvI3[30];             // 試片補償參數I3(1-30)
+    
+    // 溫度補償參數 (28個參數)
+    uint8_t glvTF[7];              // AC/PC溫度補償斜率(10-40°C)
+    uint8_t glvCTF[7];             // QC溫度補償斜率(10-40°C)
+    uint8_t glvTO[7];              // AC/PC溫度補償截距(10-40°C)
+    uint8_t glvCTO[7];             // QC溫度補償截距(10-40°C)
+    
+    // 計算後優化補償參數 (9個參數)
+    uint8_t glvCVq;                // CV Level of QC
+    uint8_t glvAq;                 // A of QC Compensation
+    uint8_t glvBq;                 // B of QC Compensation
+    uint8_t glvtCV;                // Time of BG Optimize
+    uint8_t glvCVbg;               // CV Level of BG
+    uint8_t glvAbg;                // A of BG Compensation
+    uint8_t glvBbg;                // B of BG Compensation
+    uint8_t glvAq5;                // A of QC Compensation Level 5
+    uint8_t glvBq5;                // B of QC Compensation Level 5
+} GLVParameterBlock;
+
+/* 尿酸(U)專用參數區塊 */
+typedef struct {
+    // 試片參數 (12個參數)
+    uint8_t uCsuTolerance;         // 試片檢查容差
+    uint16_t uNdl;                 // 新試片檢測水平
+    uint16_t uUdl;                 // 已使用試片檢測水平
+    uint16_t uBloodIn;             // 血液檢測水平
+    uint16_t uEvWBackground;       // W電極背景值
+    uint16_t uEvWPwmDuty;          // W電極PWM占空比
+    uint8_t uCountDownTime;        // 倒數時間
+    
+    // 測量範圍參數 (2個參數)
+    uint8_t uL;                    // 尿酸值下限
+    uint8_t uH;                    // 尿酸值上限
+    
+    // 測試時序參數 (12個參數)
+    uint16_t uTPL1;                // 時間脈衝低 (第一組)
+    uint16_t uTRD1;                // 原始數據時間 (第一組)
+    uint16_t uEVWidth1;            // 燃燒時間 (第一組)
+    uint16_t uTPL2;                // 時間脈衝低 (第二組)
+    uint16_t uTRD2;                // 原始數據時間 (第二組)
+    uint16_t uEVWidth2;            // 燃燒時間 (第二組)
+    
+    // 計算式補償參數 (80個參數)
+    uint8_t uS2;                   // 試片補償參數
+    uint8_t uI2;                   // 試片補償參數
+    uint8_t uSq;                   // 品管液QC補償參數Sq
+    uint8_t uIq;                   // 品管液QC補償參數Iq
+    float uSr;                     // OPA硬體迴路補償(斜率)
+    float uIr;                     // OPA硬體迴路補償(截距)
+    uint16_t uGLU[7];              // 多段校正參數(量測分段點)
+    uint16_t uGOAL[7];             // 多段校正參數(目標值分段點)
+    uint8_t uS3[15];               // 試片補償參數S3(1-15)
+    uint8_t uI3[15];               // 試片補償參數I3(1-15)
+    
+    // 溫度補償參數 (28個參數)
+    uint8_t uTF[7];                // AC/PC溫度補償斜率(10-40°C)
+    uint8_t uCTF[7];               // QC溫度補償斜率(10-40°C)
+    uint8_t uTO[7];                // AC/PC溫度補償截距(10-40°C)
+    uint8_t uCTO[7];               // QC溫度補償截距(10-40°C)
+    
+    // 計算後優化補償參數 (9個參數)
+    uint8_t uCVq;                  // CV Level of QC
+    uint8_t uAq;                   // A of QC Compensation
+    uint8_t uBq;                   // B of QC Compensation
+    uint8_t utCV;                  // Time of BG Optimize
+    uint8_t uCVbg;                 // CV Level of BG
+    uint8_t uAbg;                  // A of BG Compensation
+    uint8_t uBbg;                  // B of BG Compensation
+    uint8_t uAq5;                  // A of QC Compensation Level 5
+    uint8_t uBq5;                  // B of QC Compensation Level 5
+} UParameterBlock;
+
+/* 總膽固醇(C)專用參數區塊 */
+typedef struct {
+    // 試片參數 (12個參數)
+    uint8_t cCsuTolerance;         // 試片檢查容差
+    uint16_t cNdl;                 // 新試片檢測水平
+    uint16_t cUdl;                 // 已使用試片檢測水平
+    uint16_t cBloodIn;             // 血液檢測水平
+    uint16_t cEvWBackground;       // W電極背景值
+    uint16_t cEvWPwmDuty;          // W電極PWM占空比
+    uint8_t cCountDownTime;        // 倒數時間
+    
+    // 測量範圍參數 (2個參數)
+    uint8_t cL;                    // 膽固醇值下限
+    uint8_t cH;                    // 膽固醇值上限
+    
+    // 測試時序參數 (12個參數)
+    uint16_t cTPL1;                // 時間脈衝低 (第一組)
+    uint16_t cTRD1;                // 原始數據時間 (第一組)
+    uint16_t cEVWidth1;            // 燃燒時間 (第一組)
+    uint16_t cTPL2;                // 時間脈衝低 (第二組)
+    uint16_t cTRD2;                // 原始數據時間 (第二組)
+    uint16_t cEVWidth2;            // 燃燒時間 (第二組)
+    
+    // 計算式補償參數 (80個參數)
+    uint8_t cS2;                   // 試片補償參數
+    uint8_t cI2;                   // 試片補償參數
+    uint8_t cSq;                   // 品管液QC補償參數Sq
+    uint8_t cIq;                   // 品管液QC補償參數Iq
+    float cSr;                     // OPA硬體迴路補償(斜率)
+    float cIr;                     // OPA硬體迴路補償(截距)
+    uint16_t cGLU[7];              // 多段校正參數(量測分段點)
+    uint16_t cGOAL[7];             // 多段校正參數(目標值分段點)
+    uint8_t cS3[15];               // 試片補償參數S3(1-15)
+    uint8_t cI3[15];               // 試片補償參數I3(1-15)
+    
+    // 溫度補償參數 (28個參數)
+    uint8_t cTF[7];                // AC/PC溫度補償斜率(10-40°C)
+    uint8_t cCTF[7];               // QC溫度補償斜率(10-40°C)
+    uint8_t cTO[7];                // AC/PC溫度補償截距(10-40°C)
+    uint8_t cCTO[7];               // QC溫度補償截距(10-40°C)
+    
+    // 計算後優化補償參數 (9個參數)
+    uint8_t cCVq;                  // CV Level of QC
+    uint8_t cAq;                   // A of QC Compensation
+    uint8_t cBq;                   // B of QC Compensation
+    uint8_t ctCV;                  // Time of BG Optimize
+    uint8_t cCVbg;                 // CV Level of BG
+    uint8_t cAbg;                  // A of BG Compensation
+    uint8_t cBbg;                  // B of BG Compensation
+    uint8_t cAq5;                  // A of QC Compensation Level 5
+    uint8_t cBq5;                  // B of QC Compensation Level 5
+} CParameterBlock;
+
+/* 三酸甘油脂(TG)專用參數區塊 */
+typedef struct {
+    // 試片參數 (12個參數)
+    uint8_t tgCsuTolerance;        // 試片檢查容差
+    uint16_t tgNdl;                // 新試片檢測水平
+    uint16_t tgUdl;                // 已使用試片檢測水平
+    uint16_t tgBloodIn;            // 血液檢測水平
+    uint16_t tgEvWBackground;      // W電極背景值
+    uint16_t tgEvWPwmDuty;         // W電極PWM占空比
+    uint8_t tgCountDownTime;       // 倒數時間
+    
+    // 測量範圍參數 (2個參數)
+    uint8_t tgL;                   // 三酸甘油脂值下限
+    uint16_t tgH;                  // 三酸甘油脂值上限
+    
+    // 測試時序參數 (12個參數)
+    uint16_t tgTPL1;               // 時間脈衝低 (第一組)
+    uint16_t tgTRD1;               // 原始數據時間 (第一組)
+    uint16_t tgEVWidth1;           // 燃燒時間 (第一組)
+    uint16_t tgTPL2;               // 時間脈衝低 (第二組)
+    uint16_t tgTRD2;               // 原始數據時間 (第二組)
+    uint16_t tgEVWidth2;           // 燃燒時間 (第二組)
+    
+    // 計算式補償參數 (80個參數)
+    uint8_t tgS2;                  // 試片補償參數
+    uint8_t tgI2;                  // 試片補償參數
+    uint8_t tgSq;                  // 品管液QC補償參數Sq
+    uint8_t tgIq;                  // 品管液QC補償參數Iq
+    float tgSr;                    // OPA硬體迴路補償(斜率)
+    float tgIr;                    // OPA硬體迴路補償(截距)
+    uint16_t tgGLU[7];             // 多段校正參數(量測分段點)
+    uint16_t tgGOAL[7];            // 多段校正參數(目標值分段點)
+    uint8_t tgS3[15];              // 試片補償參數S3(1-15)
+    uint8_t tgI3[15];              // 試片補償參數I3(1-15)
+    
+    // 溫度補償參數 (28個參數)
+    uint8_t tgTF[7];               // AC/PC溫度補償斜率(10-40°C)
+    uint8_t tgCTF[7];              // QC溫度補償斜率(10-40°C)
+    uint8_t tgTO[7];               // AC/PC溫度補償截距(10-40°C)
+    uint8_t tgCTO[7];              // QC溫度補償截距(10-40°C)
+    
+    // 計算後優化補償參數 (9個參數)
+    uint8_t tgCVq;                 // CV Level of QC
+    uint8_t tgAq;                  // A of QC Compensation
+    uint8_t tgBq;                  // B of QC Compensation
+    uint8_t tgtCV;                 // Time of BG Optimize
+    uint8_t tgCVbg;                // CV Level of BG
+    uint8_t tgAbg;                 // A of BG Compensation
+    uint8_t tgBbg;                 // B of BG Compensation
+    uint8_t tgAq5;                 // A of QC Compensation Level 5
+    uint8_t tgBq5;                 // B of QC Compensation Level 5
+} TGParameterBlock;
+
+/* 血糖(GAV)專用參數區塊 */
+typedef struct {
+    // 試片參數 (12個參數)
+    uint8_t gavCsuTolerance;       // 試片檢查容差
+    uint16_t gavNdl;               // 新試片檢測水平
+    uint16_t gavUdl;               // 已使用試片檢測水平
+    uint16_t gavBloodIn;           // 血液檢測水平
+    uint16_t gavEvWBackground;     // W電極背景值
+    uint16_t gavEvWPwmDuty;        // W電極PWM占空比
+    uint8_t gavCountDownTime;      // 倒數時間
+    
+    // 測量範圍參數 (3個參數)
+    uint8_t gavL;                  // 血糖值下限
+    uint16_t gavH;                 // 血糖值上限
+    uint16_t gavT3E37;             // T3 ADV錯誤37閾值
+    
+    // 測試時序參數 (12個參數)
+    uint16_t gavTPL1;              // 時間脈衝低 (第一組)
+    uint16_t gavTRD1;              // 原始數據時間 (第一組)
+    uint16_t gavEVWidth1;          // 燃燒時間 (第一組)
+    uint16_t gavTPL2;              // 時間脈衝低 (第二組)
+    uint16_t gavTRD2;              // 原始數據時間 (第二組)
+    uint16_t gavEVWidth2;          // 燃燒時間 (第二組)
+    
+    // 計算式補償參數 (110個參數)
+    uint8_t gavS2;                 // 試片補償參數
+    uint8_t gavI2;                 // 試片補償參數
+    uint8_t gavSq;                 // 品管液QC補償參數Sq
+    uint8_t gavIq;                 // 品管液QC補償參數Iq
+    float gavSr;                   // OPA硬體迴路補償(斜率)
+    float gavIr;                   // OPA硬體迴路補償(截距)
+    uint16_t gavGLU[7];            // 多段校正參數(量測分段點)
+    uint16_t gavGOAL[7];           // 多段校正參數(目標值分段點)
+    uint8_t gavS3[30];             // 試片補償參數S3(1-30)
+    uint8_t gavI3[30];             // 試片補償參數I3(1-30)
+    
+    // AC補償參數 (28個參數)
+    uint16_t gavAcLWaveL;          // AC振幅判斷(低)
+    uint16_t gavAcHWaveL;          // AC振幅判斷(高)
+    uint8_t gavS4[7];              // AC補償參數S4(HCT10-HCT70)
+    uint8_t gavI4[7];              // AC補償參數I4(HCT10-HCT70)
+    uint16_t gavAcAdc[7];          // AC補償判定值(HCT10-HCT70)
+    
+    // 溫度補償參數 (42個參數)
+    uint8_t gavTF[7];              // AC/PC溫度補償斜率(10-40°C)
+    uint8_t gavCTF[7];             // QC溫度補償斜率(10-40°C)
+    uint8_t gavTO[7];              // AC/PC溫度補償截距(10-40°C)
+    uint8_t gavCTO[7];             // QC溫度補償截距(10-40°C)
+    uint8_t gavAcTF[7];            // AC(交流)溫度補償斜率(10-40°C)
+    uint8_t gavAcTO[7];            // AC(交流)溫度補償截距(10-40°C)
+    
+    // 計算後優化補償參數 (9個參數)
+    uint8_t gavCVq;                // CV Level of QC
+    uint8_t gavAq;                 // A of QC Compensation
+    uint8_t gavBq;                 // B of QC Compensation
+    uint8_t gavtCV;                // Time of BG Optimize
+    uint8_t gavCVbg;               // CV Level of BG
+    uint8_t gavAbg;                // A of BG Compensation
+    uint8_t gavBbg;                // B of BG Compensation
+    uint8_t gavAq5;                // A of QC Compensation Level 5
+    uint8_t gavBq5;                // B of QC Compensation Level 5
+} GAVParameterBlock;
+
+/* 完整參數表結構 */
+typedef struct {
+    ParameterHeader header;         // 參數表頭部
+    BasicSystemBlock basic;         // 基本系統參數
+    HardwareCalibBlock hardware;    // 硬體校準參數
+    GLVParameterBlock glv;          // 血糖(GLV)參數
+    UParameterBlock u;              // 尿酸(U)參數
+    CParameterBlock c;              // 膽固醇(C)參數
+    TGParameterBlock tg;            // 三酸甘油脂(TG)參數
+    GAVParameterBlock gav;          // 血糖(GAV)參數
+    uint8_t reserved[36];           // 保留區域供未來擴展
+    uint16_t checksum;              // 校驗和 (0~844位址的總和)
+    uint8_t crc16;                  // CRC16校驗值
+} ParameterTable;
+
+#pragma pack()  // 恢復默認對齊
+
+/* 全局參數表指針 */
+extern ParameterTable *g_pParamTable;
+
+/* 參數表函數原型 */
+ParamError_TypeDef PARAM_Init(void);
+ParamError_TypeDef PARAM_LoadFromFlash(ParamArea_TypeDef area);
+ParamError_TypeDef PARAM_SaveToFlash(ParamArea_TypeDef area);
+ParamError_TypeDef PARAM_LoadDefaults(void);
+ParamError_TypeDef PARAM_GetValue(uint16_t paramAddress, void *pValue, uint8_t size);
+ParamError_TypeDef PARAM_SetValue(uint16_t paramAddress, void *pValue, uint8_t size);
+ParamError_TypeDef PARAM_Backup(void);
+ParamError_TypeDef PARAM_Restore(void);
+uint8_t PARAM_IsInitialized(void);
+uint16_t PARAM_CalculateChecksum(void);
+uint8_t PARAM_CalculateCRC16(void);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* __PARAM_TABLE_H */

@@ -12,6 +12,8 @@
 #include "debug.h"
 #include "string.h"
 #include "param_table.h"
+#include "param_code_table.h"
+#include "param_utils.h"
 #include "strip_detect.h"
 
 /* È«¾Ö×ƒ”µ */

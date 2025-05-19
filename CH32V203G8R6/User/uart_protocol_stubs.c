@@ -11,6 +11,8 @@
 #include "uart_protocol.h"
 #include "debug.h"
 #include "param_table.h"
+#include "param_code_table.h"
+#include "param_utils.h"
 #include <string.h>
 
 /*********************************************************************
