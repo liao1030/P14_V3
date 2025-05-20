@@ -29,6 +29,13 @@ typedef enum {
     STRIP_STATE_ERROR = 3      // 錯誤狀態
 } StripState_TypeDef;
 
+/* 電池狀態定義 */
+typedef enum {
+    BATT_STATUS_LOW = 0,        // 電池電量低
+    BATT_STATUS_NORMAL,         // 電池電量正常
+    BATT_STATUS_CHARGING,       // 電池正在充電
+} BatteryStatus_TypeDef;
+
 /* 試片插入狀態結構 */
 typedef struct {
     StripState_TypeDef state;         // 試片狀態
@@ -39,6 +46,8 @@ typedef struct {
     uint32_t insertTime;              // 插入時間戳
     uint8_t detectionComplete;        // 偵測完成標誌
     uint8_t ackSent;                  // 回應已發送
+    uint16_t batteryVoltage;          // 電池電壓(mV)
+    BatteryStatus_TypeDef battStatus; // 電池狀態
 } StripDetectInfo_TypeDef;
 
 /* 函數宣告 */
@@ -49,6 +58,9 @@ StripType_TypeDef STRIP_DETECT_GetStripType(void);
 void STRIP_DETECT_HandleInsertedEvent(void);
 void STRIP_DETECT_SetStripType(StripType_TypeDef type);
 void STRIP_DETECT_SetPinStatus(uint8_t pin3, uint8_t pin5);
+uint16_t STRIP_DETECT_GetBatteryVoltage(void);
+BatteryStatus_TypeDef STRIP_DETECT_GetBatteryStatus(void);
+void STRIP_DETECT_SetBatteryInfo(uint16_t voltage);
 
 #ifdef __cplusplus
 }

@@ -7,18 +7,24 @@
 C_SRCS += \
 ../APP/StripDetect.c \
 ../APP/app_uart.c \
+../APP/batt_measure.c \
+../APP/batt_test.c \
 ../APP/peripheral.c \
 ../APP/peripheral_main.c 
 
 C_DEPS += \
 ./APP/StripDetect.d \
 ./APP/app_uart.d \
+./APP/batt_measure.d \
+./APP/batt_test.d \
 ./APP/peripheral.d \
 ./APP/peripheral_main.d 
 
 OBJS += \
 ./APP/StripDetect.o \
 ./APP/app_uart.o \
+./APP/batt_measure.o \
+./APP/batt_test.o \
 ./APP/peripheral.o \
 ./APP/peripheral_main.o 
 

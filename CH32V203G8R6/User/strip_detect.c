@@ -22,7 +22,9 @@ static StripDetectInfo_TypeDef stripInfo = {
     .t1Voltage = 0.0f,
     .insertTime = 0,
     .detectionComplete = 0,
-    .ackSent = 0
+    .ackSent = 0,
+    .batteryVoltage = 3000,     // 預設3000mV
+    .battStatus = BATT_STATUS_NORMAL
 };
 
 /* 試片類型名稱由 param_table.c 中的 StripType_GetName 函數提供 */
@@ -354,4 +356,49 @@ void STRIP_DETECT_SetPinStatus(uint8_t pin3, uint8_t pin5)
 {
     stripInfo.pin3Status = pin3;
     stripInfo.pin5Status = pin5;
+}
+
+/*********************************************************************
+ * @fn      STRIP_DETECT_GetBatteryVoltage
+ *
+ * @brief   獲取電池電壓
+ *
+ * @return  電池電壓值(mV)
+ */
+uint16_t STRIP_DETECT_GetBatteryVoltage(void)
+{
+    return stripInfo.batteryVoltage;
+}
+
+/*********************************************************************
+ * @fn      STRIP_DETECT_GetBatteryStatus
+ *
+ * @brief   獲取電池狀態
+ *
+ * @return  電池狀態
+ */
+BatteryStatus_TypeDef STRIP_DETECT_GetBatteryStatus(void)
+{
+    return stripInfo.battStatus;
+}
+
+/*********************************************************************
+ * @fn      STRIP_DETECT_SetBatteryInfo
+ *
+ * @brief   設置電池電壓信息
+ *
+ * @param   voltage - 電池電壓(mV)
+ *
+ * @return  none
+ */
+void STRIP_DETECT_SetBatteryInfo(uint16_t voltage)
+{
+    stripInfo.batteryVoltage = voltage;
+    
+    /* 根據電壓設置電池狀態 */
+    if (voltage < 2500) { // 低於2.5V視為電量低
+        stripInfo.battStatus = BATT_STATUS_LOW;
+    } else {
+        stripInfo.battStatus = BATT_STATUS_NORMAL;
+    }
 }

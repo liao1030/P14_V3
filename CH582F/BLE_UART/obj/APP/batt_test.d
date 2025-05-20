@@ -1,4 +1,4 @@
-APP/StripDetect.o: ../APP/StripDetect.c \
+APP/batt_test.o: ../APP/batt_test.c \
  /Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/HAL/include/CONFIG.h \
  /Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/LIB/CH58xBLE_LIB.H \
  /Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/StdPeriphDriver/inc/CH58x_common.h \
@@ -24,10 +24,6 @@ APP/StripDetect.o: ../APP/StripDetect.c \
  /Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/HAL/include/SLEEP.h \
  /Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/HAL/include/LED.h \
  /Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/HAL/include/KEY.h \
- /Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/APP/include/app_uart.h \
- /Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/APP/app_drv_fifo/app_drv_fifo.h \
- /Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/APP/ble_uart_service/ble_uart_service.h \
- /Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/APP/include/StripDetect.h \
  ../APP/batt_measure.h
 
 /Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/HAL/include/CONFIG.h:
@@ -79,13 +75,5 @@ APP/StripDetect.o: ../APP/StripDetect.c \
 /Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/HAL/include/LED.h:
 
 /Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/HAL/include/KEY.h:
-
-/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/APP/include/app_uart.h:
-
-/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/APP/app_drv_fifo/app_drv_fifo.h:
-
-/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/APP/ble_uart_service/ble_uart_service.h:
-
-/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/APP/include/StripDetect.h:
 
 ../APP/batt_measure.h:

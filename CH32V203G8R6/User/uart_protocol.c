@@ -864,7 +864,7 @@ void UART2_Receive_Byte_ISR(uint8_t byte)
 /*********************************************************************
  * @fn      UART_ProcessStripInsertedCmd
  *
- * @brief   處理試片插入通知命令
+ * @brief   處理試片插入通知命令，同時接收電池電壓數據
  *
  * @param   data - 數據指針
  * @param   length - 數據長度
@@ -873,7 +873,7 @@ void UART2_Receive_Byte_ISR(uint8_t byte)
  */
 uint8_t UART_ProcessStripInsertedCmd(uint8_t *data, uint8_t length)
 {
-    /* 讀取試片Pin3和Pin5的狀態（如果有提供） */
+    /* 檢查數據長度 */
     if (length >= 2) {
         uint8_t pin3Status = data[0];
         uint8_t pin5Status = data[1];
@@ -881,14 +881,26 @@ uint8_t UART_ProcessStripInsertedCmd(uint8_t *data, uint8_t length)
         /* 設置試片腳位狀態 */
         STRIP_DETECT_SetPinStatus(pin3Status, pin5Status);
         
+        /* 如果數據包中包含電池電壓數據 */
+        if (length >= 4) {
+            uint16_t battVoltage = (data[2] << 8) | data[3]; // 電池電壓 (mV)
+            
+            /* 儲存電池電壓數據到外部變數 */
+            extern void STRIP_DETECT_SetBatteryInfo(uint16_t voltage);
+            STRIP_DETECT_SetBatteryInfo(battVoltage);
+            
+            printf("Strip inserted notification received. Pin3=%d, Pin5=%d, BattVoltage=%dmV\r\n", 
+                   pin3Status, pin5Status, battVoltage);
+        } else {
+            printf("Strip inserted notification received. Pin3=%d, Pin5=%d\r\n", 
+                   pin3Status, pin5Status);
+        }
+        
         /* 觸發插入處理 */
         STRIP_DETECT_HandleInsertedEvent();
-        
-        printf("Strip inserted notification received. Pin3=%d, Pin5=%d\r\n", 
-               pin3Status, pin5Status);
     } else {
-        printf("Strip inserted notification without pin status\r\n");
-        STRIP_DETECT_HandleInsertedEvent();
+        printf("Strip inserted notification with insufficient data\r\n");
+        return 0;
     }
     
     return 1;

@@ -16,6 +16,7 @@
 #include "app_uart.h"
 #include "StripDetect.h"
 #include "CH58x_common.h"
+#include "batt_measure.h"
 
 /*********************************************************************
  * MACROS
@@ -36,6 +37,7 @@
 // 通訊協議相關
 #define PROTOCOL_STRIP_INSERTED         0x20  // 試片插入通知
 #define PROTOCOL_STRIP_TYPE_ACK         0xA0  // 試片類型回應
+#define PROTOCOL_BATT_DATA_LEN          2     // 電池電壓數據長度(2字節)
 
 /*********************************************************************
  * CONSTANTS
@@ -88,6 +90,7 @@ static tmosTaskID StripDetect_TaskID = INVALID_TASK_ID;
 static void StripDetect_SendMessage(uint8_t msgType, uint8_t stripType);
 static void StripDetect_SendInsertInfo(uint8_t pin3Status, uint8_t pin5Status);
 static void StripDetect_PeriodicCheck(void);
+static uint16_t StripDetect_GetBatteryVoltage(void);
 
 /*********************************************************************
  * @fn      debounce_pin_status
@@ -149,6 +152,9 @@ void StripDetect_Init(tmosTaskID task_id)
     // 設定初始狀態
     GPIOB_SetBits(T3_IN_SEL_PIN);                // T3_IN_SEL輸出高電平，預設關閉T3電極
     GPIOA_ResetBits(V2P5_ENABLE_PIN);              // V2P5_ENABLE輸出低電平，不供電給CH32V203
+    
+    // 初始化電池電壓測量模組
+    Batt_MeasureInit();
     
     // 啟動定期檢查任務，每100ms檢查一次
     tmos_start_task(StripDetect_TaskID, STRIP_PERIODIC_CHECK_EVT, MS1_TO_SYSTEM_TIME(100));
@@ -375,9 +381,21 @@ uint8_t StripDetect_GetStripType(void)
 }
 
 /*********************************************************************
+ * @fn      StripDetect_GetBatteryVoltage
+ *
+ * @brief   獲取電池電壓
+ *
+ * @return  電池電壓 (mV)
+ */
+static uint16_t StripDetect_GetBatteryVoltage(void)
+{
+    return Batt_GetVoltage();
+}
+
+/*********************************************************************
  * @fn      StripDetect_SendInsertInfo
  *
- * @brief   發送試片插入狀態資訊到MCU
+ * @brief   發送試片插入狀態資訊到MCU，同時包含電池電壓信息
  *
  * @param   pin3Status - Strip_Detect_3腳位狀態
  * @param   pin5Status - Strip_Detect_5腳位狀態
@@ -386,21 +404,28 @@ uint8_t StripDetect_GetStripType(void)
  */
 static void StripDetect_SendInsertInfo(uint8_t pin3Status, uint8_t pin5Status)
 {
-    uint8_t buf[7];
+    uint8_t buf[9];  // 增加兩個字節用於電池電壓
+    uint16_t battVoltage;
+    
+    // 測量當前電池電壓
+    battVoltage = StripDetect_GetBatteryVoltage();
     
     /* 組裝消息包 */
     buf[0] = 0xAA;                // 起始標記
     buf[1] = PROTOCOL_STRIP_INSERTED;  // 試片插入通知命令
-    buf[2] = 0x02;                // 長度為2
+    buf[2] = 0x04;                // 長度為4（2字節腳位狀態 + 2字節電池電壓）
     buf[3] = pin3Status;          // 第3腳狀態
     buf[4] = pin5Status;          // 第5腳狀態
-    buf[5] = (buf[1] + buf[2] + buf[3] + buf[4]) % 256;  // 校驗和
-    buf[6] = 0x55;                // 結束標記
+    buf[5] = battVoltage >> 8;    // 電池電壓高字節
+    buf[6] = battVoltage & 0xFF;  // 電池電壓低字節
+    buf[7] = (buf[1] + buf[2] + buf[3] + buf[4] + buf[5] + buf[6]) % 256;  // 校驗和
+    buf[8] = 0x55;                // 結束標記
     
     /* 發送到MCU */
-    send_to_uart_mcu(buf, 7);
+    send_to_uart_mcu(buf, 9);
     
-    PRINT("Strip Insert Info Sent. Pin3=%d, Pin5=%d\n", pin3Status, pin5Status);
+    PRINT("Strip Insert Info Sent. Pin3=%d, Pin5=%d, BattVoltage=%dmV\n", 
+          pin3Status, pin5Status, battVoltage);
 }
 
 /*********************************************************************
