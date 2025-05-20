@@ -94,8 +94,9 @@ uint16_t Batt_GetVoltage(void)
     adc_value = adc_sum / ADC_SAMPLES_NUM;
     
     // 轉換為電壓值 (mV)
-    // ADC滿量程（4096）對應2.0V參考電壓
-    voltage = (uint16_t)(adc_value * 2000.0f / 4096.0f * BATT_VOLTAGE_FACTOR);
+    // 在PGA_1_4模式下，有效量程為0-4V
+    // 計算公式: (ADC/512-3)*Vref*5，Vref約為1.05V
+    voltage = (uint16_t)((adc_value / 512.0f - 3.0f) * 1050.0f * 5);
     
     // 存儲當前電池電壓
     current_battery_voltage = voltage;
