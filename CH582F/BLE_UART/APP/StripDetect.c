@@ -409,7 +409,6 @@ static void StripDetect_SendInsertInfo(uint8_t pin3Status, uint8_t pin5Status)
     
     PRINT("Strip Insert Info Sent. Pin3=%d, Pin5=%d\n", pin3Status, pin5Status);
 }
-
 /*********************************************************************
  * @fn      GetBatteryVoltage
  *
@@ -423,23 +422,19 @@ static uint16_t GetBatteryVoltage(void)
 {
     uint16_t adcValue;
     uint16_t voltage;
-    
+
     // 初始化內部電池電壓ADC
     ADC_InterBATSampInit();
-    
+
     // 設定ADC通道為內部電池電壓
     ADC_ChannelCfg(CH_INTE_VBAT);
-    
+
     // 讀取電池電壓 (使用VBAT通道)
     adcValue = ADC_ExcutSingleConver();
-    
+
     // 轉換為電壓值 (單位: mV)
-    // VBAT = (adcValue * 4 * 1200) / 1024 (為12位ADC轉換到mV的計算公式)
-    // 4 = 分壓系數，1200 = 內部參考電壓 1.2V
-    voltage = (uint16_t)((((uint32_t)adcValue * 4 * 1200)) / 1024);
-    
+    // PGA_1_4 模式下，電壓計算公式: (ADC/512-3)*Vref
+    voltage = (uint16_t)(((adcValue / 512.0) - 3) * 1050);
+
     return voltage;
 }
-
-/*********************************************************************
-*********************************************************************/
