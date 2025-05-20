@@ -19,6 +19,7 @@ static uint8_t rx_buffer[MAX_PACKET_SIZE];
 static uint8_t tx_buffer[MAX_PACKET_SIZE];
 static uint16_t rx_index = 0;
 static uint8_t packet_received = 0;
+uint16_t g_batteryVoltage = 0;  // 全局電池電壓變數
 
 /* 當前測試狀態 */
 static uint8_t test_in_progress = 0;
@@ -871,8 +872,29 @@ void UART2_Receive_Byte_ISR(uint8_t byte)
  */
 uint8_t UART_ProcessStripInsertedCmd(uint8_t *data, uint8_t length)
 {
-    /* 讀取試片Pin3和Pin5的狀態（如果有提供） */
-    if (length >= 2) {
+    uint16_t batteryVoltage = 0;
+    
+    /* 讀取試片Pin3和Pin5的狀態及電池電壓（如果有提供） */
+    if (length >= 4) {
+        uint8_t pin3Status = data[0];
+        uint8_t pin5Status = data[1];
+        
+        /* 讀取電池電壓 */
+        batteryVoltage = (uint16_t)((data[2] << 8) | data[3]);
+        
+        /* 更新系統中的電池電壓變數 */
+        extern uint16_t g_batteryVoltage; // 這需要在某個地方定義
+        g_batteryVoltage = batteryVoltage;
+        
+        /* 設置試片腳位狀態 */
+        STRIP_DETECT_SetPinStatus(pin3Status, pin5Status);
+        
+        /* 觸發插入處理 */
+        STRIP_DETECT_HandleInsertedEvent();
+        
+        printf("Strip inserted notification received. Pin3=%d, Pin5=%d, BatteryVoltage=%dmV\r\n", 
+               pin3Status, pin5Status, batteryVoltage);
+    } else if (length >= 2) {
         uint8_t pin3Status = data[0];
         uint8_t pin5Status = data[1];
         
@@ -903,10 +925,14 @@ uint8_t UART_ProcessStripInsertedCmd(uint8_t *data, uint8_t length)
  */
 uint8_t UART_SendStripTypeAck(StripType_TypeDef stripType)
 {
-    uint8_t data[1];
+    uint8_t data[3];
+    extern uint16_t g_batteryVoltage;
+    
     data[0] = stripType;
+    data[1] = (uint8_t)(g_batteryVoltage >> 8);     // 電池電壓高位元組
+    data[2] = (uint8_t)(g_batteryVoltage & 0xFF);   // 電池電壓低位元組
     
-    printf("Sending strip type ack: %s\r\n", StripType_GetName(stripType));
+    printf("Sending strip type ack: %s, Battery: %dmV\r\n", StripType_GetName(stripType), g_batteryVoltage);
     
-    return UART_SendPacket(CMD_STRIP_TYPE_ACK, data, 1);
+    return UART_SendPacket(CMD_STRIP_TYPE_ACK, data, 3);
 }

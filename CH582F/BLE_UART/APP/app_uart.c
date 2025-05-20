@@ -286,16 +286,24 @@ void process_uart_mcu_protocol(uint8_t *data, uint16_t len)
     
     // 根據不同指令進行處理
     switch(cmd) {
-        case 0xA0: // 試片類型回應指令
-            if (dataLen == 1) {
-                uint8_t stripType = data[3]; // 獲取試片類型
-                StripDetect_SetStripType(stripType);
-                PRINT("MCU set Strip Type: %d\n", stripType);
+        case 0xA0:  // 試片類型回應
+            {
+                if (dataLen >= 3) {  // 確保有足夠的數據包含試片類型和電池電壓
+                    uint8_t stripType = data[3];
+                    uint16_t batteryVoltage = (uint16_t)((data[4] << 8) | data[5]);
+                    
+                    // 處理試片類型
+                    StripDetect_SetStripType(stripType);
+                    
+                    // 輸出電池電壓資訊
+                    PRINT("Strip Type Ack: Type=%d, Battery=%dmV\n", stripType, batteryVoltage);
+                }
+                else if (dataLen >= 1) {
+                    uint8_t stripType = data[3];
+                    StripDetect_SetStripType(stripType);
+                    PRINT("Strip Type Ack: Type=%d\n", stripType);
+                }
             }
-            break;
-            
-        default:
-            PRINT("Unknown command: 0x%02X\n", cmd);
             break;
     }
 }

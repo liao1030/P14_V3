@@ -22,9 +22,15 @@
  */
 uint16_t Get_Battery_Voltage(void)
 {
-    // 這是存根函數，實際使用時需要通過ADC讀取電池電壓
-    // 假設電池電壓為3600mV
-    return 3600;
+    // 使用全局電池電壓值
+    extern uint16_t g_batteryVoltage;
+    
+    // 如果電池電壓為0（可能還未收到CH582F的數據），返回一個默認值
+    if (g_batteryVoltage == 0) {
+        return 3600; // 默認值
+    }
+    
+    return g_batteryVoltage;
 }
 
 /*********************************************************************

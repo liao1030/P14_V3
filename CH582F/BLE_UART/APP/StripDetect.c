@@ -88,6 +88,7 @@ static tmosTaskID StripDetect_TaskID = INVALID_TASK_ID;
 static void StripDetect_SendMessage(uint8_t msgType, uint8_t stripType);
 static void StripDetect_SendInsertInfo(uint8_t pin3Status, uint8_t pin5Status);
 static void StripDetect_PeriodicCheck(void);
+static uint16_t GetBatteryVoltage(void);
 
 /*********************************************************************
  * @fn      debounce_pin_status
@@ -386,21 +387,58 @@ uint8_t StripDetect_GetStripType(void)
  */
 static void StripDetect_SendInsertInfo(uint8_t pin3Status, uint8_t pin5Status)
 {
-    uint8_t buf[7];
+    uint8_t buf[9];
+    uint16_t batteryVoltage;
+    
+    /* 讀取電池電壓 */
+    batteryVoltage = GetBatteryVoltage();
     
     /* 組裝消息包 */
     buf[0] = 0xAA;                // 起始標記
     buf[1] = PROTOCOL_STRIP_INSERTED;  // 試片插入通知命令
-    buf[2] = 0x02;                // 長度為2
+    buf[2] = 0x04;                // 長度為4 (pin3, pin5, batteryVoltage高位, batteryVoltage低位)
     buf[3] = pin3Status;          // 第3腳狀態
     buf[4] = pin5Status;          // 第5腳狀態
-    buf[5] = (buf[1] + buf[2] + buf[3] + buf[4]) % 256;  // 校驗和
-    buf[6] = 0x55;                // 結束標記
+    buf[5] = (uint8_t)(batteryVoltage >> 8);   // 電池電壓高位元組
+    buf[6] = (uint8_t)(batteryVoltage & 0xFF); // 電池電壓低位元組
+    buf[7] = (buf[1] + buf[2] + buf[3] + buf[4] + buf[5] + buf[6]) % 256;  // 校驗和
+    buf[8] = 0x55;                // 結束標記
     
     /* 發送到MCU */
-    send_to_uart_mcu(buf, 7);
+    send_to_uart_mcu(buf, 9);
     
     PRINT("Strip Insert Info Sent. Pin3=%d, Pin5=%d\n", pin3Status, pin5Status);
+}
+
+/*********************************************************************
+ * @fn      GetBatteryVoltage
+ *
+ * @brief   讀取電池電壓
+ *
+ * @param   none
+ *
+ * @return  電池電壓 (單位: mV)
+ */
+static uint16_t GetBatteryVoltage(void)
+{
+    uint16_t adcValue;
+    uint16_t voltage;
+    
+    // 初始化內部電池電壓ADC
+    ADC_InterBATSampInit();
+    
+    // 設定ADC通道為內部電池電壓
+    ADC_ChannelCfg(CH_INTE_VBAT);
+    
+    // 讀取電池電壓 (使用VBAT通道)
+    adcValue = ADC_ExcutSingleConver();
+    
+    // 轉換為電壓值 (單位: mV)
+    // VBAT = (adcValue * 4 * 1200) / 1024 (為12位ADC轉換到mV的計算公式)
+    // 4 = 分壓系數，1200 = 內部參考電壓 1.2V
+    voltage = (uint16_t)((((uint32_t)adcValue * 4 * 1200)) / 1024);
+    
+    return voltage;
 }
 
 /*********************************************************************
