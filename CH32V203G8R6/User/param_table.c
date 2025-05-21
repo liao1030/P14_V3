@@ -382,7 +382,7 @@ void PARAM_SetDefault(void)
     /* 時間設定參數預設值（設置為當前編譯時間） */
     param_table[PARAM_YEAR] = 25;       // 2025年 (25)
     param_table[PARAM_MONTH] = 5;       // 5月
-    param_table[PARAM_DATE] = 8;        // 8日
+    param_table[PARAM_DATE] = 21;        // 21日
     param_table[PARAM_HOUR] = 12;       // 12時
     param_table[PARAM_MINUTE] = 0;      // 0分
     param_table[PARAM_SECOND] = 0;      // 0秒
@@ -390,15 +390,22 @@ void PARAM_SetDefault(void)
     /* 測試條件參數預設值 */
     param_table[PARAM_TLL] = 10;        // 操作溫度下限: 10°C
     param_table[PARAM_TLH] = 40;        // 操作溫度上限: 40°C
-    param_table[PARAM_MGDL] = UNIT_MMOL_L; // 預設單位: mmol/L
+    param_table[PARAM_MGDL] = UNIT_MG_DL; // 預設單位: mg/dL
     param_table[PARAM_EVENT] = EVENT_AC;   // 預設事件: 飯前
     param_table[PARAM_STRIP_TYPE] = STRIP_TYPE_GLV; // 預設試片: 血糖
     
     /* 硬體校準參數預設值 */
-    PARAM_SetWord(PARAM_EV_T3_TRG, 120);  // EV_T3觸發電壓
+    PARAM_SetWord(PARAM_EV_T3_TRG, 120);   // EV_T3觸發電壓
     param_table[PARAM_EV_WORKING] = 164;   // 濃度工作電壓
     param_table[PARAM_EV_T3] = 164;        // 血液測濃電極電壓
     param_table[PARAM_DACO] = 0;           // DAC偏移補償
+    
+    /* 為各測試項目設置W電極PWM占空比預設值 */
+    PARAM_SetWord(PARAM_BG_W_PWM_DUTY, 1000); // 血糖W電極PWM占空比預設值: 100.0%
+    PARAM_SetWord(PARAM_U_W_PWM_DUTY, 750);  // 尿酸W電極PWM占空比預設值: 75.0%
+    PARAM_SetWord(PARAM_C_W_PWM_DUTY, 250);  // 總膽固醇W電極PWM占空比預設值: 25.0%
+    PARAM_SetWord(PARAM_TG_W_PWM_DUTY, 250); // 三酸甘油脂W電極PWM占空比預設值: 25.0%
+
     param_table[PARAM_DACDO] = 0;          // DAC校正管理參數
     param_table[PARAM_CC211NODONE] = 0;    // CC211正常完成
     param_table[PARAM_CAL_TOL] = 8;        // OPS/OPI校準容差: 0.8%

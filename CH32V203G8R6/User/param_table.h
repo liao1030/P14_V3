@@ -63,27 +63,28 @@
 #define PARAM_BG_L            62     // 血糖值下限
 #define PARAM_BG_H            63     // 血糖值上限
 #define PARAM_BG_T3_E37       64     // T3 ADV超E37閾值 (2 bytes)
+#define PARAM_BG_W_PWM_DUTY   66     // W電極PWM占空比 (2 bytes)
 /* 血糖測試時序參數 */
-#define PARAM_BG_TPL1         66     // 測試間格1 (2 bytes)
-#define PARAM_BG_TRD1         68     // 讀取延遲1 (2 bytes)
-#define PARAM_BG_EVWIDTH1     70     // 工作電壓寬度1 (2 bytes)
-#define PARAM_BG_TPL2         72     // 測試間格2 (2 bytes)
-#define PARAM_BG_TRD2         74     // 讀取延遲2 (2 bytes)
-#define PARAM_BG_EVWIDTH2     76     // 工作電壓寬度2 (2 bytes)
+#define PARAM_BG_TPL1         68     // 測試間格1 (2 bytes)
+#define PARAM_BG_TRD1         70     // 讀取延遲1 (2 bytes)
+#define PARAM_BG_EVWIDTH1     72     // 工作電壓寬度1 (2 bytes)
+#define PARAM_BG_TPL2         74     // 測試間格2 (2 bytes)
+#define PARAM_BG_TRD2         76     // 讀取延遲2 (2 bytes)
+#define PARAM_BG_EVWIDTH2     78     // 工作電壓寬度2 (2 bytes)
 /* 血糖標準品曲線參數 */
-#define PARAM_BG_CAL_A1       78     // 標準品曲線係數A1 (4 bytes)
-#define PARAM_BG_CAL_B1       82     // 標準品曲線係數B1 (4 bytes)
-#define PARAM_BG_CAL_C1       86     // 標準品曲線係數C1 (4 bytes)
+#define PARAM_BG_CAL_A1       80     // 標準品曲線係數A1 (4 bytes)
+#define PARAM_BG_CAL_B1       84     // 標準品曲線係數B1 (4 bytes)
+#define PARAM_BG_CAL_C1       88     // 標準品曲線係數C1 (4 bytes)
 /* 血糖溫度補償參數 */
-#define PARAM_BG_TEMP_A1      90     // 溫度補償係數A1 (4 bytes)
-#define PARAM_BG_TEMP_B1      94     // 溫度補償係數B1 (4 bytes)
-#define PARAM_BG_TEMP_C1      98     // 溫度補償係數C1 (4 bytes)
+#define PARAM_BG_TEMP_A1      92     // 溫度補償係數A1 (4 bytes)
+#define PARAM_BG_TEMP_B1      96     // 溫度補償係數B1 (4 bytes)
+#define PARAM_BG_TEMP_C1      100    // 溫度補償係數C1 (4 bytes)
 /* 血糖血量補償參數 */
-#define PARAM_BG_BLOOD_A1     102    // 血量補償係數A1 (4 bytes)
-#define PARAM_BG_BLOOD_B1     106    // 血量補償係數B1 (4 bytes)
-#define PARAM_BG_BLOOD_C1     110    // 血量補償係數C1 (4 bytes)
+#define PARAM_BG_BLOOD_A1     104    // 血量補償係數A1 (4 bytes)
+#define PARAM_BG_BLOOD_B1     108    // 血量補償係數B1 (4 bytes)
+#define PARAM_BG_BLOOD_C1     112    // 血量補償係數C1 (4 bytes)
 /* 血糖測試參數保留區 */
-#define PARAM_BG_RESERVED     114    // 保留區 (99 bytes)
+#define PARAM_BG_RESERVED     116    // 保留區 (97 bytes)
 
 /* 尿酸(U)專用參數地址定義 */
 #define PARAM_U_CSU_TOL       213    // 試片檢查容差
@@ -94,27 +95,28 @@
 #define PARAM_U_L             236    // 尿酸值下限
 #define PARAM_U_H             237    // 尿酸值上限
 #define PARAM_U_T3_E37        238    // T3 ADV超E37閾值 (2 bytes)
+#define PARAM_U_W_PWM_DUTY    240    // W電極PWM占空比 (2 bytes)
 /* 尿酸測試時序參數 */
-#define PARAM_U_TPL1          240    // 測試間格1 (2 bytes)
-#define PARAM_U_TRD1          242    // 讀取延遲1 (2 bytes)
-#define PARAM_U_EVWIDTH1      244    // 工作電壓寬度1 (2 bytes)
-#define PARAM_U_TPL2          246    // 測試間格2 (2 bytes)
-#define PARAM_U_TRD2          248    // 讀取延遲2 (2 bytes)
-#define PARAM_U_EVWIDTH2      250    // 工作電壓寬度2 (2 bytes)
+#define PARAM_U_TPL1          242    // 測試間格1 (2 bytes)
+#define PARAM_U_TRD1          244    // 讀取延遲1 (2 bytes)
+#define PARAM_U_EVWIDTH1      246    // 工作電壓寬度1 (2 bytes)
+#define PARAM_U_TPL2          248    // 測試間格2 (2 bytes)
+#define PARAM_U_TRD2          250    // 讀取延遲2 (2 bytes)
+#define PARAM_U_EVWIDTH2      252    // 工作電壓寬度2 (2 bytes)
 /* 尿酸標準品曲線參數 */
-#define PARAM_U_CAL_A1        252    // 標準品曲線係數A1 (4 bytes)
-#define PARAM_U_CAL_B1        256    // 標準品曲線係數B1 (4 bytes)
-#define PARAM_U_CAL_C1        260    // 標準品曲線係數C1 (4 bytes)
+#define PARAM_U_CAL_A1        254    // 標準品曲線係數A1 (4 bytes)
+#define PARAM_U_CAL_B1        258    // 標準品曲線係數B1 (4 bytes)
+#define PARAM_U_CAL_C1        262    // 標準品曲線係數C1 (4 bytes)
 /* 尿酸溫度補償參數 */
-#define PARAM_U_TEMP_A1       264    // 溫度補償係數A1 (4 bytes)
-#define PARAM_U_TEMP_B1       268    // 溫度補償係數B1 (4 bytes)
-#define PARAM_U_TEMP_C1       272    // 溫度補償係數C1 (4 bytes)
+#define PARAM_U_TEMP_A1       266    // 溫度補償係數A1 (4 bytes)
+#define PARAM_U_TEMP_B1       270    // 溫度補償係數B1 (4 bytes)
+#define PARAM_U_TEMP_C1       274    // 溫度補償係數C1 (4 bytes)
 /* 尿酸血量補償參數 */
-#define PARAM_U_BLOOD_A1      276    // 血量補償係數A1 (4 bytes)
-#define PARAM_U_BLOOD_B1      280    // 血量補償係數B1 (4 bytes)
-#define PARAM_U_BLOOD_C1      284    // 血量補償係數C1 (4 bytes)
+#define PARAM_U_BLOOD_A1      278    // 血量補償係數A1 (4 bytes)
+#define PARAM_U_BLOOD_B1      282    // 血量補償係數B1 (4 bytes)
+#define PARAM_U_BLOOD_C1      286    // 血量補償係數C1 (4 bytes)
 /* 尿酸測試參數保留區 */
-#define PARAM_U_RESERVED      288    // 保留區 (67 bytes)
+#define PARAM_U_RESERVED      290    // 保留區 (65 bytes)
 
 /* 總膽固醇(C)專用參數地址定義 */
 #define PARAM_C_CSU_TOL       355    // 試片檢查容差
@@ -125,27 +127,28 @@
 #define PARAM_C_L             378    // 總膽固醇值下限
 #define PARAM_C_H             379    // 總膽固醇值上限 (2 bytes)
 #define PARAM_C_T3_E37        381    // T3 ADV超E37閾值 (2 bytes)
+#define PARAM_C_W_PWM_DUTY    383    // W電極PWM占空比 (2 bytes)
 /* 總膽固醇測試時序參數 */
-#define PARAM_C_TPL1          383    // 測試間格1 (2 bytes)
-#define PARAM_C_TRD1          385    // 讀取延遲1 (2 bytes)
-#define PARAM_C_EVWIDTH1      387    // 工作電壓寬度1 (2 bytes)
-#define PARAM_C_TPL2          389    // 測試間格2 (2 bytes)
-#define PARAM_C_TRD2          391    // 讀取延遲2 (2 bytes)
-#define PARAM_C_EVWIDTH2      393    // 工作電壓寬度2 (2 bytes)
+#define PARAM_C_TPL1          385    // 測試間格1 (2 bytes)
+#define PARAM_C_TRD1          387    // 讀取延遲1 (2 bytes)
+#define PARAM_C_EVWIDTH1      389    // 工作電壓寬度1 (2 bytes)
+#define PARAM_C_TPL2          391    // 測試間格2 (2 bytes)
+#define PARAM_C_TRD2          393    // 讀取延遲2 (2 bytes)
+#define PARAM_C_EVWIDTH2      395    // 工作電壓寬度2 (2 bytes)
 /* 總膽固醇標準品曲線參數 */
-#define PARAM_C_CAL_A1        395    // 標準品曲線係數A1 (4 bytes)
-#define PARAM_C_CAL_B1        399    // 標準品曲線係數B1 (4 bytes)
-#define PARAM_C_CAL_C1        403    // 標準品曲線係數C1 (4 bytes)
+#define PARAM_C_CAL_A1        397    // 標準品曲線係數A1 (4 bytes)
+#define PARAM_C_CAL_B1        401    // 標準品曲線係數B1 (4 bytes)
+#define PARAM_C_CAL_C1        405    // 標準品曲線係數C1 (4 bytes)
 /* 總膽固醇溫度補償參數 */
-#define PARAM_C_TEMP_A1       407    // 溫度補償係數A1 (4 bytes)
-#define PARAM_C_TEMP_B1       411    // 溫度補償係數B1 (4 bytes)
-#define PARAM_C_TEMP_C1       415    // 溫度補償係數C1 (4 bytes)
+#define PARAM_C_TEMP_A1       409    // 溫度補償係數A1 (4 bytes)
+#define PARAM_C_TEMP_B1       413    // 溫度補償係數B1 (4 bytes)
+#define PARAM_C_TEMP_C1       417    // 溫度補償係數C1 (4 bytes)
 /* 總膽固醇血量補償參數 */
-#define PARAM_C_BLOOD_A1      419    // 血量補償係數A1 (4 bytes)
-#define PARAM_C_BLOOD_B1      423    // 血量補償係數B1 (4 bytes)
-#define PARAM_C_BLOOD_C1      427    // 血量補償係數C1 (4 bytes)
+#define PARAM_C_BLOOD_A1      421    // 血量補償係數A1 (4 bytes)
+#define PARAM_C_BLOOD_B1      425    // 血量補償係數B1 (4 bytes)
+#define PARAM_C_BLOOD_C1      429    // 血量補償係數C1 (4 bytes)
 /* 總膽固醇測試參數保留區 */
-#define PARAM_C_RESERVED      431    // 保留區 (66 bytes)
+#define PARAM_C_RESERVED      433    // 保留區 (64 bytes)
 
 /* 三酸甘油脂(TG)專用參數地址定義 */
 #define PARAM_TG_CSU_TOL      497    // 試片檢查容差
@@ -156,27 +159,28 @@
 #define PARAM_TG_L            520    // 三酸甘油脂值下限
 #define PARAM_TG_H            521    // 三酸甘油脂值上限 (2 bytes)
 #define PARAM_TG_T3_E37       523    // T3 ADV超E37閾值 (2 bytes)
+#define PARAM_TG_W_PWM_DUTY   525    // W電極PWM占空比 (2 bytes)
 /* 三酸甘油脂測試時序參數 */
-#define PARAM_TG_TPL1         525    // 測試間格1 (2 bytes)
-#define PARAM_TG_TRD1         527    // 讀取延遲1 (2 bytes)
-#define PARAM_TG_EVWIDTH1     529    // 工作電壓寬度1 (2 bytes)
-#define PARAM_TG_TPL2         531    // 測試間格2 (2 bytes)
-#define PARAM_TG_TRD2         533    // 讀取延遲2 (2 bytes)
-#define PARAM_TG_EVWIDTH2     535    // 工作電壓寬度2 (2 bytes)
+#define PARAM_TG_TPL1         527    // 測試間格1 (2 bytes)
+#define PARAM_TG_TRD1         529    // 讀取延遲1 (2 bytes)
+#define PARAM_TG_EVWIDTH1     531    // 工作電壓寬度1 (2 bytes)
+#define PARAM_TG_TPL2         533    // 測試間格2 (2 bytes)
+#define PARAM_TG_TRD2         535    // 讀取延遲2 (2 bytes)
+#define PARAM_TG_EVWIDTH2     537    // 工作電壓寬度2 (2 bytes)
 /* 三酸甘油脂標準品曲線參數 */
-#define PARAM_TG_CAL_A1       537    // 標準品曲線係數A1 (4 bytes)
-#define PARAM_TG_CAL_B1       541    // 標準品曲線係數B1 (4 bytes)
-#define PARAM_TG_CAL_C1       545    // 標準品曲線係數C1 (4 bytes)
+#define PARAM_TG_CAL_A1       539    // 標準品曲線係數A1 (4 bytes)
+#define PARAM_TG_CAL_B1       543    // 標準品曲線係數B1 (4 bytes)
+#define PARAM_TG_CAL_C1       547    // 標準品曲線係數C1 (4 bytes)
 /* 三酸甘油脂溫度補償參數 */
-#define PARAM_TG_TEMP_A1      549    // 溫度補償係數A1 (4 bytes)
-#define PARAM_TG_TEMP_B1      553    // 溫度補償係數B1 (4 bytes)
-#define PARAM_TG_TEMP_C1      557    // 溫度補償係數C1 (4 bytes)
+#define PARAM_TG_TEMP_A1      551    // 溫度補償係數A1 (4 bytes)
+#define PARAM_TG_TEMP_B1      555    // 溫度補償係數B1 (4 bytes)
+#define PARAM_TG_TEMP_C1      559    // 溫度補償係數C1 (4 bytes)
 /* 三酸甘油脂血量補償參數 */
-#define PARAM_TG_BLOOD_A1     561    // 血量補償係數A1 (4 bytes)
-#define PARAM_TG_BLOOD_B1     565    // 血量補償係數B1 (4 bytes)
-#define PARAM_TG_BLOOD_C1     569    // 血量補償係數C1 (4 bytes)
+#define PARAM_TG_BLOOD_A1     563    // 血量補償係數A1 (4 bytes)
+#define PARAM_TG_BLOOD_B1     567    // 血量補償係數B1 (4 bytes)
+#define PARAM_TG_BLOOD_C1     571    // 血量補償係數C1 (4 bytes)
 /* 三酸甘油脂測試參數保留區 */
-#define PARAM_TG_RESERVED     573    // 保留區 (66 bytes)
+#define PARAM_TG_RESERVED     575    // 保留區 (64 bytes)
 
 /* 保留區域 */
 #define PARAM_RESERVED        639    // 系統保留 (37 bytes)
