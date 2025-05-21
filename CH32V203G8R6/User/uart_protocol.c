@@ -13,6 +13,7 @@
 #include "string.h"
 #include "param_table.h"
 #include "strip_detect.h"
+#include "rtc.h"
 
 /* 全局變數 */
 static uint8_t rx_buffer[MAX_PACKET_SIZE];
@@ -303,8 +304,11 @@ uint8_t UART_ProcessSyncTime(uint8_t *data, uint8_t length)
         return 0;
     }
     
-    /* 設置系統時間 */
+    /* 設置系統時間到參數表 */
     uint8_t result = PARAM_SetDateTime(year - 2000, month, date, hour, minute, second);
+    
+    /* 同時更新RTC時間 */
+    RTC_SetTime(year - 2000, month, date, hour, minute, second);
     
     /* 發送確認回應 */
     UART_SendSyncTimeAck(result ? 0 : ERR_DATA_FORMAT);

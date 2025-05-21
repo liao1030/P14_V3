@@ -23,6 +23,7 @@
 #include "param_table.h"
 #include "uart_protocol.h"
 #include "strip_detect.h"
+#include "rtc.h"
 
 void USART2_IRQHandler(void) __attribute__((interrupt("WCH-Interrupt-fast")));
 void DMA1_Channel6_IRQHandler(void) __attribute__((interrupt("WCH-Interrupt-fast")));
@@ -221,6 +222,10 @@ int main(void)
     
     /* 初始化試片偵測相關設置 */
     STRIP_DETECT_Init();
+    
+    /* 初始化RTC */
+    RTC_Config();
+    printf("RTC Configured\r\n");
     
     /* 顯示一些基本系統資訊 */
     printf("Model No: %d\r\n", PARAM_GetByte(PARAM_MODEL_NO));
