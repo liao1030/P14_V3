@@ -196,6 +196,30 @@ uint8_t ring_buffer_pop()
 }
 
 /*********************************************************************
+ * @fn      GPIO_Pin_Init
+ *
+ * @brief   初始化GPIO腳位
+ *
+ * @return  none
+ */
+void GPIO_Pin_Init(void)
+{
+    GPIO_InitTypeDef GPIO_InitStructure = {0};
+    
+    // 啟用GPIOB時鐘
+    RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOB, ENABLE);
+    
+    // 初始化WE_ENABLE (PB15) - 設為輸出高電平
+    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_15;
+    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;  // 推挽輸出
+    GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz; // 50MHz速度
+    GPIO_Init(GPIOB, &GPIO_InitStructure);
+    
+    // 將WE_ENABLE設為高電平，關閉WE_ENABLE
+    GPIO_SetBits(GPIOB, GPIO_Pin_15);
+}
+
+/*********************************************************************
  * @fn      main
  *
  * @brief   Main program.
@@ -207,6 +231,11 @@ int main(void)
     NVIC_PriorityGroupConfig(NVIC_PriorityGroup_1);
     Delay_Init();
     USART_Printf_Init(115200);
+    
+    // 初始化GPIO腳位
+    GPIO_Pin_Init();
+    printf("GPIO Pins Initialized\r\n");
+    
     USARTx_CFG(115200);
     DMA_INIT();
     printf("SystemClk:%d\r\n", SystemCoreClock);
