@@ -412,7 +412,7 @@ static void StripDetect_SendInsertInfo(uint8_t pin3Status, uint8_t pin5Status)
 /*********************************************************************
  * @fn      GetBatteryVoltage
  *
- * @brief   讀取電池電壓
+ * @brief   讀取電池電壓，取樣100次，排序後取中間20個的平均值
  *
  * @param   none
  *
@@ -420,8 +420,11 @@ static void StripDetect_SendInsertInfo(uint8_t pin3Status, uint8_t pin5Status)
  */
 static uint16_t GetBatteryVoltage(void)
 {
-    uint16_t adcValue;
+    uint16_t adcValues[100];
     uint16_t voltage;
+    uint32_t sum = 0;
+    uint8_t i, j;
+    uint16_t temp;
 
     // 初始化內部電池電壓ADC
     ADC_InterBATSampInit();
@@ -429,12 +432,33 @@ static uint16_t GetBatteryVoltage(void)
     // 設定ADC通道為內部電池電壓
     ADC_ChannelCfg(CH_INTE_VBAT);
 
-    // 讀取電池電壓 (使用VBAT通道)
-    adcValue = ADC_ExcutSingleConver();
+    // 讀取電池電壓100次 (使用VBAT通道)
+    for (i = 0; i < 100; i++) {
+        adcValues[i] = ADC_ExcutSingleConver();
+    }
+
+    // 冒泡排序，從小到大
+    for (i = 0; i < 99; i++) {
+        for (j = 0; j < 99 - i; j++) {
+            if (adcValues[j] > adcValues[j + 1]) {
+                temp = adcValues[j];
+                adcValues[j] = adcValues[j + 1];
+                adcValues[j + 1] = temp;
+            }
+        }
+    }
+
+    // 計算中間20個值的總和 (從索引40到59)
+    for (i = 40; i < 60; i++) {
+        sum += adcValues[i];
+    }
+
+    // 計算平均值
+    sum = sum / 20;
 
     // 轉換為電壓值 (單位: mV)
     // PGA_1_4 模式下，電壓計算公式: (ADC/512-3)*Vref
-    voltage = (uint16_t)(((adcValue / 512.0) - 3) * 1050);
+    voltage = (uint16_t)(((sum / 512.0) - 3) * 1050);
 
     return voltage;
 }
