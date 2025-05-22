@@ -30,6 +30,18 @@
 void USART2_IRQHandler(void) __attribute__((interrupt("WCH-Interrupt-fast")));
 void DMA1_Channel6_IRQHandler(void) __attribute__((interrupt("WCH-Interrupt-fast")));
 
+/* 狀態機相關定義 */
+typedef enum {
+    STATE_IDLE,             // 空閒狀態
+    STATE_STRIP_INSERTED,   // 試片已插入
+    STATE_MEASURING,        // 測量中
+    STATE_RESULT_READY,     // 結果準備好
+    STATE_ERROR             // 錯誤狀態
+} SystemState_TypeDef;
+
+/* 狀態機處理函式宣告 */
+void State_Process(void);
+
 // ring buffer size
 #define RING_BUFFER_LEN     (1024u)
 
@@ -299,6 +311,52 @@ void TIM1_PWM_Init(void)
     printf("TIM1 PWM Initialized (20KHz, 100%% duty)\r\n");
 }
 
+/* 系統當前狀態 */
+static SystemState_TypeDef currentSystemState = STATE_IDLE;
+
+/*********************************************************************
+ * @fn      State_Process
+ *
+ * @brief   處理系統狀態機
+ *
+ * @return  none
+ */
+void State_Process(void)
+{
+    switch(currentSystemState)
+    {
+        case STATE_IDLE:
+            // 在空閒狀態下檢查是否有試片插入
+            // 實作部分後續再增加
+            break;
+        
+        case STATE_STRIP_INSERTED:
+            // 處理試片已插入狀態
+            // 實作部分後續再增加
+            break;
+            
+        case STATE_MEASURING:
+            // 處理測量中狀態
+            // 實作部分後續再增加
+            break;
+            
+        case STATE_RESULT_READY:
+            // 處理結果準備好狀態
+            // 實作部分後續再增加
+            break;
+            
+        case STATE_ERROR:
+            // 處理錯誤狀態
+            // 實作部分後續再增加
+            break;
+            
+        default:
+            // 未知狀態，重置為空閒狀態
+            currentSystemState = STATE_IDLE;
+            break;
+    }
+}
+
 /*********************************************************************
  * @fn      main
  *
@@ -358,6 +416,9 @@ int main(void)
         
         // 處理試片偵測相關任務
         STRIP_DETECT_Process();
+        
+        // 處理系統狀態機
+        State_Process();
         
         // /* 測試環境可以保留以下程式碼，以便於偵錯 */
         // if (ring_buffer.RemainCount > 0)
