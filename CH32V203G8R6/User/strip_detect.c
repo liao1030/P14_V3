@@ -178,6 +178,10 @@ void STRIP_DETECT_Process(void)
         
         /* 發送試片類型到CH582F */
         STRIP_DETECT_SendType(stripInfo.type);
+
+        /* 將系統狀態設置為等待血液滴入 */
+        System_SetState(STATE_WAIT_FOR_BLOOD);
+        printf("System now waiting for blood sample...\r\n");
     }
 }
 
@@ -339,6 +343,10 @@ void STRIP_DETECT_HandleInsertedEvent(void)
     stripInfo.detectionComplete = 1;
     
     printf("Strip Detected as type: %s\r\n", StripType_GetName(detectedType));
+    
+    /* 將系統狀態設置為等待血液滴入 */
+    System_SetState(STATE_WAIT_FOR_BLOOD);
+    printf("System now waiting for blood sample...\r\n");
 }
 
 /*********************************************************************
@@ -387,6 +395,10 @@ void STRIP_DETECT_SetStripType(StripType_TypeDef type)
     STRIP_DETECT_UpdateWPWMDuty(type);
     
     printf("Strip Type Manually Set: %s\r\n", StripType_GetName(type));
+    
+    /* 將系統狀態設置為等待血液滴入 */
+    System_SetState(STATE_WAIT_FOR_BLOOD);
+    printf("System now waiting for blood sample...\r\n");
 }
 
 /*********************************************************************

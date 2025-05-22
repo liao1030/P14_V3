@@ -11,6 +11,7 @@ C_SRCS += \
 ../User/rtc.c \
 ../User/strip_detect.c \
 ../User/system_ch32v20x.c \
+../User/system_state.c \
 ../User/uart_protocol.c \
 ../User/uart_protocol_stubs.c 
 
@@ -21,6 +22,7 @@ C_DEPS += \
 ./User/rtc.d \
 ./User/strip_detect.d \
 ./User/system_ch32v20x.d \
+./User/system_state.d \
 ./User/uart_protocol.d \
 ./User/uart_protocol_stubs.d 
 
@@ -31,6 +33,7 @@ OBJS += \
 ./User/rtc.o \
 ./User/strip_detect.o \
 ./User/system_ch32v20x.o \
+./User/system_state.o \
 ./User/uart_protocol.o \
 ./User/uart_protocol_stubs.o 
 

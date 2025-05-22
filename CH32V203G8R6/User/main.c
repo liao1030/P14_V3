@@ -22,25 +22,18 @@
 #include "string.h"
 #include "param_table.h"
 #include "uart_protocol.h"
-#include "strip_detect.h"
+#include "system_state.h"  // 系統狀態定義
 #include "rtc.h"
 #include "ch32v20x_opa.h"
 #include "ch32v20x_tim.h"
+#include "strip_detect.h"
 
 void USART2_IRQHandler(void) __attribute__((interrupt("WCH-Interrupt-fast")));
 void DMA1_Channel6_IRQHandler(void) __attribute__((interrupt("WCH-Interrupt-fast")));
 
-/* 狀態機相關定義 */
-typedef enum {
-    STATE_IDLE,                // 空閒狀態
-    STATE_STRIP_DETECTED,      // 檢測到試片
-    STATE_STRIP_VALIDATION,    // 試片驗證階段
-    STATE_PARAMETER_SETUP,     // 參數設置階段
-    STATE_WAIT_FOR_BLOOD,      // 等待血液滴入
-    STATE_MEASURING,           // 測量中
-    STATE_RESULT_READY,        // 結果準備好
-    STATE_ERROR                // 錯誤狀態
-} SystemState_TypeDef;
+/* 系統狀態定義已移至 system_state.h */
+
+/* 系統狀態變量已移至 system_state.c */
 
 /* 狀態機處理函式宣告 */
 void State_Process(void);
@@ -314,9 +307,6 @@ void TIM1_PWM_Init(void)
     printf("TIM1 PWM Initialized (20KHz, 100%% duty)\r\n");
 }
 
-/* 系統當前狀態 */
-static SystemState_TypeDef currentSystemState = STATE_IDLE;
-
 /*********************************************************************
  * @fn      State_Process
  *
@@ -326,7 +316,8 @@ static SystemState_TypeDef currentSystemState = STATE_IDLE;
  */
 void State_Process(void)
 {
-    switch(currentSystemState)
+    SystemState_TypeDef currentState = System_GetState();
+    switch(currentState)
     {
         case STATE_IDLE:
             // 在空閒狀態下檢查是否有試片插入
@@ -334,8 +325,8 @@ void State_Process(void)
             break;
         
         case STATE_STRIP_DETECTED:
-            // 處理檢測到試片狀態
-            // 實作部分後續再增加
+            // 處理檢測到試片狀態 - 這部分已由 STRIP_DETECT_Process 處理
+            // 在確認試片類型後自動進入 STATE_WAIT_FOR_BLOOD 狀態
             break;
             
         case STATE_STRIP_VALIDATION:
@@ -350,7 +341,8 @@ void State_Process(void)
             
         case STATE_WAIT_FOR_BLOOD:
             // 處理等待血液滴入階段
-            // 實作部分後續再增加
+            // 這裡可以添加LED閃爍或其他提示用戶滴血的操作
+            // 檢測血液滴入的邏輯會在後續實作
             break;
             
         case STATE_MEASURING:
@@ -370,10 +362,12 @@ void State_Process(void)
             
         default:
             // 未知狀態，重置為空閒狀態
-            currentSystemState = STATE_IDLE;
+            System_SetState(STATE_IDLE);
             break;
     }
 }
+
+/* System_SetState 和 System_GetState 函數已移至 system_state.c */
 
 /*********************************************************************
  * @fn      main

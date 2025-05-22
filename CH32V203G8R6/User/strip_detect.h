@@ -19,6 +19,7 @@ extern "C" {
 #include "ch32v20x.h"
 #include "param_table.h"
 #include "ch32v20x_tim.h"  // 添加TIM函數聲明
+#include "system_state.h"   // 系統狀態定義
 
 /* 試片狀態定義 */
 typedef enum {
@@ -27,6 +28,8 @@ typedef enum {
     STRIP_STATE_DETECTED = 2,  // 已判別類型
     STRIP_STATE_ERROR = 3      // 錯誤狀態
 } StripState_TypeDef;
+
+/* SystemState_TypeDef 定義在 system_state.h 中 */
 
 /* 試片插入狀態結構 */
 typedef struct {
@@ -48,6 +51,9 @@ StripType_TypeDef STRIP_DETECT_GetStripType(void);
 void STRIP_DETECT_HandleInsertedEvent(void);
 void STRIP_DETECT_SetStripType(StripType_TypeDef type);
 void STRIP_DETECT_SetPinStatus(uint8_t pin3, uint8_t pin5);
+
+/* 外部函數聲明 */
+extern void Delay_Ms(uint32_t n);
 
 #ifdef __cplusplus
 }
