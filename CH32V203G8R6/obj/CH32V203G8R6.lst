@@ -33,27 +33,27 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   ALLOC
   8 .stack        00000800  20004800  20004800  00006800  2**0
                   ALLOC
-  9 .debug_info   00019fad  00000000  00000000  000060a0  2**0
+  9 .debug_info   00019fc1  00000000  00000000  000060a0  2**0
                   CONTENTS, READONLY, DEBUGGING
- 10 .debug_abbrev 000046d6  00000000  00000000  0002004d  2**0
+ 10 .debug_abbrev 000046d6  00000000  00000000  00020061  2**0
                   CONTENTS, READONLY, DEBUGGING
- 11 .debug_aranges 00000e20  00000000  00000000  00024728  2**3
+ 11 .debug_aranges 00000e20  00000000  00000000  00024738  2**3
                   CONTENTS, READONLY, DEBUGGING
- 12 .debug_ranges 00001070  00000000  00000000  00025548  2**3
+ 12 .debug_ranges 00001070  00000000  00000000  00025558  2**3
                   CONTENTS, READONLY, DEBUGGING
- 13 .debug_line   00015534  00000000  00000000  000265b8  2**0
+ 13 .debug_line   00015534  00000000  00000000  000265c8  2**0
                   CONTENTS, READONLY, DEBUGGING
- 14 .debug_str    0000463c  00000000  00000000  0003baec  2**0
+ 14 .debug_str    0000467e  00000000  00000000  0003bafc  2**0
                   CONTENTS, READONLY, DEBUGGING
- 15 .comment      00000032  00000000  00000000  00040128  2**0
+ 15 .comment      00000032  00000000  00000000  0004017a  2**0
                   CONTENTS, READONLY
- 16 .debug_frame  00002a68  00000000  00000000  0004015c  2**2
+ 16 .debug_frame  00002a68  00000000  00000000  000401ac  2**2
                   CONTENTS, READONLY, DEBUGGING
- 17 .debug_loc    00007b53  00000000  00000000  00042bc4  2**0
+ 17 .debug_loc    00007b53  00000000  00000000  00042c14  2**0
                   CONTENTS, READONLY, DEBUGGING
- 18 .stab         00000084  00000000  00000000  0004a718  2**2
+ 18 .stab         00000084  00000000  00000000  0004a768  2**2
                   CONTENTS, READONLY, DEBUGGING
- 19 .stabstr      00000117  00000000  00000000  0004a79c  2**0
+ 19 .stabstr      00000117  00000000  00000000  0004a7ec  2**0
                   CONTENTS, READONLY, DEBUGGING
 SYMBOL TABLE:
 00000000 l    d  .init	00000000 .init
@@ -1008,7 +1008,7 @@ Disassembly of section .text:
 0000052e <State_Process>:
      52e:	81818793          	addi	a5,gp,-2024 # 200000a0 <_edata>
      532:	4394                	lw	a3,0(a5)
-     534:	4711                	li	a4,4
+     534:	471d                	li	a4,7
      536:	00d77463          	bgeu	a4,a3,53e <State_Process+0x10>
      53a:	0007a023          	sw	zero,0(a5) # 4000 <memchr+0x6>
      53e:	8082                	ret

@@ -32,11 +32,14 @@ void DMA1_Channel6_IRQHandler(void) __attribute__((interrupt("WCH-Interrupt-fast
 
 /* 狀態機相關定義 */
 typedef enum {
-    STATE_IDLE,             // 空閒狀態
-    STATE_STRIP_INSERTED,   // 試片已插入
-    STATE_MEASURING,        // 測量中
-    STATE_RESULT_READY,     // 結果準備好
-    STATE_ERROR             // 錯誤狀態
+    STATE_IDLE,                // 空閒狀態
+    STATE_STRIP_DETECTED,      // 檢測到試片
+    STATE_STRIP_VALIDATION,    // 試片驗證階段
+    STATE_PARAMETER_SETUP,     // 參數設置階段
+    STATE_WAIT_FOR_BLOOD,      // 等待血液滴入
+    STATE_MEASURING,           // 測量中
+    STATE_RESULT_READY,        // 結果準備好
+    STATE_ERROR                // 錯誤狀態
 } SystemState_TypeDef;
 
 /* 狀態機處理函式宣告 */
@@ -330,8 +333,23 @@ void State_Process(void)
             // 實作部分後續再增加
             break;
         
-        case STATE_STRIP_INSERTED:
-            // 處理試片已插入狀態
+        case STATE_STRIP_DETECTED:
+            // 處理檢測到試片狀態
+            // 實作部分後續再增加
+            break;
+            
+        case STATE_STRIP_VALIDATION:
+            // 處理試片驗證階段
+            // 實作部分後續再增加
+            break;
+            
+        case STATE_PARAMETER_SETUP:
+            // 處理參數設置階段
+            // 實作部分後續再增加
+            break;
+            
+        case STATE_WAIT_FOR_BLOOD:
+            // 處理等待血液滴入階段
             // 實作部分後續再增加
             break;
             

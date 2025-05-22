@@ -2218,29 +2218,29 @@ END GROUP
                 0x0000000020005000                PROVIDE (_eusrstack = .)
 OUTPUT(CH32V203G8R6.elf elf32-littleriscv)
 
-.debug_info     0x0000000000000000    0x19fad
+.debug_info     0x0000000000000000    0x19fc1
  .debug_info    0x0000000000000000      0xbb5 ./User/ch32v20x_it.o
- .debug_info    0x0000000000000bb5     0x21ec ./User/main.o
- .debug_info    0x0000000000002da1     0x17ff ./User/param_table.o
- .debug_info    0x00000000000045a0     0x1044 ./User/rtc.o
- .debug_info    0x00000000000055e4     0x19c0 ./User/strip_detect.o
- .debug_info    0x0000000000006fa4      0xb30 ./User/system_ch32v20x.o
- .debug_info    0x0000000000007ad4     0x219c ./User/uart_protocol.o
- .debug_info    0x0000000000009c70      0xe6c ./User/uart_protocol_stubs.o
- .debug_info    0x000000000000aadc       0x22 ./Startup/startup_ch32v20x_D6.o
- .debug_info    0x000000000000aafe     0x16eb ./Peripheral/src/ch32v20x_adc.o
- .debug_info    0x000000000000c1e9     0x1091 ./Peripheral/src/ch32v20x_bkp.o
- .debug_info    0x000000000000d27a      0xd16 ./Peripheral/src/ch32v20x_dma.o
- .debug_info    0x000000000000df90     0x15d2 ./Peripheral/src/ch32v20x_flash.o
- .debug_info    0x000000000000f562     0x1349 ./Peripheral/src/ch32v20x_gpio.o
- .debug_info    0x00000000000108ab      0xe61 ./Peripheral/src/ch32v20x_misc.o
- .debug_info    0x000000000001170c      0xb1d ./Peripheral/src/ch32v20x_opa.o
- .debug_info    0x0000000000012229     0x1049 ./Peripheral/src/ch32v20x_pwr.o
- .debug_info    0x0000000000013272     0x1268 ./Peripheral/src/ch32v20x_rcc.o
- .debug_info    0x00000000000144da      0xdc9 ./Peripheral/src/ch32v20x_rtc.o
- .debug_info    0x00000000000152a3     0x2ab3 ./Peripheral/src/ch32v20x_tim.o
- .debug_info    0x0000000000017d56     0x1335 ./Peripheral/src/ch32v20x_usart.o
- .debug_info    0x000000000001908b      0xf22 ./Debug/debug.o
+ .debug_info    0x0000000000000bb5     0x2200 ./User/main.o
+ .debug_info    0x0000000000002db5     0x17ff ./User/param_table.o
+ .debug_info    0x00000000000045b4     0x1044 ./User/rtc.o
+ .debug_info    0x00000000000055f8     0x19c0 ./User/strip_detect.o
+ .debug_info    0x0000000000006fb8      0xb30 ./User/system_ch32v20x.o
+ .debug_info    0x0000000000007ae8     0x219c ./User/uart_protocol.o
+ .debug_info    0x0000000000009c84      0xe6c ./User/uart_protocol_stubs.o
+ .debug_info    0x000000000000aaf0       0x22 ./Startup/startup_ch32v20x_D6.o
+ .debug_info    0x000000000000ab12     0x16eb ./Peripheral/src/ch32v20x_adc.o
+ .debug_info    0x000000000000c1fd     0x1091 ./Peripheral/src/ch32v20x_bkp.o
+ .debug_info    0x000000000000d28e      0xd16 ./Peripheral/src/ch32v20x_dma.o
+ .debug_info    0x000000000000dfa4     0x15d2 ./Peripheral/src/ch32v20x_flash.o
+ .debug_info    0x000000000000f576     0x1349 ./Peripheral/src/ch32v20x_gpio.o
+ .debug_info    0x00000000000108bf      0xe61 ./Peripheral/src/ch32v20x_misc.o
+ .debug_info    0x0000000000011720      0xb1d ./Peripheral/src/ch32v20x_opa.o
+ .debug_info    0x000000000001223d     0x1049 ./Peripheral/src/ch32v20x_pwr.o
+ .debug_info    0x0000000000013286     0x1268 ./Peripheral/src/ch32v20x_rcc.o
+ .debug_info    0x00000000000144ee      0xdc9 ./Peripheral/src/ch32v20x_rtc.o
+ .debug_info    0x00000000000152b7     0x2ab3 ./Peripheral/src/ch32v20x_tim.o
+ .debug_info    0x0000000000017d6a     0x1335 ./Peripheral/src/ch32v20x_usart.o
+ .debug_info    0x000000000001909f      0xf22 ./Debug/debug.o
 
 .debug_abbrev   0x0000000000000000     0x46d6
  .debug_abbrev  0x0000000000000000      0x22c ./User/ch32v20x_it.o
@@ -2360,50 +2360,50 @@ OUTPUT(CH32V203G8R6.elf elf32-littleriscv)
  .debug_line    0x0000000000013da9      0xf61 ./Peripheral/src/ch32v20x_usart.o
  .debug_line    0x0000000000014d0a      0x82a ./Debug/debug.o
 
-.debug_str      0x0000000000000000     0x463c
+.debug_str      0x0000000000000000     0x467e
  .debug_str     0x0000000000000000      0x620 ./User/ch32v20x_it.o
                                         0x6a5 (size before relaxing)
- .debug_str     0x0000000000000620      0xf05 ./User/main.o
-                                       0x1570 (size before relaxing)
- .debug_str     0x0000000000001525      0x33d ./User/param_table.o
+ .debug_str     0x0000000000000620      0xf47 ./User/main.o
+                                       0x15b2 (size before relaxing)
+ .debug_str     0x0000000000001567      0x33d ./User/param_table.o
                                         0xa95 (size before relaxing)
- .debug_str     0x0000000000001862      0x1b0 ./User/rtc.o
+ .debug_str     0x00000000000018a4      0x1b0 ./User/rtc.o
                                         0x829 (size before relaxing)
- .debug_str     0x0000000000001a12      0x4c3 ./User/strip_detect.o
+ .debug_str     0x0000000000001a54      0x4c3 ./User/strip_detect.o
                                         0xee1 (size before relaxing)
- .debug_str     0x0000000000001ed5       0xf2 ./User/system_ch32v20x.o
+ .debug_str     0x0000000000001f17       0xf2 ./User/system_ch32v20x.o
                                         0x6bf (size before relaxing)
- .debug_str     0x0000000000001fc7      0x3bf ./User/uart_protocol.o
+ .debug_str     0x0000000000002009      0x3bf ./User/uart_protocol.o
                                         0xc94 (size before relaxing)
- .debug_str     0x0000000000002386       0x33 ./User/uart_protocol_stubs.o
+ .debug_str     0x00000000000023c8       0x33 ./User/uart_protocol_stubs.o
                                         0x7bc (size before relaxing)
- .debug_str     0x00000000000023b9       0x2d ./Startup/startup_ch32v20x_D6.o
+ .debug_str     0x00000000000023fb       0x2d ./Startup/startup_ch32v20x_D6.o
                                          0x76 (size before relaxing)
- .debug_str     0x00000000000023e6      0x40e ./Peripheral/src/ch32v20x_adc.o
+ .debug_str     0x0000000000002428      0x40e ./Peripheral/src/ch32v20x_adc.o
                                         0xc37 (size before relaxing)
- .debug_str     0x00000000000027f4      0x376 ./Peripheral/src/ch32v20x_bkp.o
+ .debug_str     0x0000000000002836      0x376 ./Peripheral/src/ch32v20x_bkp.o
                                         0xac5 (size before relaxing)
- .debug_str     0x0000000000002b6a       0xcb ./Peripheral/src/ch32v20x_dma.o
+ .debug_str     0x0000000000002bac       0xcb ./Peripheral/src/ch32v20x_dma.o
                                         0x813 (size before relaxing)
- .debug_str     0x0000000000002c35      0x49c ./Peripheral/src/ch32v20x_flash.o
+ .debug_str     0x0000000000002c77      0x49c ./Peripheral/src/ch32v20x_flash.o
                                         0xb3f (size before relaxing)
- .debug_str     0x00000000000030d1      0x236 ./Peripheral/src/ch32v20x_gpio.o
+ .debug_str     0x0000000000003113      0x236 ./Peripheral/src/ch32v20x_gpio.o
                                         0x9dc (size before relaxing)
- .debug_str     0x0000000000003307       0x9c ./Peripheral/src/ch32v20x_misc.o
+ .debug_str     0x0000000000003349       0x9c ./Peripheral/src/ch32v20x_misc.o
                                         0xa9e (size before relaxing)
- .debug_str     0x00000000000033a3       0x56 ./Peripheral/src/ch32v20x_opa.o
+ .debug_str     0x00000000000033e5       0x56 ./Peripheral/src/ch32v20x_opa.o
                                         0x6db (size before relaxing)
- .debug_str     0x00000000000033f9      0x1a0 ./Peripheral/src/ch32v20x_pwr.o
+ .debug_str     0x000000000000343b      0x1a0 ./Peripheral/src/ch32v20x_pwr.o
                                         0x87c (size before relaxing)
- .debug_str     0x0000000000003599      0x34c ./Peripheral/src/ch32v20x_rcc.o
+ .debug_str     0x00000000000035db      0x34c ./Peripheral/src/ch32v20x_rcc.o
                                         0xaee (size before relaxing)
- .debug_str     0x00000000000038e5      0x14b ./Peripheral/src/ch32v20x_rtc.o
+ .debug_str     0x0000000000003927      0x14b ./Peripheral/src/ch32v20x_rtc.o
                                         0x826 (size before relaxing)
- .debug_str     0x0000000000003a30      0x8bb ./Peripheral/src/ch32v20x_tim.o
+ .debug_str     0x0000000000003a72      0x8bb ./Peripheral/src/ch32v20x_tim.o
                                        0x12d9 (size before relaxing)
- .debug_str     0x00000000000042eb      0x2dd ./Peripheral/src/ch32v20x_usart.o
+ .debug_str     0x000000000000432d      0x2dd ./Peripheral/src/ch32v20x_usart.o
                                         0xb0a (size before relaxing)
- .debug_str     0x00000000000045c8       0x74 ./Debug/debug.o
+ .debug_str     0x000000000000460a       0x74 ./Debug/debug.o
                                         0x931 (size before relaxing)
 
 .comment        0x0000000000000000       0x32
