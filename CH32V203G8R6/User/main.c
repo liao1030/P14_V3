@@ -24,6 +24,8 @@
 #include "uart_protocol.h"
 #include "strip_detect.h"
 #include "rtc.h"
+#include "ch32v20x_opa.h"
+#include "ch32v20x_tim.h"
 
 void USART2_IRQHandler(void) __attribute__((interrupt("WCH-Interrupt-fast")));
 void DMA1_Channel6_IRQHandler(void) __attribute__((interrupt("WCH-Interrupt-fast")));
@@ -196,6 +198,108 @@ uint8_t ring_buffer_pop()
 }
 
 /*********************************************************************
+ * @fn      OPA2_Init
+ *
+ * @brief   初始化OPA2，設定輸出、正向與負向輸入端。
+ *
+ * @return  none
+ */
+void OPA2_Init(void)
+{
+    GPIO_InitTypeDef GPIO_InitStructure = {0};
+    OPA_InitTypeDef OPA_InitStructure = {0};
+    
+    /* 啟用GPIOA和OPA的時鐘 */
+    RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA, ENABLE);
+    RCC_APB2PeriphClockCmd(RCC_APB2Periph_AFIO, ENABLE);
+
+    /* 配置OPA2相關的GPIO引腳 */
+    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_4 | GPIO_Pin_5 | GPIO_Pin_7;
+    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AIN;
+    GPIO_Init(GPIOA, &GPIO_InitStructure);
+
+    /* 配置OPA2 */
+    OPA_InitStructure.OPA_NUM = OPA2;           /* 選擇OPA2 */
+    OPA_InitStructure.PSEL = CHP1;              /* 選擇OPA2正向輸入端為CHP1(PA7) */
+    OPA_InitStructure.NSEL = CHN1;              /* 選擇OPA2負向輸入端為CHN1(PA5) */
+    OPA_InitStructure.Mode = OUT_IO_OUT1;       /* OPA2輸出通道為OUT1(PA4) */
+    OPA_Init(&OPA_InitStructure);
+    
+    /* 啟用OPA2 */
+    OPA_Cmd(OPA2, ENABLE);
+    
+    printf("OPA2 Initialized\r\n");
+}
+
+/*********************************************************************
+ * @fn      TIM1_PWM_Init
+ *
+ * @brief   初始化TIM1，配置PB15(TIM1_CH3N)為20KHz PWM輸出，預設佔空比100%。
+ *
+ * @return  none
+ */
+void TIM1_PWM_Init(void)
+{
+    GPIO_InitTypeDef GPIO_InitStructure = {0};
+    TIM_TimeBaseInitTypeDef TIM_TimeBaseStructure = {0};
+    TIM_OCInitTypeDef TIM_OCInitStructure = {0};
+    TIM_BDTRInitTypeDef TIM_BDTRInitStructure = {0};
+
+    /* 啟用GPIOB和TIM1的時鐘 */
+    RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOB | RCC_APB2Periph_TIM1, ENABLE);
+
+    /* 配置PB15 (TIM1_CH3N) */
+    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_15;
+    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_PP;
+    GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+    GPIO_Init(GPIOB, &GPIO_InitStructure);
+
+    /* 計算PWM頻率所需的參數 
+     * 系統時鐘 = 16MHz (根據SystemClk預設值)
+     * 目標頻率 = 20KHz
+     * 預分頻 = 1
+     * 計數週期 = 16000000 / 20000 / 1 = 800
+     */
+    TIM_TimeBaseStructure.TIM_Period = 800 - 1;         /* 計數週期，對應20KHz */
+    TIM_TimeBaseStructure.TIM_Prescaler = 0;              /* 預分頻 = 1 */
+    TIM_TimeBaseStructure.TIM_ClockDivision = 0;          /* 時鐘不分頻 */
+    TIM_TimeBaseStructure.TIM_CounterMode = TIM_CounterMode_Up; /* 向上計數模式 */
+    TIM_TimeBaseStructure.TIM_RepetitionCounter = 0;
+    TIM_TimeBaseInit(TIM1, &TIM_TimeBaseStructure);
+
+    /* 配置PWM通道3 */
+    TIM_OCInitStructure.TIM_OCMode = TIM_OCMode_PWM2;    /* PWM模式2 */
+    TIM_OCInitStructure.TIM_OutputState = TIM_OutputState_Enable;
+    TIM_OCInitStructure.TIM_OutputNState = TIM_OutputNState_Enable; /* 啟用互補輸出 */
+    TIM_OCInitStructure.TIM_Pulse = 400 - 1;            /* 50% 佔空比 */
+    TIM_OCInitStructure.TIM_OCPolarity = TIM_OCPolarity_High;
+    TIM_OCInitStructure.TIM_OCNPolarity = TIM_OCNPolarity_High;
+    TIM_OCInitStructure.TIM_OCIdleState = TIM_OCIdleState_Set;
+    TIM_OCInitStructure.TIM_OCNIdleState = TIM_OCNIdleState_Reset;
+    TIM_OC3Init(TIM1, &TIM_OCInitStructure);
+
+    /* 設定TIM1的死區和斷路控制 */
+    TIM_BDTRInitStructure.TIM_OSSRState = TIM_OSSRState_Enable;
+    TIM_BDTRInitStructure.TIM_OSSIState = TIM_OSSIState_Enable;
+    TIM_BDTRInitStructure.TIM_LOCKLevel = TIM_LOCKLevel_OFF;
+    TIM_BDTRInitStructure.TIM_DeadTime = 0;              /* 無死區時間 */
+    TIM_BDTRInitStructure.TIM_Break = TIM_Break_Disable; /* 禁用斷路功能 */
+    TIM_BDTRInitStructure.TIM_BreakPolarity = TIM_BreakPolarity_Low;
+    TIM_BDTRInitStructure.TIM_AutomaticOutput = TIM_AutomaticOutput_Enable;
+    TIM_BDTRConfig(TIM1, &TIM_BDTRInitStructure);
+
+    /* 啟用預加載 */
+    TIM_OC3PreloadConfig(TIM1, TIM_OCPreload_Enable);
+    TIM_ARRPreloadConfig(TIM1, ENABLE);
+    
+    /* 啟用TIM1 */
+    TIM_Cmd(TIM1, ENABLE);
+    TIM_CtrlPWMOutputs(TIM1, ENABLE);
+    
+    printf("TIM1 PWM Initialized (20KHz, 100%% duty)\r\n");
+}
+
+/*********************************************************************
  * @fn      main
  *
  * @brief   Main program.
@@ -211,6 +315,12 @@ int main(void)
     DMA_INIT();
     printf("SystemClk:%d\r\n", SystemCoreClock);
     printf("This is an example\r\n");
+    
+    /* 初始化OPA2 */
+    OPA2_Init();
+    
+    /* 初始化TIM1 PWM (WE_ENABLE, PB15, 20KHz) */
+    TIM1_PWM_Init();
     
     /* 初始化參數表 */
     PARAM_Init();

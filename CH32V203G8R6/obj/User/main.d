@@ -26,7 +26,8 @@ User/main.o: ../User/main.c \
  /Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH32V203G8R6/User/ch32v20x_it.h \
  /Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH32V203G8R6/Peripheral/inc/ch32v20x_misc.h \
  ../User/param_table.h ../User/uart_protocol.h ../User/strip_detect.h \
- ../User/rtc.h
+ ../User/rtc.h \
+ /Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH32V203G8R6/Peripheral/inc/ch32v20x_opa.h
 
 /Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH32V203G8R6/Debug/debug.h:
 
@@ -87,3 +88,5 @@ User/main.o: ../User/main.c \
 ../User/strip_detect.h:
 
 ../User/rtc.h:
+
+/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH32V203G8R6/Peripheral/inc/ch32v20x_opa.h:
