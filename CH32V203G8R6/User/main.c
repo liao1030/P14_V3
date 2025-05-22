@@ -271,7 +271,7 @@ void TIM1_PWM_Init(void)
     TIM_OCInitStructure.TIM_OCMode = TIM_OCMode_PWM2;    /* PWM模式2 */
     TIM_OCInitStructure.TIM_OutputState = TIM_OutputState_Enable;
     TIM_OCInitStructure.TIM_OutputNState = TIM_OutputNState_Enable; /* 啟用互補輸出 */
-    TIM_OCInitStructure.TIM_Pulse = 400 - 1;            /* 50% 佔空比 */
+    TIM_OCInitStructure.TIM_Pulse = 800 - 1;            /* 預設 0% 佔空比 */
     TIM_OCInitStructure.TIM_OCPolarity = TIM_OCPolarity_High;
     TIM_OCInitStructure.TIM_OCNPolarity = TIM_OCNPolarity_High;
     TIM_OCInitStructure.TIM_OCIdleState = TIM_OCIdleState_Set;
@@ -331,7 +331,7 @@ int main(void)
     printf("UART Protocol Initialized\r\n");
     
     /* 初始化試片偵測相關設置 */
-    STRIP_DETECT_Init();
+    STRIP_DETECT_Init();    
     
     /* 初始化RTC */
     RTC_Config();

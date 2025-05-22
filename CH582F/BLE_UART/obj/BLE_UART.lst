@@ -9683,7 +9683,7 @@ void StripDetect_Init(tmosTaskID task_id)
     393e:	400017b7          	lui	a5,0x40001
     3942:	0c87a703          	lw	a4,200(a5) # 400010c8 <_eusrstack+0x1fff90c8>
 /Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:152
-    GPIOA_ResetBits(V2P5_ENABLE_PIN);              // V2P5_ENABLE輸出低電平，不供電給CH32V203
+    GPIOA_ResetBits(V2P5_ENABLE_PIN);              // V2P5_ENABLE輸出低電平，不供電給CH32V203   
     3946:	6691                	lui	a3,0x4
 /Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:155
     
@@ -9695,13 +9695,13 @@ void StripDetect_Init(tmosTaskID task_id)
     394c:	40076713          	ori	a4,a4,1024
     3950:	0ce7a423          	sw	a4,200(a5)
 /Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:152
-    GPIOA_ResetBits(V2P5_ENABLE_PIN);              // V2P5_ENABLE輸出低電平，不供電給CH32V203
+    GPIOA_ResetBits(V2P5_ENABLE_PIN);              // V2P5_ENABLE輸出低電平，不供電給CH32V203   
     3954:	0ac7a703          	lw	a4,172(a5)
 /Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:155
     tmos_start_task(StripDetect_TaskID, STRIP_PERIODIC_CHECK_EVT, MS1_TO_SYSTEM_TIME(100));
     3958:	04000593          	li	a1,64
 /Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:152
-    GPIOA_ResetBits(V2P5_ENABLE_PIN);              // V2P5_ENABLE輸出低電平，不供電給CH32V203
+    GPIOA_ResetBits(V2P5_ENABLE_PIN);              // V2P5_ENABLE輸出低電平，不供電給CH32V203   
     395c:	8f55                	or	a4,a4,a3
     395e:	0ae7a623          	sw	a4,172(a5)
 /Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:155

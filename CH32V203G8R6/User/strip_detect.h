@@ -18,6 +18,7 @@ extern "C" {
 #include "debug.h"
 #include "ch32v20x.h"
 #include "param_table.h"
+#include "ch32v20x_tim.h"  // Ìí¼ÓTIMº¯”µÂ•Ã÷
 
 /* Ô‡Æ¬ î‘B¶¨Áx */
 typedef enum {

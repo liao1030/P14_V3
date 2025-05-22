@@ -31,6 +31,7 @@ static uint16_t STRIP_DETECT_ReadADC(uint8_t channel);
 static float STRIP_DETECT_GetT1Voltage(void);
 static StripType_TypeDef STRIP_DETECT_DetermineStripType(void);
 static void STRIP_DETECT_SendType(StripType_TypeDef type);
+static void STRIP_DETECT_UpdateWPWMDuty(StripType_TypeDef type);
 
 /*********************************************************************
  * @fn      STRIP_DETECT_Init
@@ -57,13 +58,6 @@ void STRIP_DETECT_Init(void)
     GPIO_InitStructure.GPIO_Pin = GPIO_Pin_6;
     GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AIN;
     GPIO_Init(GPIOA, &GPIO_InitStructure);
-    
-    /* 配置WE_ENABLE引腳 (PB15) - 控制W電極的PWM */
-    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_15;
-    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
-    GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
-    GPIO_Init(GPIOB, &GPIO_InitStructure);
-    GPIO_SetBits(GPIOB, GPIO_Pin_15); // 預設為高電平
     
     /* 初始化ADC */
     STRIP_DETECT_ADC_Init();
@@ -179,6 +173,9 @@ void STRIP_DETECT_Process(void)
         /* 保存試片類型到參數表 */
         PARAM_SetByte(PARAM_STRIP_TYPE, (uint8_t)stripInfo.type);
         
+        /* 設置W電極PWM佔空比 */
+        STRIP_DETECT_UpdateWPWMDuty(stripInfo.type);
+        
         /* 發送試片類型到CH582F */
         STRIP_DETECT_SendType(stripInfo.type);
     }
@@ -254,6 +251,54 @@ static void STRIP_DETECT_SendType(StripType_TypeDef type)
 }
 
 /*********************************************************************
+ * @fn      STRIP_DETECT_UpdateWPWMDuty
+ *
+ * @brief   根據試片類型設置W電極PWM佔空比
+ *
+ * @param   type - 試片類型
+ *
+ * @return  none
+ */
+static void STRIP_DETECT_UpdateWPWMDuty(StripType_TypeDef type)
+{
+    uint16_t dutyValue = 0;  // PWM佔空比值 (0~1000)
+    uint16_t compareValue = 0;  // TIM1計數器比較值
+    uint16_t period = 800;  // TIM1週期值 (由初始化得知是800)
+    
+    /* 讀取參數表中該試片類型對應的PWM佔空比設定 */
+    switch (type)
+    {
+        case STRIP_TYPE_GLV:  // 血糖(GLV試片)
+        case STRIP_TYPE_GAV:  // 血糖(GAV試片)
+            dutyValue = PARAM_GetWord(PARAM_BG_W_PWM_DUTY);
+            break;
+        
+        case STRIP_TYPE_U:    // 尿酸
+            dutyValue = PARAM_GetWord(PARAM_U_W_PWM_DUTY);
+            break;
+            
+        case STRIP_TYPE_C:    // 總膽固醇
+            dutyValue = PARAM_GetWord(PARAM_C_W_PWM_DUTY);
+            break;
+            
+        case STRIP_TYPE_TG:   // 三酸甘油脂
+            dutyValue = PARAM_GetWord(PARAM_TG_W_PWM_DUTY);
+            break;
+            
+        default:
+            dutyValue = 1000;  // 預設100%佔空比
+            break;
+    }
+    
+    /* 計算TIM1比較值 (按照PWM模式2) */
+    /* 轉換比例 0~1000 -> 0~800，同時PWM模式2是值越大佔空比越小 */
+    compareValue = period * (1000 - dutyValue) / 1000;
+    
+    // /* 更新TIM1通道3比較值，設置PWM佔空比 */
+    TIM_SetCompare3(TIM1, compareValue);
+}
+
+/*********************************************************************
  * @fn      STRIP_DETECT_HandleInsertedEvent
  *
  * @brief   處理試片插入事件
@@ -282,6 +327,9 @@ void STRIP_DETECT_HandleInsertedEvent(void)
     /* 判斷試片類型 */
     StripType_TypeDef detectedType = STRIP_DETECT_DetermineStripType();
     stripInfo.type = detectedType;
+    
+    /* 設置W電極PWM佔空比 */
+    STRIP_DETECT_UpdateWPWMDuty(detectedType);
     
     /* 發送試片類型回應到藍牙模組 */
     UART_SendStripTypeAck(detectedType);
@@ -334,6 +382,9 @@ void STRIP_DETECT_SetStripType(StripType_TypeDef type)
     
     /* 保存試片類型到參數表 */
     PARAM_SetByte(PARAM_STRIP_TYPE, (uint8_t)type);
+    
+    /* 設置W電極PWM佔空比 */
+    STRIP_DETECT_UpdateWPWMDuty(type);
     
     printf("Strip Type Manually Set: %s\r\n", StripType_GetName(type));
 }

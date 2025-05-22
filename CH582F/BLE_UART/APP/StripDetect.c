@@ -149,7 +149,7 @@ void StripDetect_Init(tmosTaskID task_id)
     
     // 設定初始狀態
     GPIOB_SetBits(T3_IN_SEL_PIN);                // T3_IN_SEL輸出高電平，預設關閉T3電極
-    GPIOA_ResetBits(V2P5_ENABLE_PIN);              // V2P5_ENABLE輸出低電平，不供電給CH32V203
+    GPIOA_ResetBits(V2P5_ENABLE_PIN);              // V2P5_ENABLE輸出低電平，不供電給CH32V203   
     
     // 啟動定期檢查任務，每100ms檢查一次
     tmos_start_task(StripDetect_TaskID, STRIP_PERIODIC_CHECK_EVT, MS1_TO_SYSTEM_TIME(100));
