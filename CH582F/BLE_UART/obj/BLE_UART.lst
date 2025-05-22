@@ -9685,8 +9685,11 @@ void StripDetect_Init(tmosTaskID task_id)
 /Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:152
     GPIOA_ResetBits(V2P5_ENABLE_PIN);              // V2P5_ENABLE輸出低電平，不供電給CH32V203   
     3946:	6691                	lui	a3,0x4
-/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:155
+/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:158
     
+    // //測試用
+    // GPIOA_SetBits(V2P5_ENABLE_PIN);              // V2P5_ENABLE輸出低電平，供電給CH32V203
+
     // 啟動定期檢查任務，每100ms檢查一次
     tmos_start_task(StripDetect_TaskID, STRIP_PERIODIC_CHECK_EVT, MS1_TO_SYSTEM_TIME(100));
     3948:	0a000613          	li	a2,160
@@ -9697,37 +9700,37 @@ void StripDetect_Init(tmosTaskID task_id)
 /Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:152
     GPIOA_ResetBits(V2P5_ENABLE_PIN);              // V2P5_ENABLE輸出低電平，不供電給CH32V203   
     3954:	0ac7a703          	lw	a4,172(a5)
-/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:155
+/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:158
     tmos_start_task(StripDetect_TaskID, STRIP_PERIODIC_CHECK_EVT, MS1_TO_SYSTEM_TIME(100));
     3958:	04000593          	li	a1,64
 /Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:152
     GPIOA_ResetBits(V2P5_ENABLE_PIN);              // V2P5_ENABLE輸出低電平，不供電給CH32V203   
     395c:	8f55                	or	a4,a4,a3
     395e:	0ae7a623          	sw	a4,172(a5)
-/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:155
+/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:158
     tmos_start_task(StripDetect_TaskID, STRIP_PERIODIC_CHECK_EVT, MS1_TO_SYSTEM_TIME(100));
     3962:	00044503          	lbu	a0,0(s0)
     3966:	0b6010ef          	jal	ra,4a1c <tmos_start_task>
-/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:158
+/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:161
     
     PRINT("Strip Detect Module Initialized (Polling Mode)\n");
 }
     396a:	4422                	lw	s0,8(sp)
     396c:	40b2                	lw	ra,12(sp)
-/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:157
+/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:160
     PRINT("Strip Detect Module Initialized (Polling Mode)\n");
     396e:	00022517          	auipc	a0,0x22
     3972:	e6650513          	addi	a0,a0,-410 # 257d4 <devInfoSoftwareRev+0x8c>
-/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:158
+/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:161
 }
     3976:	0141                	addi	sp,sp,16
-/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:157
+/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:160
     PRINT("Strip Detect Module Initialized (Polling Mode)\n");
     3978:	3972006f          	j	2450e <puts>
 
 0000397c <StripDetect_ProcessEvent>:
 StripDetect_ProcessEvent():
-/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:171
+/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:174
  * @param   events - 事件標誌
  *
  * @return  未處理的事件
@@ -9743,17 +9746,17 @@ uint16_t StripDetect_ProcessEvent(tmosTaskID task_id, uint16_t events)
     3988:	cdd2                	sw	s4,216(sp)
     398a:	cbd6                	sw	s5,212(sp)
     398c:	c9da                	sw	s6,208(sp)
-/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:172
+/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:175
     if(events & STRIP_PERIODIC_CHECK_EVT)
     398e:	0405f793          	andi	a5,a1,64
-/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:171
+/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:174
 {
     3992:	892e                	mv	s2,a1
-/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:172
+/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:175
     if(events & STRIP_PERIODIC_CHECK_EVT)
     3994:	18078163          	beqz	a5,3b16 <StripDetect_ProcessEvent+0x19a>
 StripDetect_PeriodicCheck():
-/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:216
+/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:219
     static uint8_t lastPin5Status = 1;
     static uint8_t debounceCount3 = 0;
     static uint8_t debounceCount5 = 0;
@@ -9762,24 +9765,24 @@ StripDetect_PeriodicCheck():
     uint8_t currentPin3Status = GPIOB_ReadPortPin(STRIP_DETECT_3_PIN) ? 1 : 0;
     3998:	400017b7          	lui	a5,0x40001
     399c:	0c47a703          	lw	a4,196(a5) # 400010c4 <_eusrstack+0x1fff90c4>
-/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:217
+/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:220
     uint8_t currentPin5Status = GPIOA_ReadPortPin(STRIP_DETECT_5_PIN) ? 1 : 0;
     39a0:	0a47a783          	lw	a5,164(a5)
-/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:220
+/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:223
     
     // 除彈跳處理
     uint8_t stablePin3Status = debounce_pin_status(currentPin3Status, lastPin3Status, &debounceCount3, 3);
     39a4:	8161c403          	lbu	s0,-2026(gp) # 2000244e <lastPin3Status.5395>
-/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:216
+/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:219
     uint8_t currentPin3Status = GPIOB_ReadPortPin(STRIP_DETECT_3_PIN) ? 1 : 0;
     39a8:	832d                	srli	a4,a4,0xb
-/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:217
+/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:220
     uint8_t currentPin5Status = GPIOA_ReadPortPin(STRIP_DETECT_5_PIN) ? 1 : 0;
     39aa:	83bd                	srli	a5,a5,0xf
-/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:216
+/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:219
     uint8_t currentPin3Status = GPIOB_ReadPortPin(STRIP_DETECT_3_PIN) ? 1 : 0;
     39ac:	8b05                	andi	a4,a4,1
-/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:217
+/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:220
     uint8_t currentPin5Status = GPIOA_ReadPortPin(STRIP_DETECT_5_PIN) ? 1 : 0;
     39ae:	8b85                	andi	a5,a5,1
 debounce_pin_status():
@@ -9796,7 +9799,7 @@ debounce_pin_status():
     39be:	0685                	addi	a3,a3,1
     39c0:	86d18923          	sb	a3,-1934(gp) # 200024aa <debounceCount3.5397>
 StripDetect_PeriodicCheck():
-/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:221
+/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:224
     uint8_t stablePin5Status = debounce_pin_status(currentPin5Status, lastPin5Status, &debounceCount5, 3);
     39c4:	8171c483          	lbu	s1,-2025(gp) # 2000244f <lastPin5Status.5396>
 debounce_pin_status():
@@ -9813,72 +9816,72 @@ debounce_pin_status():
     39d6:	0685                	addi	a3,a3,1
     39d8:	86d189a3          	sb	a3,-1933(gp) # 200024ab <debounceCount5.5398>
 StripDetect_PeriodicCheck():
-/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:224
+/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:227
     
     // 更新上次狀態
     lastPin3Status = currentPin3Status;
     39dc:	80e18b23          	sb	a4,-2026(gp) # 2000244e <lastPin3Status.5395>
-/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:225
+/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:228
     lastPin5Status = currentPin5Status;
     39e0:	80f18ba3          	sb	a5,-2025(gp) # 2000244f <lastPin5Status.5396>
-/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:228
+/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:231
 
     // 檢查試片插入情況 - 至少有一個引腳為低電平，試片可能已插入
     if (stablePin3Status == 0 || stablePin5Status == 0)
     39e4:	c011                	beqz	s0,39e8 <StripDetect_ProcessEvent+0x6c>
     39e6:	e8f1                	bnez	s1,3aba <StripDetect_ProcessEvent+0x13e>
-/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:230
+/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:233
     {
         if(!stripState.isStripInserted)
     39e8:	1ffff797          	auipc	a5,0x1ffff
     39ec:	8bc7c783          	lbu	a5,-1860(a5) # 200022a4 <stripState>
     39f0:	e3c9                	bnez	a5,3a72 <StripDetect_ProcessEvent+0xf6>
-/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:233
+/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:236
         {
             // 第一次偵測到試片插入
             stripState.isStripInserted = true;
     39f2:	4985                	li	s3,1
     39f4:	1ffff797          	auipc	a5,0x1ffff
     39f8:	8b378823          	sb	s3,-1872(a5) # 200022a4 <stripState>
-/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:234
+/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:237
             stripState.pin3Status = stablePin3Status;
     39fc:	1ffff797          	auipc	a5,0x1ffff
     3a00:	8a878523          	sb	s0,-1878(a5) # 200022a6 <stripState+0x2>
-/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:235
+/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:238
             stripState.pin5Status = stablePin5Status;
     3a04:	1ffff797          	auipc	a5,0x1ffff
     3a08:	8a9781a3          	sb	s1,-1885(a5) # 200022a7 <stripState+0x3>
-/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:236
+/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:239
             stripState.insertTimeStamp = GetSysClock() / 1000;
     3a0c:	c36ff0ef          	jal	ra,2e42 <GetSysClock>
     3a10:	3e800793          	li	a5,1000
     3a14:	02f55533          	divu	a0,a0,a5
-/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:239
+/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:242
             
             // 試片插入時，V2P5_ENABLE輸出高電平，供電給CH32V203
             GPIOA_SetBits(V2P5_ENABLE_PIN);
     3a18:	40001737          	lui	a4,0x40001
     3a1c:	6691                	lui	a3,0x4
-/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:242
+/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:245
 
             // 啟動延遲任務，等待1000ms後發送試片插入消息給MCU
             tmos_start_task(StripDetect_TaskID, STRIP_SEND_MESSAGE_EVT, MS1_TO_SYSTEM_TIME(1000));
     3a1e:	64000613          	li	a2,1600
     3a22:	08000593          	li	a1,128
-/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:236
+/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:239
             stripState.insertTimeStamp = GetSysClock() / 1000;
     3a26:	1ffff797          	auipc	a5,0x1ffff
     3a2a:	88a7a123          	sw	a0,-1918(a5) # 200022a8 <stripState+0x4>
-/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:239
+/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:242
             GPIOA_SetBits(V2P5_ENABLE_PIN);
     3a2e:	0a872783          	lw	a5,168(a4) # 400010a8 <_eusrstack+0x1fff90a8>
     3a32:	8fd5                	or	a5,a5,a3
     3a34:	0af72423          	sw	a5,168(a4)
-/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:242
+/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:245
             tmos_start_task(StripDetect_TaskID, STRIP_SEND_MESSAGE_EVT, MS1_TO_SYSTEM_TIME(1000));
     3a38:	8151c503          	lbu	a0,-2027(gp) # 2000244d <StripDetect_TaskID>
     3a3c:	7e1000ef          	jal	ra,4a1c <tmos_start_task>
-/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:247
+/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:250
             
             // 設定等待MCU回應
             stripState.isWaitingForMCUResponse = true;
@@ -9888,37 +9891,37 @@ StripDetect_PeriodicCheck():
     3a42:	85a2                	mv	a1,s0
     3a44:	00022517          	auipc	a0,0x22
     3a48:	ddc50513          	addi	a0,a0,-548 # 25820 <devInfoSoftwareRev+0xd8>
-/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:245
+/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:248
             stripState.isWaitingForMCUResponse = true;
     3a4c:	1ffff797          	auipc	a5,0x1ffff
     3a50:	87378023          	sb	s3,-1952(a5) # 200022ac <stripState+0x8>
-/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:247
+/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:250
             PRINT("Strip Inserted (Polling)! Pin3: %d, Pin5: %d\n", stablePin3Status, stablePin5Status);
     3a54:	1a1200ef          	jal	ra,243f4 <iprintf>
-/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:250
+/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:253
             
             // 根據Pin3和Pin5的狀態預判試片類型
             if(stablePin3Status == 0 && stablePin5Status == 1) {
     3a58:	4785                	li	a5,1
     3a5a:	e431                	bnez	s0,3aa6 <StripDetect_ProcessEvent+0x12a>
-/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:252
+/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:255
                 // 可能是GLV或U型試片
                 PRINT("Possible Strip Type: GLV or U\n");
     3a5c:	00022517          	auipc	a0,0x22
     3a60:	df450513          	addi	a0,a0,-524 # 25850 <devInfoSoftwareRev+0x108>
-/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:250
+/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:253
             if(stablePin3Status == 0 && stablePin5Status == 1) {
     3a64:	04f48863          	beq	s1,a5,3ab4 <StripDetect_ProcessEvent+0x138>
-/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:255
+/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:258
             } else if(stablePin3Status == 0 && stablePin5Status == 0) {
                 // 可能是C型試片
                 PRINT("Possible Strip Type: C\n");
     3a68:	00022517          	auipc	a0,0x22
     3a6c:	e0850513          	addi	a0,a0,-504 # 25870 <devInfoSoftwareRev+0x128>
-/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:253
+/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:256
             } else if(stablePin3Status == 0 && stablePin5Status == 0) {
     3a70:	c0b1                	beqz	s1,3ab4 <StripDetect_ProcessEvent+0x138>
-/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:284
+/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:290
             PRINT("Strip Removed (Polling)\n");
         }
     }
@@ -9930,10 +9933,10 @@ StripDetect_PeriodicCheck():
     3a7a:	8151c503          	lbu	a0,-2027(gp) # 2000244d <StripDetect_TaskID>
     3a7e:	79f000ef          	jal	ra,4a1c <tmos_start_task>
 StripDetect_ProcessEvent():
-/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:177
+/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:180
         return (events ^ STRIP_PERIODIC_CHECK_EVT);
     3a82:	04094513          	xori	a0,s2,64
-/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:196
+/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:199
 }
     3a86:	50be                	lw	ra,236(sp)
     3a88:	542e                	lw	s0,232(sp)
@@ -9959,98 +9962,98 @@ debounce_pin_status():
     if (*debounceCount >= threshold) {
     3aa4:	bf25                	j	39dc <StripDetect_ProcessEvent+0x60>
 StripDetect_PeriodicCheck():
-/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:256
+/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:259
             } else if(stablePin3Status == 1 && stablePin5Status == 0) {
     3aa6:	fcf416e3          	bne	s0,a5,3a72 <StripDetect_ProcessEvent+0xf6>
-/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:258
+/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:261
                 PRINT("Possible Strip Type: TG or GAV\n");
     3aaa:	00022517          	auipc	a0,0x22
     3aae:	dde50513          	addi	a0,a0,-546 # 25888 <devInfoSoftwareRev+0x140>
-/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:256
+/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:259
             } else if(stablePin3Status == 1 && stablePin5Status == 0) {
     3ab2:	f0e1                	bnez	s1,3a72 <StripDetect_ProcessEvent+0xf6>
-/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:279
+/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:285
             PRINT("Strip Removed (Polling)\n");
     3ab4:	25b200ef          	jal	ra,2450e <puts>
     3ab8:	bf6d                	j	3a72 <StripDetect_ProcessEvent+0xf6>
-/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:263
+/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:266
     else if (stablePin3Status == 1 && stablePin5Status == 1) 
     3aba:	4785                	li	a5,1
     3abc:	faf41be3          	bne	s0,a5,3a72 <StripDetect_ProcessEvent+0xf6>
     3ac0:	fa8499e3          	bne	s1,s0,3a72 <StripDetect_ProcessEvent+0xf6>
-/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:265
+/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:268
         if(stripState.isStripInserted) 
     3ac4:	1fffe797          	auipc	a5,0x1fffe
     3ac8:	7e07c783          	lbu	a5,2016(a5) # 200022a4 <stripState>
     3acc:	d3dd                	beqz	a5,3a72 <StripDetect_ProcessEvent+0xf6>
-/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:268
+/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:271
             stripState.isStripInserted = false;
     3ace:	1fffe797          	auipc	a5,0x1fffe
     3ad2:	7c078b23          	sb	zero,2006(a5) # 200022a4 <stripState>
-/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:269
+/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:272
             stripState.stripType = STRIP_TYPE_UNKNOWN;
     3ad6:	57fd                	li	a5,-1
     3ad8:	1fffe717          	auipc	a4,0x1fffe
     3adc:	7cf706a3          	sb	a5,1997(a4) # 200022a5 <stripState+0x1>
-/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:270
+/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:273
             stripState.isTypeDetected = false;
     3ae0:	1fffe797          	auipc	a5,0x1fffe
     3ae4:	7c0786a3          	sb	zero,1997(a5) # 200022ad <stripState+0x9>
-/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:271
+/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:274
             stripState.isWaitingForMCUResponse = false;
     3ae8:	1fffe797          	auipc	a5,0x1fffe
     3aec:	7c078223          	sb	zero,1988(a5) # 200022ac <stripState+0x8>
-/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:274
+/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:277
             GPIOA_ResetBits(V2P5_ENABLE_PIN);
     3af0:	400017b7          	lui	a5,0x40001
     3af4:	0ac7a703          	lw	a4,172(a5) # 400010ac <_eusrstack+0x1fff90ac>
     3af8:	6691                	lui	a3,0x4
-/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:279
+/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:285
             PRINT("Strip Removed (Polling)\n");
     3afa:	00022517          	auipc	a0,0x22
     3afe:	dae50513          	addi	a0,a0,-594 # 258a8 <devInfoSoftwareRev+0x160>
-/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:274
+/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:277
             GPIOA_ResetBits(V2P5_ENABLE_PIN);
     3b02:	8f55                	or	a4,a4,a3
     3b04:	0ae7a623          	sw	a4,172(a5)
-/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:277
+/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:283
             GPIOB_SetBits(T3_IN_SEL_PIN);
     3b08:	0c87a703          	lw	a4,200(a5)
     3b0c:	40076713          	ori	a4,a4,1024
     3b10:	0ce7a423          	sw	a4,200(a5)
-/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:279
+/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:285
             PRINT("Strip Removed (Polling)\n");
     3b14:	b745                	j	3ab4 <StripDetect_ProcessEvent+0x138>
 StripDetect_ProcessEvent():
-/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:180
+/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:183
     if(events & STRIP_SEND_MESSAGE_EVT)
     3b16:	0805f793          	andi	a5,a1,128
-/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:195
+/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:198
     return 0;
     3b1a:	4501                	li	a0,0
-/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:180
+/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:183
     if(events & STRIP_SEND_MESSAGE_EVT)
     3b1c:	d7ad                	beqz	a5,3a86 <StripDetect_ProcessEvent+0x10a>
-/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:183
+/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:186
         PRINT("STRIP_SEND_MESSAGE_EVT triggered, isStripInserted=%d\n", stripState.isStripInserted);
     3b1e:	1fffe597          	auipc	a1,0x1fffe
     3b22:	7865c583          	lbu	a1,1926(a1) # 200022a4 <stripState>
     3b26:	00022517          	auipc	a0,0x22
     3b2a:	d9a50513          	addi	a0,a0,-614 # 258c0 <devInfoSoftwareRev+0x178>
     3b2e:	0c7200ef          	jal	ra,243f4 <iprintf>
-/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:184
+/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:187
         if(stripState.isStripInserted)
     3b32:	1fffe717          	auipc	a4,0x1fffe
     3b36:	77274703          	lbu	a4,1906(a4) # 200022a4 <stripState>
     3b3a:	1fffe797          	auipc	a5,0x1fffe
     3b3e:	76a78793          	addi	a5,a5,1898 # 200022a4 <stripState>
     3b42:	12070463          	beqz	a4,3c6a <StripDetect_ProcessEvent+0x2ee>
-/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:187
+/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:190
             StripDetect_SendInsertInfo(stripState.pin3Status, stripState.pin5Status);
     3b46:	0027c483          	lbu	s1,2(a5)
     3b4a:	0037c983          	lbu	s3,3(a5)
 GetBatteryVoltage():
-/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:430
+/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:436
     uint32_t sum = 0;
     uint8_t i, j;
     uint16_t temp;
@@ -10059,40 +10062,40 @@ GetBatteryVoltage():
     ADC_InterBATSampInit();
     3b4e:	f30fe0ef          	jal	ra,227e <ADC_InterBATSampInit>
     3b52:	0020                	addi	s0,sp,8
-/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:433
+/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:439
 
     // 設定ADC通道為內部電池電壓
     ADC_ChannelCfg(CH_INTE_VBAT);
     3b54:	400017b7          	lui	a5,0x40001
     3b58:	4739                	li	a4,14
 StripDetect_ProcessEvent():
-/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:187
+/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:190
             StripDetect_SendInsertInfo(stripState.pin3Status, stripState.pin5Status);
     3b5a:	0ff4f493          	andi	s1,s1,255
     3b5e:	0ff9f993          	andi	s3,s3,255
 GetBatteryVoltage():
-/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:433
+/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:439
     ADC_ChannelCfg(CH_INTE_VBAT);
     3b62:	04e78c23          	sb	a4,88(a5) # 40001058 <_eusrstack+0x1fff9058>
-/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:436
+/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:442
 
     // 讀取電池電壓100次 (使用VBAT通道)
     for (i = 0; i < 100; i++) {
     3b66:	0d010b13          	addi	s6,sp,208
-/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:433
+/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:439
     ADC_ChannelCfg(CH_INTE_VBAT);
     3b6a:	8aa2                	mv	s5,s0
     3b6c:	8a22                	mv	s4,s0
-/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:437
+/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:443
         adcValues[i] = ADC_ExcutSingleConver();
     3b6e:	f2efe0ef          	jal	ra,229c <ADC_ExcutSingleConver>
     3b72:	00aa9023          	sh	a0,0(s5)
     3b76:	0a89                	addi	s5,s5,2
-/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:436
+/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:442
     for (i = 0; i < 100; i++) {
     3b78:	ff5b1be3          	bne	s6,s5,3b6e <StripDetect_ProcessEvent+0x1f2>
     3b7c:	06300713          	li	a4,99
-/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:442
+/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:448
     }
 
     // 冒泡排序，從小到大
@@ -10100,7 +10103,7 @@ GetBatteryVoltage():
         for (j = 0; j < 99 - i; j++) {
     3b80:	4781                	li	a5,0
     3b82:	a035                	j	3bae <StripDetect_ProcessEvent+0x232>
-/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:443
+/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:449
             if (adcValues[j] > adcValues[j + 1]) {
     3b84:	00179613          	slli	a2,a5,0x1
     3b88:	0994                	addi	a3,sp,208
@@ -10112,26 +10115,26 @@ GetBatteryVoltage():
     3b96:	f3865583          	lhu	a1,-200(a2)
     3b9a:	f386d503          	lhu	a0,-200(a3) # 3f38 <peripheralRssiCB+0x8>
     3b9e:	00b57663          	bgeu	a0,a1,3baa <StripDetect_ProcessEvent+0x22e>
-/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:445
+/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:451
                 temp = adcValues[j];
                 adcValues[j] = adcValues[j + 1];
     3ba2:	f2a61c23          	sh	a0,-200(a2)
-/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:446
+/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:452
                 adcValues[j + 1] = temp;
     3ba6:	f2b69c23          	sh	a1,-200(a3)
-/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:442
+/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:448
         for (j = 0; j < 99 - i; j++) {
     3baa:	0ff7f793          	andi	a5,a5,255
     3bae:	fce7cbe3          	blt	a5,a4,3b84 <StripDetect_ProcessEvent+0x208>
     3bb2:	177d                	addi	a4,a4,-1
-/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:441
+/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:447
     for (i = 0; i < 99; i++) {
     3bb4:	f771                	bnez	a4,3b80 <StripDetect_ProcessEvent+0x204>
     3bb6:	02840713          	addi	a4,s0,40
-/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:425
+/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:431
     uint32_t sum = 0;
     3bba:	4781                	li	a5,0
-/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:453
+/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:459
         }
     }
 
@@ -10141,10 +10144,10 @@ GetBatteryVoltage():
     3bbc:	05045683          	lhu	a3,80(s0)
     3bc0:	0409                	addi	s0,s0,2
     3bc2:	97b6                	add	a5,a5,a3
-/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:452
+/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:458
     for (i = 40; i < 60; i++) {
     3bc4:	fe871ce3          	bne	a4,s0,3bbc <StripDetect_ProcessEvent+0x240>
-/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:461
+/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:467
     // 計算平均值
     sum = sum / 20;
 
@@ -10171,66 +10174,66 @@ GetBatteryVoltage():
     3bfe:	2171f0ef          	jal	ra,23614 <__muldf3>
     3c02:	604200ef          	jal	ra,24206 <__fixunsdfsi>
 StripDetect_SendInsertInfo():
-/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:397
+/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:403
     buf[0] = 0xAA;                // 起始標記
     3c06:	6789                	lui	a5,0x2
     3c08:	0aa78793          	addi	a5,a5,170 # 20aa <_einit+0x20a6>
 GetBatteryVoltage():
-/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:461
+/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:467
     voltage = (uint16_t)(((sum / 512.0) - 3) * 1050);
     3c0c:	0542                	slli	a0,a0,0x10
     3c0e:	8141                	srli	a0,a0,0x10
 StripDetect_SendInsertInfo():
-/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:397
+/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:403
     buf[0] = 0xAA;                // 起始標記
     3c10:	00f11423          	sh	a5,8(sp)
-/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:399
+/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:405
     buf[2] = 0x04;                // 長度為4 (pin3, pin5, batteryVoltage高位, batteryVoltage低位)
     3c14:	4791                	li	a5,4
-/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:402
+/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:408
     buf[5] = (uint8_t)(batteryVoltage >> 8);   // 電池電壓高位元組
     3c16:	00855713          	srli	a4,a0,0x8
-/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:399
+/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:405
     buf[2] = 0x04;                // 長度為4 (pin3, pin5, batteryVoltage高位, batteryVoltage低位)
     3c1a:	00f10523          	sb	a5,10(sp)
-/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:403
+/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:409
     buf[6] = (uint8_t)(batteryVoltage & 0xFF); // 電池電壓低位元組
     3c1e:	0ff57793          	andi	a5,a0,255
-/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:404
+/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:410
     buf[7] = (buf[1] + buf[2] + buf[3] + buf[4] + buf[5] + buf[6]) % 256;  // 校驗和
     3c22:	02448513          	addi	a0,s1,36
     3c26:	954e                	add	a0,a0,s3
     3c28:	953a                	add	a0,a0,a4
     3c2a:	953e                	add	a0,a0,a5
-/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:403
+/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:409
     buf[6] = (uint8_t)(batteryVoltage & 0xFF); // 電池電壓低位元組
     3c2c:	00f10723          	sb	a5,14(sp)
-/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:404
+/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:410
     buf[7] = (buf[1] + buf[2] + buf[3] + buf[4] + buf[5] + buf[6]) % 256;  // 校驗和
     3c30:	00a107a3          	sb	a0,15(sp)
-/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:405
+/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:411
     buf[8] = 0x55;                // 結束標記
     3c34:	05500793          	li	a5,85
-/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:408
+/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:414
     send_to_uart_mcu(buf, 9);
     3c38:	45a5                	li	a1,9
     3c3a:	8552                	mv	a0,s4
-/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:402
+/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:408
     buf[5] = (uint8_t)(batteryVoltage >> 8);   // 電池電壓高位元組
     3c3c:	00e106a3          	sb	a4,13(sp)
-/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:405
+/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:411
     buf[8] = 0x55;                // 結束標記
     3c40:	00f10823          	sb	a5,16(sp)
-/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:400
+/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:406
     buf[3] = pin3Status;          // 第3腳狀態
     3c44:	009105a3          	sb	s1,11(sp)
-/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:401
+/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:407
     buf[4] = pin5Status;          // 第5腳狀態
     3c48:	01310623          	sb	s3,12(sp)
-/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:408
+/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:414
     send_to_uart_mcu(buf, 9);
     3c4c:	2a61                	jal	3de4 <send_to_uart_mcu>
-/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:410
+/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:416
     PRINT("Strip Insert Info Sent. Pin3=%d, Pin5=%d\n", pin3Status, pin5Status);
     3c4e:	864e                	mv	a2,s3
     3c50:	85a6                	mv	a1,s1
@@ -10238,106 +10241,106 @@ StripDetect_SendInsertInfo():
     3c56:	ca650513          	addi	a0,a0,-858 # 258f8 <devInfoSoftwareRev+0x1b0>
     3c5a:	79a200ef          	jal	ra,243f4 <iprintf>
 StripDetect_ProcessEvent():
-/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:188
+/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:191
             PRINT("Strip Insert Info Sent after Power Up Delay\n");
     3c5e:	00022517          	auipc	a0,0x22
     3c62:	cc650513          	addi	a0,a0,-826 # 25924 <devInfoSoftwareRev+0x1dc>
     3c66:	0a9200ef          	jal	ra,2450e <puts>
-/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:191
+/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:194
         return (events ^ STRIP_SEND_MESSAGE_EVT);
     3c6a:	08094513          	xori	a0,s2,128
     3c6e:	bd21                	j	3a86 <StripDetect_ProcessEvent+0x10a>
 
 00003c70 <StripDetect_SetStripType>:
 StripDetect_SetStripType():
-/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:324
+/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:330
     if(stripState.isStripInserted && stripState.isWaitingForMCUResponse)
     3c70:	1fffe797          	auipc	a5,0x1fffe
     3c74:	6347c783          	lbu	a5,1588(a5) # 200022a4 <stripState>
     3c78:	c7c1                	beqz	a5,3d00 <StripDetect_SetStripType+0x90>
-/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:324 (discriminator 1)
+/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:330 (discriminator 1)
     3c7a:	1fffe797          	auipc	a5,0x1fffe
     3c7e:	62a78793          	addi	a5,a5,1578 # 200022a4 <stripState>
     3c82:	0087c783          	lbu	a5,8(a5)
     3c86:	0ff7f793          	andi	a5,a5,255
     3c8a:	cbbd                	beqz	a5,3d00 <StripDetect_SetStripType+0x90>
-/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:326
+/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:332
         stripState.stripType = type;
     3c8c:	1fffe797          	auipc	a5,0x1fffe
     3c90:	60a78ca3          	sb	a0,1561(a5) # 200022a5 <stripState+0x1>
-/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:327
+/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:333
         stripState.isTypeDetected = true;
     3c94:	4785                	li	a5,1
     3c96:	1fffe717          	auipc	a4,0x1fffe
     3c9a:	60f70ba3          	sb	a5,1559(a4) # 200022ad <stripState+0x9>
-/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:323
+/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:329
 {
     3c9e:	1141                	addi	sp,sp,-16
-/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:328
+/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:334
         stripState.isWaitingForMCUResponse = false;
     3ca0:	1fffe797          	auipc	a5,0x1fffe
     3ca4:	60078623          	sb	zero,1548(a5) # 200022ac <stripState+0x8>
-/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:323
+/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:329
 {
     3ca8:	c422                	sw	s0,8(sp)
     3caa:	c606                	sw	ra,12(sp)
-/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:331
+/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:337
         switch(type) {
     3cac:	4791                	li	a5,4
     3cae:	842a                	mv	s0,a0
-/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:340
+/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:346
                 GPIOB_SetBits(T3_IN_SEL_PIN);
     3cb0:	40001737          	lui	a4,0x40001
-/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:331
+/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:337
         switch(type) {
     3cb4:	02f51863          	bne	a0,a5,3ce4 <StripDetect_SetStripType+0x74>
-/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:334
+/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:340
                 GPIOB_ResetBits(T3_IN_SEL_PIN);
     3cb8:	0cc72783          	lw	a5,204(a4) # 400010cc <_eusrstack+0x1fff90cc>
-/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:335
+/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:341
                 PRINT("GAV Strip Confirmed, T3 Enabled\n");
     3cbc:	00022517          	auipc	a0,0x22
     3cc0:	c9450513          	addi	a0,a0,-876 # 25950 <devInfoSoftwareRev+0x208>
-/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:334
+/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:340
                 GPIOB_ResetBits(T3_IN_SEL_PIN);
     3cc4:	4007e793          	ori	a5,a5,1024
     3cc8:	0cf72623          	sw	a5,204(a4)
-/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:335
+/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:341
                 PRINT("GAV Strip Confirmed, T3 Enabled\n");
     3ccc:	043200ef          	jal	ra,2450e <puts>
-/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:346
+/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:352
         PRINT("Strip Type %d Confirmed\n", type);
     3cd0:	85a2                	mv	a1,s0
-/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:348
+/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:354
 }
     3cd2:	4422                	lw	s0,8(sp)
     3cd4:	40b2                	lw	ra,12(sp)
-/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:346
+/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:352
         PRINT("Strip Type %d Confirmed\n", type);
     3cd6:	00022517          	auipc	a0,0x22
     3cda:	cc250513          	addi	a0,a0,-830 # 25998 <devInfoSoftwareRev+0x250>
-/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:348
+/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:354
 }
     3cde:	0141                	addi	sp,sp,16
-/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:346
+/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:352
         PRINT("Strip Type %d Confirmed\n", type);
     3ce0:	7142006f          	j	243f4 <iprintf>
-/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:340
+/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:346
                 GPIOB_SetBits(T3_IN_SEL_PIN);
     3ce4:	0c872783          	lw	a5,200(a4)
-/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:341
+/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:347
                 PRINT("Strip Type %d Confirmed, T3 Disabled\n", type);
     3ce8:	85aa                	mv	a1,a0
     3cea:	00022517          	auipc	a0,0x22
     3cee:	c8650513          	addi	a0,a0,-890 # 25970 <devInfoSoftwareRev+0x228>
-/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:340
+/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:346
                 GPIOB_SetBits(T3_IN_SEL_PIN);
     3cf2:	4007e793          	ori	a5,a5,1024
     3cf6:	0cf72423          	sw	a5,200(a4)
-/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:341
+/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:347
                 PRINT("Strip Type %d Confirmed, T3 Disabled\n", type);
     3cfa:	6fa200ef          	jal	ra,243f4 <iprintf>
-/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:342
+/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/obj/../APP/StripDetect.c:348
                 break;
     3cfe:	bfc9                	j	3cd0 <StripDetect_SetStripType+0x60>
     3d00:	8082                	ret

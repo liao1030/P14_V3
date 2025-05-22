@@ -151,6 +151,9 @@ void StripDetect_Init(tmosTaskID task_id)
     GPIOB_SetBits(T3_IN_SEL_PIN);                // T3_IN_SEL輸出高電平，預設關閉T3電極
     GPIOA_ResetBits(V2P5_ENABLE_PIN);              // V2P5_ENABLE輸出低電平，不供電給CH32V203   
     
+    // //測試用
+    // GPIOA_SetBits(V2P5_ENABLE_PIN);              // V2P5_ENABLE輸出低電平，供電給CH32V203
+
     // 啟動定期檢查任務，每100ms檢查一次
     tmos_start_task(StripDetect_TaskID, STRIP_PERIODIC_CHECK_EVT, MS1_TO_SYSTEM_TIME(100));
     
@@ -270,9 +273,12 @@ static void StripDetect_PeriodicCheck(void)
             stripState.isTypeDetected = false;
             stripState.isWaitingForMCUResponse = false;
             
-            // 試片拔出時，V2P5_ENABLE輸出低電平，不供電給CH32V203
+            // // 試片拔出時，V2P5_ENABLE輸出低電平，不供電給CH32V203
             GPIOA_ResetBits(V2P5_ENABLE_PIN);
-            
+
+            // //測試用
+            //  GPIOA_SetBits(V2P5_ENABLE_PIN);
+
             // 試片拔除時，T3_IN_SEL輸出高電平，關閉T3電極
             GPIOB_SetBits(T3_IN_SEL_PIN);
             
