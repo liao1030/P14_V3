@@ -419,7 +419,7 @@ void PARAM_SetDefault(void)
     param_table[PARAM_BG_CSU_TOL] = 10;    // 試片檢查容差: 3%
     PARAM_SetWord(PARAM_BG_NDL, 800);      // 新試片測濃水平
     PARAM_SetWord(PARAM_BG_UDL, 850);      // 已使用試片測濃水平
-    PARAM_SetWord(PARAM_BG_BLOOD_IN, 900); // 血液測濃水平
+    PARAM_SetWord(PARAM_BG_BLOOD_IN, 819); // 血液測濃水平
     /* 試片批號預設為空白 */
     param_table[PARAM_BG_L] = 30;          // 血糖值下限: 3.0 mmol/L
     param_table[PARAM_BG_H] = 240;         // 血糖值上限: 24.0 mmol/L
@@ -429,7 +429,7 @@ void PARAM_SetDefault(void)
     param_table[PARAM_U_CSU_TOL] = 10;     // 試片檢查容差: 3%
     PARAM_SetWord(PARAM_U_NDL, 800);       // 新試片測濃水平
     PARAM_SetWord(PARAM_U_UDL, 850);       // 已使用試片測濃水平
-    PARAM_SetWord(PARAM_U_BLOOD_IN, 900);  // 血液測濃水平
+    PARAM_SetWord(PARAM_U_BLOOD_IN, 540);  // 血液測濃水平
     /* 試片批號預設為空白 */
     param_table[PARAM_U_L] = 20;           // 尿酸值下限
     param_table[PARAM_U_H] = 130;          // 尿酸值上限
@@ -439,7 +439,7 @@ void PARAM_SetDefault(void)
     param_table[PARAM_C_CSU_TOL] = 10;     // 試片檢查容差: 3%
     PARAM_SetWord(PARAM_C_NDL, 800);       // 新試片測濃水平
     PARAM_SetWord(PARAM_C_UDL, 850);       // 已使用試片測濃水平
-    PARAM_SetWord(PARAM_C_BLOOD_IN, 900);  // 血液測濃水平
+    PARAM_SetWord(PARAM_C_BLOOD_IN, 181);  // 血液測濃水平
     /* 試片批號預設為空白 */
     param_table[PARAM_C_L] = 25;           // 總膽固醇值下限
     /* 使用PARAM_SetWord存儲超過uint8_t範圍的值 */
@@ -450,7 +450,7 @@ void PARAM_SetDefault(void)
     param_table[PARAM_TG_CSU_TOL] = 10;    // 試片檢查容差: 3%
     PARAM_SetWord(PARAM_TG_NDL, 800);      // 新試片測濃水平
     PARAM_SetWord(PARAM_TG_UDL, 850);      // 已使用試片測濃水平
-    PARAM_SetWord(PARAM_TG_BLOOD_IN, 900); // 血液測濃水平
+    PARAM_SetWord(PARAM_TG_BLOOD_IN, 181); // 血液測濃水平
     /* 試片批號預設為空白 */
     param_table[PARAM_TG_L] = 30;          // 三酸甘油脂值下限
     /* 使用PARAM_SetWord存儲超過uint8_t範圍的值 */
