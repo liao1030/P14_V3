@@ -340,10 +340,68 @@ void State_Process(void)
             break;
             
         case STATE_WAIT_FOR_BLOOD:
+        {
             // 處理等待血液滴入階段
-            // 這裡可以添加LED閃爍或其他提示用戶滴血的操作
-            // 檢測血液滴入的邏輯會在後續實作
+            static uint32_t lastCheckTime = 0;
+            uint32_t currentTime = 0;
+            uint16_t adcValue, bloodInThreshold;
+            uint16_t ndl, udl; // 未使用，但需要在 PARAM_GetStripParameters 參數中
+            
+            // 獲取當前時間戳（毫秒）
+            // 這裡假設 Delay_Init 已經初始化了系統時鐘計時器
+            // 實際實現可能需要根據系統定時器調整
+            currentTime = RTC_GetCounter();
+            
+            // 每10毫秒檢查一次（限制採樣率）
+            if (currentTime - lastCheckTime >= 10)
+            {
+                lastCheckTime = currentTime;
+                
+                // 從 PA4/ADC4 讀取 GLU_OUT 的 ADC 值
+                // 配置 ADC 通道 4 (PA4)
+                ADC_RegularChannelConfig(ADC1, ADC_Channel_4, 1, ADC_SampleTime_239Cycles5);
+                
+                // 啟動 ADC 轉換
+                ADC_SoftwareStartConvCmd(ADC1, ENABLE);
+                
+                // 等待轉換完成
+                while(!ADC_GetFlagStatus(ADC1, ADC_FLAG_EOC));
+                
+                // 獲取ADC值
+                adcValue = ADC_GetConversionValue(ADC1);
+                
+                // 獲取當前試片類型的血液檢測閾值
+                StripType_TypeDef currentStripType = STRIP_DETECT_GetStripType();
+                
+                // 從參數表獲取對應試片類型的血液檢測閾值
+                if (PARAM_GetStripParameters(currentStripType, &ndl, &udl, &bloodInThreshold) && (currentStripType < STRIP_TYPE_MAX))
+                {
+                    // 檢查ADC值是否超過閾值
+                    if (adcValue > bloodInThreshold)
+                    {
+                        // 檢測到血液，切換到測量狀態
+                        System_SetState(STATE_MEASURING);
+                        printf("Blood detected! ADC value: %u, Threshold: %u\r\n", adcValue, bloodInThreshold);
+                        printf("System state changed to STATE_MEASURING\r\n");
+                    }
+                    
+                    // 每秒輸出一次當前ADC值和閾值（用於調試）
+                    static uint32_t lastPrintTime = 0;
+                    if (currentTime - lastPrintTime >= 1000)
+                    {
+                        lastPrintTime = currentTime;
+                        printf("Waiting for blood... ADC value: %u, Threshold: %u\r\n", adcValue, bloodInThreshold);
+                    }
+                }
+                else
+                {
+                    printf("Error: Invalid strip type or failed to get parameters\r\n");
+                    // 錯誤處理：無效的試片類型或無法獲取參數
+                    System_SetState(STATE_ERROR);
+                }
+            }
             break;
+        }
             
         case STATE_MEASURING:
             // 處理測量中狀態
