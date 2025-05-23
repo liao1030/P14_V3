@@ -28,6 +28,7 @@
 #include "ch32v20x_opa.h"
 #include "ch32v20x_tim.h"
 #include "strip_detect.h"
+#include "Calculation.h"  // 新增血糖計算函數標頭檔
 
 void USART2_IRQHandler (void) __attribute__ ((interrupt ("WCH-Interrupt-fast")));
 void DMA1_Channel6_IRQHandler (void) __attribute__ ((interrupt ("WCH-Interrupt-fast")));
@@ -35,6 +36,9 @@ void DMA1_Channel6_IRQHandler (void) __attribute__ ((interrupt ("WCH-Interrupt-f
 /* 系統狀態定義已移至 system_state.h */
 
 /* 系統狀態變量已移至 system_state.c */
+
+/* 血糖測量相關變數 */
+uint16_t W_ADC = 0;  // 工作電極ADC值，用於血糖計算
 
 /* 狀態機處理函式宣告 */
 void State_Process (void);
@@ -377,7 +381,19 @@ void TIM1_PWM_Init (void) {
  * @return  none
  */
 void State_Process (void) {
+    static SystemState_TypeDef lastState = STATE_IDLE;
     SystemState_TypeDef currentState = System_GetState();
+    
+    // 如果狀態發生改變，重置相關標誌
+    if (currentState != lastState) {
+        // 重置所有狀態相關的靜態變數
+        if (lastState == STATE_RESULT_READY) {
+            // 當離開 RESULT_READY 狀態時，可以進行清理工作
+            printf("Leaving RESULT_READY state\r\n");
+        }
+        lastState = currentState;
+    }
+    
     switch (currentState) {
     case STATE_IDLE:
         // 在空閒狀態下檢查是否有試片插入
@@ -559,7 +575,10 @@ void State_Process (void) {
                     // 連續取樣100次，排序後取中間20個的平均值
                     uint16_t adcValue = GetMidADC(ADC_Channel_4, 100, 20);
                     
-                    printf("Measurement complete! GLU_OUT ADC value: %d\r\n", adcValue);
+                    // 將ADC值存入W_ADC變數，供後續血糖計算使用
+                    W_ADC = adcValue;
+                    
+                    printf("Measurement complete! GLU_OUT ADC value: %d (stored in W_ADC)\r\n", adcValue);
                     
                     // 停止PWM輸出，設置為高電平
                     TIM_CtrlPWMOutputs(TIM1, DISABLE);
@@ -594,11 +613,31 @@ void State_Process (void) {
         break;
     }
 
-    case STATE_RESULT_READY:
-        // 處理結果準備好狀態
-        printf("Measurement result is ready for processing\r\n");
-        // 實作部分後續再增加
+    case STATE_RESULT_READY: {
+        static uint8_t calculationDone = 0;
+        
+        // 如果是新進入此狀態，重置標誌
+        if (currentState != lastState) {
+            calculationDone = 0;
+        }
+        
+        if (!calculationDone) {
+            // 處理結果準備好狀態
+            printf("Measurement result is ready for processing\r\n");
+            
+            // 呼叫血糖計算函數，將W_ADC轉換為血糖值
+            CalGlucose(W_ADC);
+            printf("Blood glucose measurement completed: %d %s\r\n", 
+                   wGlucose, Unit_GetSymbol((Unit_TypeDef)PARAM_GetByte(PARAM_MGDL)));
+            
+            // 標記計算已完成
+            calculationDone = 1;
+            
+            printf("Blood glucose calculation completed. Ready for next measurement.\r\n");
+        }
+        
         break;
+    }
 
     case STATE_ERROR:
         // 處理錯誤狀態

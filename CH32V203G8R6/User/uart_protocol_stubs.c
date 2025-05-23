@@ -12,6 +12,10 @@
 #include "debug.h"
 #include "param_table.h"
 #include <string.h>
+#include "Calculation.h"  // 加入血糖計算函數標頭檔
+
+/* 外部變數宣告 */
+extern uint16_t W_ADC;  // 工作電極ADC值
 
 /*********************************************************************
  * @fn      Get_Battery_Voltage
@@ -134,7 +138,7 @@ uint8_t Get_Test_Data(TestResult_TypeDef *result)
     
     // 這是存根函數，實際使用時需要填充真實的測試資料
     result->resultStatus = 0; // 成功
-    result->testValue = 123;  // 測試值(例如123 mg/dL)
+    result->testValue = wGlucose;  // 血糖測量值
     result->stripType = PARAM_GetByte(PARAM_STRIP_TYPE);
     result->eventType = PARAM_GetByte(PARAM_EVENT);
     result->stripCode = PARAM_GetWord(PARAM_CODE_TABLE_V);
@@ -188,7 +192,7 @@ uint8_t Get_Raw_Test_Data(RawData_TypeDef *rawData)
     rawData->temperature = result.temperature;
     
     // 填充其他RAW DATA專用欄位
-    rawData->w1Adv = 1000;         // W1通道ADC值
+    rawData->w1Adv = W_ADC;        // W1通道ADC值 (實際測量值)
     rawData->w2Adv = 1000;         // W2通道ADC值
     rawData->t1Ampl = 1000;        // T1溫度感測振幅
     rawData->t1AcMax = 2000;       // T1 AC最大值

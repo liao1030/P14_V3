@@ -5,6 +5,7 @@
 
 # Add inputs and outputs from these tool invocations to the build variables 
 C_SRCS += \
+../User/Calculation.c \
 ../User/ch32v20x_it.c \
 ../User/main.c \
 ../User/param_table.c \
@@ -16,6 +17,7 @@ C_SRCS += \
 ../User/uart_protocol_stubs.c 
 
 C_DEPS += \
+./User/Calculation.d \
 ./User/ch32v20x_it.d \
 ./User/main.d \
 ./User/param_table.d \
@@ -27,6 +29,7 @@ C_DEPS += \
 ./User/uart_protocol_stubs.d 
 
 OBJS += \
+./User/Calculation.o \
 ./User/ch32v20x_it.o \
 ./User/main.o \
 ./User/param_table.o \
