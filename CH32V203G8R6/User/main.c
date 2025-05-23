@@ -20,6 +20,7 @@
 
 #include "debug.h"
 #include "string.h"
+#include "stdlib.h"
 #include "param_table.h"
 #include "uart_protocol.h"
 #include "system_state.h"  // 系統狀態定義
@@ -37,6 +38,82 @@ void DMA1_Channel6_IRQHandler (void) __attribute__ ((interrupt ("WCH-Interrupt-f
 
 /* 狀態機處理函式宣告 */
 void State_Process (void);
+
+/*********************************************************************
+ * @fn      GetMidADC
+ *
+ * @brief   對指定ADC通道進行連續取樣，排序後取中間值的平均值
+ *
+ * @param   channel - ADC通道 (例如: ADC_Channel_4)
+ * @param   sampleCount - 總取樣次數
+ * @param   midCount - 中間取樣數量 (用於計算平均值)
+ *
+ * @return  中間值的平均值
+ */
+uint16_t GetMidADC(uint32_t channel, uint16_t sampleCount, uint16_t midCount)
+{
+    uint16_t *samples;
+    uint32_t sum = 0;
+    uint16_t i, j;
+    uint16_t temp;
+    uint16_t startIndex, endIndex;
+    
+    // 動態分配記憶體來存儲取樣值
+    samples = (uint16_t*)malloc(sampleCount * sizeof(uint16_t));
+    if (samples == NULL) {
+        printf("Memory allocation failed for ADC samples\r\n");
+        return 0;
+    }
+    
+    // 確保中間取樣數量不超過總取樣數量
+    if (midCount > sampleCount) {
+        midCount = sampleCount;
+    }
+    
+    // 配置ADC通道
+    ADC_RegularChannelConfig(ADC1, channel, 1, ADC_SampleTime_239Cycles5);
+    
+    // 連續取樣
+    for (i = 0; i < sampleCount; i++) {
+        // 啟動ADC轉換
+        ADC_SoftwareStartConvCmd(ADC1, ENABLE);
+        
+        // 等待轉換完成
+        while (!ADC_GetFlagStatus(ADC1, ADC_FLAG_EOC));
+        
+        // 獲取ADC值
+        samples[i] = ADC_GetConversionValue(ADC1);
+        
+        // 小延遲以確保穩定取樣
+        Delay_Us(10);
+    }
+    
+    // 使用氣泡排序對取樣值進行排序
+    for (i = 0; i < sampleCount - 1; i++) {
+        for (j = 0; j < sampleCount - i - 1; j++) {
+            if (samples[j] > samples[j + 1]) {
+                temp = samples[j];
+                samples[j] = samples[j + 1];
+                samples[j + 1] = temp;
+            }
+        }
+    }
+    
+    // 計算中間值的範圍
+    startIndex = (sampleCount - midCount) / 2;
+    endIndex = startIndex + midCount;
+    
+    // 計算中間值的總和
+    for (i = startIndex; i < endIndex; i++) {
+        sum += samples[i];
+    }
+    
+    // 釋放記憶體
+    free(samples);
+    
+    // 返回平均值
+    return (uint16_t)(sum / midCount);
+}
 
 // ring buffer size
 #define RING_BUFFER_LEN (1024u)
@@ -478,17 +555,9 @@ void State_Process (void) {
                 
             case 7: // Step 7: 讀取GLU_OUT ADC值
                 {
-                    // 配置 ADC 通道 4 (PA4 - GLU_OUT)
-                    ADC_RegularChannelConfig(ADC1, ADC_Channel_4, 1, ADC_SampleTime_239Cycles5);
-                    
-                    // 啟動 ADC 轉換
-                    ADC_SoftwareStartConvCmd(ADC1, ENABLE);
-                    
-                    // 等待轉換完成
-                    while (!ADC_GetFlagStatus(ADC1, ADC_FLAG_EOC));
-                    
-                    // 獲取ADC值
-                    uint16_t adcValue = ADC_GetConversionValue(ADC1);
+                    // 使用 GetMidADC 函數進行精確測量
+                    // 連續取樣100次，排序後取中間20個的平均值
+                    uint16_t adcValue = GetMidADC(ADC_Channel_4, 100, 20);
                     
                     printf("Measurement complete! GLU_OUT ADC value: %d\r\n", adcValue);
                     
