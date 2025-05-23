@@ -37,7 +37,6 @@ extern uint16_t Get_Battery_Voltage(void);
 extern uint16_t Get_Temperature(void);
 extern uint8_t Check_Strip_Status(void);
 extern uint8_t Check_Blood_Status(void);
-extern uint8_t Perform_Test(void);
 extern uint8_t Get_Test_Data(TestResult_TypeDef *result);
 extern uint8_t Get_Raw_Test_Data(RawData_TypeDef *rawData);
 
@@ -454,28 +453,21 @@ uint8_t UART_ProcessGetResult(uint8_t *data, uint8_t length)
         return 0;
     }
     
-    /* 檢查是否測試進行中 */
-    if(!test_in_progress)
-    {
-        UART_SendErrorAck(CMD_GET_RESULT, ERR_TEST_TIMEOUT);
-        return 0;
-    }
+    //目前先忽略test_in_progress與blood_detected的檢查
+
+    // /* 檢查是否測試進行中 */
+    // if(test_in_progress!=0)
+    // {
+    //     UART_SendErrorAck(CMD_GET_RESULT, ERR_TEST_TIMEOUT);
+    //     return 0;
+    // }
     
-    /* 檢查是否已經檢測到血液 */
-    if(!blood_detected)
-    {
-        UART_SendErrorAck(CMD_GET_RESULT, ERR_BLOOD_NOT_ENOUGH);
-        return 0;
-    }
-    
-    /* 執行測試並獲取結果 */
-    uint8_t testResult = Perform_Test();
-    if(testResult != 0)
-    {
-        UART_SendErrorAck(CMD_GET_RESULT, testResult);
-        test_in_progress = 0; // 測試結束
-        return 0;
-    }
+    // /* 檢查是否已經檢測到血液 */
+    // if(!blood_detected)
+    // {
+    //     UART_SendErrorAck(CMD_GET_RESULT, ERR_BLOOD_NOT_ENOUGH);
+    //     return 0;
+    // }
     
     /* 獲取測試資料 */
     TestResult_TypeDef result;

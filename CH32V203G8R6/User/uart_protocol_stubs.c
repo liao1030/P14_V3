@@ -109,20 +109,6 @@ uint8_t Check_Blood_Status(void)
 }
 
 /*********************************************************************
- * @fn      Perform_Test
- *
- * @brief   執行測試
- *
- * @return  0: 成功, 非0: 錯誤代碼
- */
-uint8_t Perform_Test(void)
-{
-    // 這是存根函數，實際使用時需要執行測試邏輯
-    // 假設測試成功
-    return 0;
-}
-
-/*********************************************************************
  * @fn      Get_Test_Data
  *
  * @brief   取得測試資料
