@@ -425,6 +425,14 @@ void PARAM_SetDefault(void)
     param_table[PARAM_BG_H] = 240;         // 血糖值上限: 24.0 mmol/L
     PARAM_SetWord(PARAM_BG_T3_E37, 1800);  // T3 ADV超E37閾值
     
+    /* 血糖測試時序參數預設值 */
+    PARAM_SetWord(PARAM_BG_TPL1, 800);      // 測試間格1: 800ms
+    PARAM_SetWord(PARAM_BG_TRD1, 4000);     // 讀取延遲1: 4000ms
+    PARAM_SetWord(PARAM_BG_EVWIDTH1, 200); // 工作電壓寬度1: 200ms
+    PARAM_SetWord(PARAM_BG_TPL2, 0);      // 測試間格2: 0ms
+    PARAM_SetWord(PARAM_BG_TRD2, 0);     // 讀取延遲2: 0ms
+    PARAM_SetWord(PARAM_BG_EVWIDTH2, 0); // 工作電壓寬度2: 0ms
+    
     /* 尿酸(U)專用參數預設值 */
     param_table[PARAM_U_CSU_TOL] = 10;     // 試片檢查容差: 3%
     PARAM_SetWord(PARAM_U_NDL, 800);       // 新試片測濃水平
@@ -434,6 +442,14 @@ void PARAM_SetDefault(void)
     param_table[PARAM_U_L] = 20;           // 尿酸值下限
     param_table[PARAM_U_H] = 130;          // 尿酸值上限
     PARAM_SetWord(PARAM_U_T3_E37, 1800);   // T3 ADV超E37閾值
+    
+    /* 尿酸測試時序參數預設值 */
+    PARAM_SetWord(PARAM_U_TPL1, 0);      // 測試間格1: 0ms
+    PARAM_SetWord(PARAM_U_TRD1, 6000);      // 讀取延遲1: 6000ms
+    PARAM_SetWord(PARAM_U_EVWIDTH1, 0);  // 工作電壓寬度1: 0ms
+    PARAM_SetWord(PARAM_U_TPL2, 0);      // 測試間格2: 0ms
+    PARAM_SetWord(PARAM_U_TRD2, 0);      // 讀取延遲2: 0ms
+    PARAM_SetWord(PARAM_U_EVWIDTH2, 0);  // 工作電壓寬度2: 0ms
     
     /* 總膽固醇(C)專用參數預設值 */
     param_table[PARAM_C_CSU_TOL] = 10;     // 試片檢查容差: 3%
@@ -446,6 +462,14 @@ void PARAM_SetDefault(void)
     PARAM_SetWord(PARAM_C_H, 400);         // 總膽固醇值上限設為400，使用2個位元組
     PARAM_SetWord(PARAM_C_T3_E37, 1800);   // T3 ADV超E37閾值
     
+    /* 總膽固醇測試時序參數預設值 */
+    PARAM_SetWord(PARAM_C_TPL1, 13000);      // 測試間格1: 13000ms
+    PARAM_SetWord(PARAM_C_TRD1, 2000);      // 讀取延遲1: 2000ms
+    PARAM_SetWord(PARAM_C_EVWIDTH1, 0);  // 工作電壓寬度1: 0ms
+    PARAM_SetWord(PARAM_C_TPL2, 0);      // 測試間格2: 0ms
+    PARAM_SetWord(PARAM_C_TRD2, 0);      // 讀取延遲2: 0ms
+    PARAM_SetWord(PARAM_C_EVWIDTH2, 0);  // 工作電壓寬度2: 0ms
+    
     /* 三酸甘油脂(TG)專用參數預設值 */
     param_table[PARAM_TG_CSU_TOL] = 10;    // 試片檢查容差: 3%
     PARAM_SetWord(PARAM_TG_NDL, 800);      // 新試片測濃水平
@@ -456,6 +480,14 @@ void PARAM_SetDefault(void)
     /* 使用PARAM_SetWord存儲超過uint8_t範圍的值 */
     PARAM_SetWord(PARAM_TG_H, 500);        // 三酸甘油脂值上限設為500，使用2個位元組
     PARAM_SetWord(PARAM_TG_T3_E37, 1800);  // T3 ADV超E37閾值
+    
+    /* 三酸甘油脂測試時序參數預設值 */
+    PARAM_SetWord(PARAM_TG_TPL1, 13000);     // 測試間格1: 13000ms
+    PARAM_SetWord(PARAM_TG_TRD1, 2000);     // 讀取延遲1: 2000ms
+    PARAM_SetWord(PARAM_TG_EVWIDTH1, 0); // 工作電壓寬度1: 0ms
+    PARAM_SetWord(PARAM_TG_TPL2, 0);     // 測試間格2: 0ms
+    PARAM_SetWord(PARAM_TG_TRD2, 0);     // 讀取延遲2: 0ms
+    PARAM_SetWord(PARAM_TG_EVWIDTH2, 0); // 工作電壓寬度2: 0ms
     
     /* 保留區域保持為0 */
     

@@ -130,8 +130,8 @@ void DMA_INIT (void) {
     DMA_InitStructure.DMA_Priority = DMA_Priority_VeryHigh;
     DMA_InitStructure.DMA_M2M = DMA_M2M_Disable;
 
-    DMA_InitStructure.DMA_PeripheralBaseAddr = (u32)(&USART2->DATAR);
-    DMA_InitStructure.DMA_MemoryBaseAddr = (u32)USART_DMA_CTRL.Rx_Buffer[0];
+    DMA_InitStructure.DMA_PeripheralBaseAddr = (uint32_t)(&USART2->DATAR);
+    DMA_InitStructure.DMA_MemoryBaseAddr = (uint32_t)USART_DMA_CTRL.Rx_Buffer[0];
     DMA_InitStructure.DMA_DIR = DMA_DIR_PeripheralSRC;
     DMA_InitStructure.DMA_BufferSize = RX_BUFFER_LEN;
     DMA_Init (USART_RX_CH, &DMA_InitStructure);
@@ -359,13 +359,175 @@ void State_Process (void) {
         break;
     }
 
-    case STATE_MEASURING:
-        // 處理測量中狀態
-        // 實作部分後續再增加
+    case STATE_MEASURING: {
+        static uint8_t measureStep = 1;
+        static uint32_t stepStartTime = 0;
+        static uint16_t evWidth1, tpl1, trd1, evWidth2, tpl2, trd2;
+        static uint8_t parametersLoaded = 0;
+        static uint32_t systemTick = 0;
+        
+        // 簡單的毫秒計數器（每次調用增加約10ms）
+        systemTick += 10;
+        
+        // 第一次進入此狀態時，載入時序參數
+        if (!parametersLoaded) {
+            StripType_TypeDef currentStripType = STRIP_DETECT_GetStripType();
+            if (PARAM_GetTimingParameters(currentStripType, &tpl1, &trd1, &evWidth1, 1) &&
+                PARAM_GetTimingParameters(currentStripType, &tpl2, &trd2, &evWidth2, 2)) {
+                parametersLoaded = 1;
+                stepStartTime = systemTick;
+                measureStep = 1;
+                printf("Measurement started for strip type: %s\r\n", StripType_GetName(currentStripType));
+                printf("Timing params: EV1=%d, TPL1=%d, TRD1=%d, EV2=%d, TPL2=%d, TRD2=%d\r\n",
+                       evWidth1, tpl1, trd1, evWidth2, tpl2, trd2);
+                
+                // 確保PWM開始輸出
+                TIM_CtrlPWMOutputs(TIM1, ENABLE);
+                printf("Step 1: PWM enabled for EVWIDTH1 (%d ms)\r\n", evWidth1);
+            } else {
+                printf("Failed to load timing parameters\r\n");
+                System_SetState(STATE_ERROR);
+                break;
+            }
+        }
+        
+        uint32_t elapsedTime = systemTick - stepStartTime;
+        
+        switch (measureStep) {
+            case 1: // Step 1: PWM for EVWIDTH1
+                if (elapsedTime >= evWidth1) {
+                    // 禁用PWM，設置PB15為HIGH
+                    TIM_CtrlPWMOutputs(TIM1, DISABLE);
+                    GPIO_InitTypeDef GPIO_InitStructure = {0};
+                    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_15;
+                    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
+                    GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+                    GPIO_Init(GPIOB, &GPIO_InitStructure);
+                    GPIO_SetBits(GPIOB, GPIO_Pin_15);
+                    
+                    stepStartTime = systemTick;
+                    measureStep = 2;
+                    printf("Step 2: HIGH output for TPL1 (%d ms)\r\n", tpl1);
+                }
+                break;
+                
+            case 2: // Step 2: HIGH for TPL1
+                if (elapsedTime >= tpl1) {
+                    // 重新配置為PWM輸出
+                    GPIO_InitTypeDef GPIO_InitStructure = {0};
+                    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_15;
+                    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_PP;
+                    GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+                    GPIO_Init(GPIOB, &GPIO_InitStructure);
+                    TIM_CtrlPWMOutputs(TIM1, ENABLE);
+                    
+                    stepStartTime = systemTick;
+                    measureStep = 3;
+                    printf("Step 3: PWM enabled for TRD1 (%d ms)\r\n", trd1);
+                }
+                break;
+                
+            case 3: // Step 3: PWM for TRD1
+                if (elapsedTime >= trd1) {
+                    stepStartTime = systemTick;
+                    measureStep = 4;
+                    printf("Step 4: PWM continues for EVWIDTH2 (%d ms)\r\n", evWidth2);
+                }
+                break;
+                
+            case 4: // Step 4: PWM for EVWIDTH2
+                if (elapsedTime >= evWidth2) {
+                    // 禁用PWM，設置PB15為HIGH
+                    TIM_CtrlPWMOutputs(TIM1, DISABLE);
+                    GPIO_InitTypeDef GPIO_InitStructure = {0};
+                    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_15;
+                    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
+                    GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+                    GPIO_Init(GPIOB, &GPIO_InitStructure);
+                    GPIO_SetBits(GPIOB, GPIO_Pin_15);
+                    
+                    stepStartTime = systemTick;
+                    measureStep = 5;
+                    printf("Step 5: HIGH output for TPL2 (%d ms)\r\n", tpl2);
+                }
+                break;
+                
+            case 5: // Step 5: HIGH for TPL2
+                if (elapsedTime >= tpl2) {
+                    // 重新配置為PWM輸出
+                    GPIO_InitTypeDef GPIO_InitStructure = {0};
+                    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_15;
+                    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_PP;
+                    GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+                    GPIO_Init(GPIOB, &GPIO_InitStructure);
+                    TIM_CtrlPWMOutputs(TIM1, ENABLE);
+                    
+                    stepStartTime = systemTick;
+                    measureStep = 6;
+                    printf("Step 6: PWM enabled for TRD2 (%d ms)\r\n", trd2);
+                }
+                break;
+                
+            case 6: // Step 6: PWM for TRD2
+                if (elapsedTime >= trd2) {
+                    stepStartTime = systemTick;
+                    measureStep = 7;
+                    printf("Step 7: Reading GLU_OUT ADC value\r\n");
+                }
+                break;
+                
+            case 7: // Step 7: 讀取GLU_OUT ADC值
+                {
+                    // 配置 ADC 通道 4 (PA4 - GLU_OUT)
+                    ADC_RegularChannelConfig(ADC1, ADC_Channel_4, 1, ADC_SampleTime_239Cycles5);
+                    
+                    // 啟動 ADC 轉換
+                    ADC_SoftwareStartConvCmd(ADC1, ENABLE);
+                    
+                    // 等待轉換完成
+                    while (!ADC_GetFlagStatus(ADC1, ADC_FLAG_EOC));
+                    
+                    // 獲取ADC值
+                    uint16_t adcValue = ADC_GetConversionValue(ADC1);
+                    
+                    printf("Measurement complete! GLU_OUT ADC value: %d\r\n", adcValue);
+                    
+                    // 停止PWM輸出，設置為高電平
+                    TIM_CtrlPWMOutputs(TIM1, DISABLE);
+                    GPIO_InitTypeDef GPIO_InitStructure = {0};
+                    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_15;
+                    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
+                    GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+                    GPIO_Init(GPIOB, &GPIO_InitStructure);
+                    GPIO_SetBits(GPIOB, GPIO_Pin_15);
+                    
+                    // Step 8: 進入STATE_RESULT_READY
+                    System_SetState(STATE_RESULT_READY);
+                    
+                    // 重置測量狀態變數
+                    measureStep = 1;
+                    parametersLoaded = 0;
+                    stepStartTime = 0;
+                    
+                    printf("Step 8: Entering RESULT_READY state\r\n");
+                }
+                break;
+                
+            default:
+                // 異常狀態，重置並進入錯誤狀態
+                printf("Invalid measure step: %d\r\n", measureStep);
+                measureStep = 1;
+                parametersLoaded = 0;
+                stepStartTime = 0;
+                System_SetState(STATE_ERROR);
+                break;
+        }
         break;
+    }
 
     case STATE_RESULT_READY:
         // 處理結果準備好狀態
+        printf("Measurement result is ready for processing\r\n");
         // 實作部分後續再增加
         break;
 
@@ -461,7 +623,7 @@ int main (void) {
         //  printf("Echo Complete\r\n");
         // }
 
-        Delay_Ms (10);  // 減少延遲時間以增加處理速度
+        Delay_Ms (5);  // 減少延遲時間以增加處理速度
     }
 }
 
