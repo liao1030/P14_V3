@@ -522,9 +522,18 @@ void State_Process (void) {
                 
             case 3: // Step 3: PWM for TRD1
                 if (elapsedTime >= trd1) {
-                    stepStartTime = systemTick;
-                    measureStep = 4;
-                    printf("Step 4: PWM continues for EVWIDTH2 (%d ms)\r\n", evWidth2);
+                    // 檢查 tpl2 是否為 0
+                    if (tpl2 == 0) {
+                        // 如果 tpl2=0，跳過 Step 4~6，直接到 Step 7
+                        stepStartTime = systemTick;
+                        measureStep = 7;
+                        printf("TPL2=0, skipping Steps 4-6, jumping to Step 7: Reading GLU_OUT ADC value\r\n");
+                    } else {
+                        // 否則繼續執行 Step 4
+                        stepStartTime = systemTick;
+                        measureStep = 4;
+                        printf("Step 4: PWM continues for EVWIDTH2 (%d ms)\r\n", evWidth2);
+                    }
                 }
                 break;
                 
