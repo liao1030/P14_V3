@@ -674,80 +674,18 @@ uint8_t UART_SendResultAck(TestResult_TypeDef *result)
  */
 uint8_t UART_SendRawDataAck(RawData_TypeDef *rawData)
 {
-    uint8_t data[60]; // RAW DATA結構的封裝
+    uint8_t data[6]; // 只需要3個16位元數據 (6個位元組)
     uint8_t index = 0;
     
-    /* 封裝資料 */
-    data[index++] = (rawData->resultStatus >> 8) & 0xFF;
-    data[index++] = rawData->resultStatus & 0xFF;
-    
+    /* 只封裝需要的三個欄位 */
     data[index++] = (rawData->testValue >> 8) & 0xFF;
     data[index++] = rawData->testValue & 0xFF;
-    
-    data[index++] = (rawData->year >> 8) & 0xFF;
-    data[index++] = rawData->year & 0xFF;
-    
-    data[index++] = (rawData->month >> 8) & 0xFF;
-    data[index++] = rawData->month & 0xFF;
-    
-    data[index++] = (rawData->date >> 8) & 0xFF;
-    data[index++] = rawData->date & 0xFF;
-    
-    data[index++] = (rawData->hour >> 8) & 0xFF;
-    data[index++] = rawData->hour & 0xFF;
-    
-    data[index++] = (rawData->minute >> 8) & 0xFF;
-    data[index++] = rawData->minute & 0xFF;
-    
-    data[index++] = (rawData->second >> 8) & 0xFF;
-    data[index++] = rawData->second & 0xFF;
     
     data[index++] = (rawData->stripType >> 8) & 0xFF;
     data[index++] = rawData->stripType & 0xFF;
     
-    data[index++] = (rawData->eventType >> 8) & 0xFF;
-    data[index++] = rawData->eventType & 0xFF;
-    
-    data[index++] = (rawData->batteryVoltage >> 8) & 0xFF;
-    data[index++] = rawData->batteryVoltage & 0xFF;
-    
-    data[index++] = (rawData->temperature >> 8) & 0xFF;
-    data[index++] = rawData->temperature & 0xFF;
-    
     data[index++] = (rawData->w1Adv >> 8) & 0xFF;
     data[index++] = rawData->w1Adv & 0xFF;
-    
-    data[index++] = (rawData->w2Adv >> 8) & 0xFF;
-    data[index++] = rawData->w2Adv & 0xFF;
-    
-    data[index++] = (rawData->t1Ampl >> 8) & 0xFF;
-    data[index++] = rawData->t1Ampl & 0xFF;
-    
-    data[index++] = (rawData->t1AcMax >> 8) & 0xFF;
-    data[index++] = rawData->t1AcMax & 0xFF;
-    
-    data[index++] = (rawData->t1AcMin >> 8) & 0xFF;
-    data[index++] = rawData->t1AcMin & 0xFF;
-    
-    data[index++] = (rawData->t3Adc >> 8) & 0xFF;
-    data[index++] = rawData->t3Adc & 0xFF;
-    
-    data[index++] = (rawData->testCount >> 8) & 0xFF;
-    data[index++] = rawData->testCount & 0xFF;
-    
-    data[index++] = (rawData->stripCode >> 8) & 0xFF;
-    data[index++] = rawData->stripCode & 0xFF;
-    
-    /* 加入ASCII編碼的操作者ID和圖表編號 */
-    for(int i = 0; i < 10; i++)
-    {
-        data[index++] = rawData->operatorId[i];
-    }
-    
-    for(int i = 0; i < 10; i++)
-    {
-        data[index++] = rawData->chartNo[i];
-    }
     
     return UART_SendPacket(CMD_RAW_DATA_ACK, data, index);
 }
