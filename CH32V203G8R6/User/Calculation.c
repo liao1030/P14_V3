@@ -9,6 +9,7 @@
 #include "Calculation.h"
 #include "param_table.h"
 #include <stdio.h>
+#include "strip_detect.h"  // 包含試片檢測相關函數
 
 /* 血糖值變數 */
 uint16_t wGlucose = 0;
@@ -33,11 +34,18 @@ void CalGlucose(uint16_t adcValue)
     float I3 = -60.0f;
     float Tf = 100.0f;
     float To = 0.0f;
-    float BG_Offset = -5.0f;
+    float BG_Offset = 0.0f;    
     
     // 根據試片類型決定背景值
     uint16_t EV_BACKGROUND;
-    uint8_t stripType = PARAM_GetByte(PARAM_STRIP_TYPE); // 假設從參數表讀取試片類型
+    
+    // 優先使用試片檢測模組的當前類型，如果無效則使用參數表中的值
+    StripType_TypeDef stripType = STRIP_DETECT_GetStripType();
+    if (stripType >= STRIP_TYPE_MAX) {
+        stripType = (StripType_TypeDef)PARAM_GetByte(PARAM_STRIP_TYPE);
+    }
+    
+    printf("Using strip type: %s (%d)\r\n", StripType_GetName(stripType), stripType);
     
     switch(stripType) {
         case STRIP_TYPE_GLV:  // 試片GLV

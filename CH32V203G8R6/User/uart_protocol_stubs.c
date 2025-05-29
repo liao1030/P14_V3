@@ -13,6 +13,7 @@
 #include "param_table.h"
 #include <string.h>
 #include "Calculation.h"  // 加入血糖計算函數標頭檔
+#include "strip_detect.h"  // 包含試片檢測相關函數
 
 /* 外部變數宣告 */
 extern uint16_t W_ADC;  // 工作電極ADC值
@@ -125,7 +126,12 @@ uint8_t Get_Test_Data(TestResult_TypeDef *result)
     // 這是存根函數，實際使用時需要填充真實的測試資料
     result->resultStatus = 0; // 成功
     result->testValue = wGlucose;  // 血糖測量值
-    result->stripType = PARAM_GetByte(PARAM_STRIP_TYPE);
+    // 優先使用試片檢測模組的當前類型，如果無效則使用參數表中的值
+    StripType_TypeDef stripType = STRIP_DETECT_GetStripType();
+    if (stripType >= STRIP_TYPE_MAX) {
+        stripType = (StripType_TypeDef)PARAM_GetByte(PARAM_STRIP_TYPE);
+    }
+    result->stripType = stripType;
     result->eventType = PARAM_GetByte(PARAM_EVENT);
     result->stripCode = PARAM_GetWord(PARAM_CODE_TABLE_V);
     
