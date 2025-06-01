@@ -1,0 +1,102 @@
+flowchart TD
+    A[主迴圈開始] --> B[UART 協議處理<br/>UART_Protocol_Process]
+    B --> B1[檢查封包接收]
+    B1 --> B2{有完整封包?}
+    B2 -->|是| B3[解析並處理封包<br/>UART_ProcessPacket]
+    B2 -->|否| C
+    B3 --> B4[重設接收變數]
+    B4 --> C[試片檢測處理<br/>STRIP_DETECT_Process]
+    
+    C --> C1{試片狀態?}
+    C1 -->|INSERTED| C2[啟用 T1 測量電路<br/>PA8 設為低電平]
+    C2 --> C3[延遲 10ms 等待穩定]
+    C3 --> C4[讀取 T1 電壓<br/>PA6/ADC_Channel_6]
+    C4 --> C5[判別試片類型<br/>根據腳位和電壓]
+    C5 --> C6[保存試片類型到參數表]
+    C6 --> C7[設置 W 電極 PWM 佔空比]
+    C7 --> C8[發送試片類型到 CH582F]
+    C8 --> C9[切換到 STATE_WAIT_FOR_BLOOD]
+    C9 --> C10[關閉 T1 測量電路<br/>PA8 設為高電平]
+    C10 --> D
+    C1 -->|其他| D
+    
+    D[狀態機處理<br/>State_Process] --> E{當前系統狀態?}
+    
+    E -->|STATE_IDLE| F[空閒狀態處理]
+    F --> F1[等待試片插入]
+    F1 --> Z
+    
+    E -->|STATE_WAIT_FOR_BLOOD| G[等待血液狀態處理]
+    G --> G1[讀取 GLU_OUT ADC 值<br/>PA4/ADC_Channel_4]
+    G1 --> G2[配置 ADC 通道 4]
+    G2 --> G3[啟動 ADC 轉換]
+    G3 --> G4[等待轉換完成<br/>檢查 ADC_FLAG_EOC]
+    G4 --> G5[獲取 ADC 值]
+    G5 --> G6[從參數表獲取血液檢測閾值]
+    G6 --> G7{ADC 值 > 閾值?}
+    G7 -->|是| G8[檢測到血液<br/>切換到 STATE_MEASURING]
+    G7 -->|否| Z
+    G8 --> Z
+    
+    E -->|STATE_MEASURING| H[測量狀態處理]
+    H --> H1[載入時序參數<br/>evWidth1, tpl1, trd1<br/>evWidth2, tpl2, trd2]
+    H1 --> H2[系統毫秒計數器更新<br/>+10ms]
+    H2 --> H3{測量步驟?}
+    
+    H3 -->|Step 1| H4[PWM 輸出控制<br/>PB15, evWidth1 時間]
+    H4 --> H5[啟用 PWM<br/>TIM_CtrlPWMOutputs ENABLE]
+    H5 --> H6{時間達到 evWidth1?}
+    H6 -->|否| H4
+    H6 -->|是| H7[Step 2: 切換到高電平輸出]
+    H7 --> H8[禁用 PWM, 設定 PB15 為 HIGH]
+    H8 --> H9{時間達到 tpl1?}
+    H9 -->|否| H8
+    H9 -->|是| H10[Step 3: 重新啟用 PWM]
+    H10 --> H11{時間達到 trd1?}
+    H11 -->|否| H10
+    H11 -->|是| H12{tpl2 == 0?}
+    H12 -->|是| H20[跳到 Step 7]
+    H12 -->|否| H13[Step 4: 繼續 PWM evWidth2]
+    H13 --> H14{時間達到 evWidth2?}
+    H14 -->|否| H13
+    H14 -->|是| H15[Step 5: HIGH tpl2]
+    H15 --> H16{時間達到 tpl2?}
+    H16 -->|否| H15
+    H16 -->|是| H17[Step 6: PWM trd2]
+    H17 --> H18{時間達到 trd2?}
+    H18 -->|否| H17
+    H18 -->|是| H20
+    H20 --> H21[Step 7: 精確 ADC 測量<br/>GetMidADC 函數]
+    H21 --> H22[100次連續取樣]
+    H22 --> H23[氣泡排序]
+    H23 --> H24[取中間20個值平均]
+    H24 --> H25[存入 W_ADC 變數]
+    H25 --> H26[停止 PWM 輸出<br/>PB15 設為 HIGH]
+    H26 --> H27[切換到 STATE_RESULT_READY]
+    H27 --> Z
+    
+    E -->|STATE_RESULT_READY| I[結果準備狀態處理]
+    I --> I1[呼叫血糖計算函數<br/>CalGlucose 使用 W_ADC]
+    I1 --> I2[將 ADC 值轉換為血糖值]
+    I2 --> I3[顯示測量結果<br/>血糖值和單位]
+    I3 --> I4[標記計算完成]
+    I4 --> Z
+    
+    E -->|STATE_ERROR| J[錯誤狀態處理]
+    J --> J1[記錄錯誤資訊]
+    J1 --> J2[停止所有測量動作]
+    J2 --> J3[重置相關變數]
+    J3 --> J4[可選：自動恢復或等待手動重置]
+    J4 --> Z
+    
+    E -->|其他狀態| K[未知狀態處理]
+    K --> K1[重置為 STATE_IDLE]
+    K1 --> Z
+    
+    Z[延遲 5ms] --> A
+    
+    style A fill:#fff3e0
+    style H fill:#e8f5e8
+    style I fill:#fff8e1
+    style J fill:#ffebee
+    style C fill:#e3f2fd

@@ -1,0 +1,42 @@
+flowchart TD
+    A[GetMidADC 函數調用] --> B[動態分配記憶體<br/>sampleCount * sizeof uint16_t]
+    B --> B1{記憶體分配成功?}
+    B1 -->|否| B2[返回錯誤值 0]
+    B1 -->|是| C[參數驗證<br/>midCount ≤ sampleCount]
+    C --> D[配置 ADC 通道<br/>ADC_RegularChannelConfig]
+    D --> E[開始連續取樣循環<br/>i = 0 to sampleCount]
+    
+    E --> F[啟動 ADC 轉換<br/>ADC_SoftwareStartConvCmd]
+    F --> G[等待轉換完成<br/>while !ADC_FLAG_EOC]
+    G --> H[讀取 ADC 值<br/>ADC_GetConversionValue]
+    H --> I[存入取樣陣列<br/>samples(i)]
+    I --> J[微延遲 10us<br/>確保取樣穩定]
+    J --> K{所有取樣完成?}
+    K -->|否| E
+    K -->|是| L[氣泡排序演算法]
+    
+    L --> M[外層循環 i = 0 to sampleCount-1]
+    M --> N[內層循環 j = 0 to sampleCount-i-1]
+    N --> O{samples(j) > samples(j+1)?}
+    O -->|是| P[交換位置<br/>temp = samples(j)<br/>samples(j) = samples(j+1)<br/>samples(j+1) = temp]
+    O -->|否| Q
+    P --> Q{內層循環完成?}
+    Q -->|否| N
+    Q -->|是| R{外層循環完成?}
+    R -->|否| M
+    R -->|是| S[計算中間值範圍]
+    
+    S --> T[startIndex = (sampleCount - midCount) / 2]
+    T --> U[endIndex = startIndex + midCount]
+    U --> V[計算中間值總和<br/>sum = 0]
+    V --> W[累加中間值<br/>for i = startIndex to endIndex]
+    W --> X[sum += samples(i)]
+    X --> Y{累加完成?}
+    Y -->|否| W
+    Y -->|是| Z[計算平均值<br/>average = sum / midCount]
+    Z --> AA[釋放記憶體<br/>free(samples)]
+    AA --> BB[返回平均值]
+    
+    style A fill:#e8f5e8
+    style L fill:#fff3e0
+    style BB fill:#c8e6c9

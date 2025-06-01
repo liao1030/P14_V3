@@ -1,0 +1,58 @@
+flowchart TD
+    A[USART2 中斷觸發] --> B{中斷類型檢查}
+    B -->|IDLE 中斷| C[UART 空閒線路檢測]
+    C --> C1[計算接收資料長度<br/>RX_BUFFER_LEN - DMA_CNTR]
+    C1 --> C2[備份當前緩衝區標號]
+    C2 --> C3[切換 DMA 使用緩衝區<br/>雙緩衝機制]
+    C3 --> C4[停用 DMA Channel6]
+    C4 --> C5[重設 DMA 計數器]
+    C5 --> C6[更新 DMA 記憶體位址<br/>指向新緩衝區]
+    C6 --> C7[重新啟動 DMA]
+    C7 --> C8[清除 IDLE 標誌<br/>讀取 USART_DR]
+    C8 --> C9[將資料推入環形緩衝區<br/>ring_buffer_push_huge]
+    C9 --> C10[逐位元組處理接收資料<br/>呼叫 UART2_Receive_Byte_ISR]
+    C10 --> M[中斷返回]
+    
+    B -->|RXNE 中斷| D[單位元組接收中斷]
+    D --> D1[讀取接收位元組<br/>USART_ReceiveData]
+    D1 --> D2[呼叫協議處理<br/>UART2_Receive_Byte_ISR]
+    D2 --> M
+    
+    N[DMA1 Channel6 中斷觸發] --> O[DMA 緩衝區滿事件]
+    O --> O1[設定接收長度<br/>RX_BUFFER_LEN]
+    O1 --> O2[備份當前緩衝區標號]
+    O2 --> O3[切換到另一個緩衝區]
+    O3 --> O4[停用 DMA]
+    O4 --> O5[重設 DMA 計數器]
+    O5 --> O6[更新 DMA 記憶體位址]
+    O6 --> O7[重新啟動 DMA]
+    O7 --> O8[將完整緩衝區資料<br/>推入環形緩衝區]
+    O8 --> O9[逐位元組處理資料]
+    O9 --> O10[清除 DMA 中斷標誌<br/>DMA_ClearITPendingBit]
+    O10 --> P[DMA 中斷返回]
+    
+    Q[UART 協議位元組處理<br/>UART2_Receive_Byte_ISR] --> R{檢查封包起始}
+    R -->|START_MARK| S[開始新封包接收]
+    S --> S1[重設接收索引]
+    S1 --> S2[設定接收狀態]
+    S2 --> T
+    
+    R -->|資料位元組| T[將位元組存入接收緩衝區]
+    T --> T1[檢查緩衝區溢位]
+    T1 --> T2[增加接收索引]
+    T2 --> U{檢查封包完整性}
+    
+    U -->|END_MARK| V[封包接收完成]
+    V --> V1[驗證封包檢驗和]
+    V1 --> V2{檢驗和正確?}
+    V2 -->|是| V3[設定 packet_received 標誌]
+    V2 -->|否| V4[丟棄封包，記錄錯誤]
+    V3 --> W[封包處理完成]
+    V4 --> W
+    
+    U -->|繼續接收| X[等待更多資料]
+    X --> W
+    
+    style A fill:#e3f2fd
+    style N fill:#e3f2fd
+    style Q fill:#f3e5f5
