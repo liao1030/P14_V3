@@ -14,6 +14,7 @@
 #include <string.h>
 #include "Calculation.h"  // 加入血糖計算函數標頭檔
 #include "strip_detect.h"  // 包含試片檢測相關函數
+#include "system_state.h"  // 包含系統狀態相關函數
 
 /* 外部變數宣告 */
 extern uint16_t W_ADC;  // 工作電極ADC值
@@ -94,19 +95,15 @@ uint8_t Check_Strip_Status(void)
  */
 uint8_t Check_Blood_Status(void)
 {
-    // 這是存根函數，實際使用時需要檢查是否已檢測到血液樣本
-    // 假設未檢測到血液
-    static uint8_t counter = 0;
+    // 檢查系統狀態，如果系統狀態為 STATE_MEASURING 或之後的狀態，表示已檢測到血液
+    SystemState_TypeDef currentState = System_GetState();
     
-    // 模擬血液檢測，每10次呼叫返回一次已檢測到血液
-    counter++;
-    if(counter >= 10)
-    {
-        counter = 0;
-        return 1;
+    // 當系統狀態為 STATE_MEASURING 或 STATE_RESULT_READY 時，返回已檢測到血液
+    if (currentState == STATE_MEASURING || currentState == STATE_RESULT_READY) {
+        return 1;  // 已檢測到血液
     }
     
-    return 0;
+    return 0;  // 未檢測到血液
 }
 
 /*********************************************************************
