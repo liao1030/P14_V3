@@ -1,5 +1,5 @@
 ################################################################################
-# MRS Version: 2.1.0
+# MRS Version: 2.2.0
 # Automatically-generated file. Do not edit!
 ################################################################################
 
@@ -41,7 +41,21 @@ OBJS += \
 ./User/uart_protocol_stubs.o 
 
 
+EXPANDS += \
+./User/Calculation.c.234r.expand \
+./User/ch32v20x_it.c.234r.expand \
+./User/main.c.234r.expand \
+./User/param_table.c.234r.expand \
+./User/rtc.c.234r.expand \
+./User/strip_detect.c.234r.expand \
+./User/system_ch32v20x.c.234r.expand \
+./User/system_state.c.234r.expand \
+./User/uart_protocol.c.234r.expand \
+./User/uart_protocol_stubs.c.234r.expand 
+
+
 
 # Each subdirectory must supply rules for building sources it contributes
 User/%.o: ../User/%.c
 	@	riscv-none-embed-gcc -march=rv32imacxw -mabi=ilp32 -msmall-data-limit=8 -msave-restore -fmax-errors=20 -Os -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections -fno-common -Wunused -Wuninitialized -g -I"/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH32V203G8R6/Debug" -I"/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH32V203G8R6/Core" -I"/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH32V203G8R6/User" -I"/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH32V203G8R6/Peripheral/inc" -std=gnu99 -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@)" -c -o "$@" "$<"
+

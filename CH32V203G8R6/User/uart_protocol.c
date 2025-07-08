@@ -672,15 +672,6 @@ uint8_t UART_SendResultAck(TestResult_TypeDef *result)
  *
  * @return  發送結果(1:成功 0:失敗)
  */
-/*********************************************************************
- * @fn      UART_SendRawDataAck
- *
- * @brief   發送RAW DATA回應
- *
- * @param   rawData - RAW DATA結構指標
- *
- * @return  發送結果(1:成功 0:失敗)
- */
 uint8_t UART_SendRawDataAck(RawData_TypeDef *rawData)
 {
     uint8_t data[60]; // RAW DATA結構的封裝
@@ -866,6 +857,47 @@ void UART2_Receive_Byte_ISR(uint8_t byte)
 }
 
 /*********************************************************************
+ * @fn      UART_UpdateBloodCountdown
+ *
+ * @brief   根據試片類型更新血液檢測倒數時間
+ *
+ * @param   stripType - 試片類型
+ *
+ * @return  none
+ */
+void UART_UpdateBloodCountdown(StripType_TypeDef stripType)
+{
+    uint16_t tpl1, trd1, evWidth1;
+    uint16_t tpl2, trd2, evWidth2; // 未使用但參數需要
+    
+    /* 獲取試片時序參數 */
+    if (PARAM_GetTimingParameters(stripType, &tpl1, &trd1, &evWidth1, 1) &&
+        PARAM_GetTimingParameters(stripType, &tpl2, &trd2, &evWidth2, 2)) {
+        
+        /* 計算血液倒數時間：(tpl1 + trd1 + evWidth1) / 1000 */
+        uint32_t totalTime = (uint32_t)tpl1 + (uint32_t)trd1 + (uint32_t)evWidth1;
+        blood_countdown = (uint8_t)(totalTime / 1000);
+
+        if ((totalTime%1000) > 0) {
+            blood_countdown++;
+        }
+        
+        /* 確保至少有1秒的倒數時間 */
+        if (blood_countdown < 1) {
+            blood_countdown = 1;
+        }
+        
+        printf("Blood countdown updated for strip type %s: %d seconds\r\n", 
+               StripType_GetName(stripType), blood_countdown);
+    } else {
+        /* 無法獲取時序參數，使用預設值 */
+        blood_countdown = 5;
+        printf("Failed to get timing parameters for strip type %s, using default countdown: %d seconds\r\n", 
+               StripType_GetName(stripType), blood_countdown);
+    }
+}
+
+/*********************************************************************
  * @fn      UART_ProcessStripInsertedCmd
  *
  * @brief   處理試片插入通知命令
@@ -897,6 +929,10 @@ uint8_t UART_ProcessStripInsertedCmd(uint8_t *data, uint8_t length)
         /* 觸發插入處理 */
         STRIP_DETECT_HandleInsertedEvent();
         
+        /* 獲取判斷的試片類型並更新血液倒數時間 */
+        StripType_TypeDef currentStripType = STRIP_DETECT_GetStripType();
+        UART_UpdateBloodCountdown(currentStripType);
+        
         printf("Strip inserted notification received. Pin3=%d, Pin5=%d, BatteryVoltage=%dmV\r\n", 
                pin3Status, pin5Status, batteryVoltage);
     } else if (length >= 2) {
@@ -909,11 +945,19 @@ uint8_t UART_ProcessStripInsertedCmd(uint8_t *data, uint8_t length)
         /* 觸發插入處理 */
         STRIP_DETECT_HandleInsertedEvent();
         
+        /* 獲取判斷的試片類型並更新血液倒數時間 */
+        StripType_TypeDef currentStripType = STRIP_DETECT_GetStripType();
+        UART_UpdateBloodCountdown(currentStripType);
+        
         printf("Strip inserted notification received. Pin3=%d, Pin5=%d\r\n", 
                pin3Status, pin5Status);
     } else {
         printf("Strip inserted notification without pin status\r\n");
         STRIP_DETECT_HandleInsertedEvent();
+        
+        /* 獲取判斷的試片類型並更新血液倒數時間 */
+        StripType_TypeDef currentStripType = STRIP_DETECT_GetStripType();
+        UART_UpdateBloodCountdown(currentStripType);
     }
     
     return 1;

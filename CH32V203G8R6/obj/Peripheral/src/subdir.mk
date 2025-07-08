@@ -1,5 +1,5 @@
 ################################################################################
-# MRS Version: 2.1.0
+# MRS Version: 2.2.0
 # Automatically-generated file. Do not edit!
 ################################################################################
 
@@ -71,7 +71,31 @@ OBJS += \
 ./Peripheral/src/ch32v20x_wwdg.o 
 
 
+EXPANDS += \
+./Peripheral/src/ch32v20x_adc.c.234r.expand \
+./Peripheral/src/ch32v20x_bkp.c.234r.expand \
+./Peripheral/src/ch32v20x_can.c.234r.expand \
+./Peripheral/src/ch32v20x_crc.c.234r.expand \
+./Peripheral/src/ch32v20x_dbgmcu.c.234r.expand \
+./Peripheral/src/ch32v20x_dma.c.234r.expand \
+./Peripheral/src/ch32v20x_exti.c.234r.expand \
+./Peripheral/src/ch32v20x_flash.c.234r.expand \
+./Peripheral/src/ch32v20x_gpio.c.234r.expand \
+./Peripheral/src/ch32v20x_i2c.c.234r.expand \
+./Peripheral/src/ch32v20x_iwdg.c.234r.expand \
+./Peripheral/src/ch32v20x_misc.c.234r.expand \
+./Peripheral/src/ch32v20x_opa.c.234r.expand \
+./Peripheral/src/ch32v20x_pwr.c.234r.expand \
+./Peripheral/src/ch32v20x_rcc.c.234r.expand \
+./Peripheral/src/ch32v20x_rtc.c.234r.expand \
+./Peripheral/src/ch32v20x_spi.c.234r.expand \
+./Peripheral/src/ch32v20x_tim.c.234r.expand \
+./Peripheral/src/ch32v20x_usart.c.234r.expand \
+./Peripheral/src/ch32v20x_wwdg.c.234r.expand 
+
+
 
 # Each subdirectory must supply rules for building sources it contributes
 Peripheral/src/%.o: ../Peripheral/src/%.c
 	@	riscv-none-embed-gcc -march=rv32imacxw -mabi=ilp32 -msmall-data-limit=8 -msave-restore -fmax-errors=20 -Os -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections -fno-common -Wunused -Wuninitialized -g -I"/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH32V203G8R6/Debug" -I"/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH32V203G8R6/Core" -I"/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH32V203G8R6/User" -I"/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH32V203G8R6/Peripheral/inc" -std=gnu99 -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@)" -c -o "$@" "$<"
+

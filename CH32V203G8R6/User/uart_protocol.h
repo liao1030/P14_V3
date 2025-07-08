@@ -164,4 +164,7 @@ uint8_t UART_VerifyChecksum(uint8_t *packet, uint16_t length);
 /* 接收中斷處理函數 */
 void UART2_Receive_Byte_ISR(uint8_t byte);
 
+/* 血液倒數時間更新函數 */
+void UART_UpdateBloodCountdown(StripType_TypeDef stripType);
+
 #endif /* __UART_PROTOCOL_H */
