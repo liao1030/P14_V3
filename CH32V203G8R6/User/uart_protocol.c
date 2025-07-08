@@ -382,6 +382,10 @@ uint8_t UART_ProcessSetParam(uint8_t *data, uint8_t length)
     PARAM_SetWord(PARAM_CODE_TABLE_V, code);
     PARAM_SetByte(PARAM_EVENT, event);
     
+    /* 同步更新測試結果結構 */
+    current_test_result.eventType = event;
+    current_test_result.stripCode = code;
+    
     /* 發送確認回應 */
     UART_SendParamAck(0); // 0表示成功
     
