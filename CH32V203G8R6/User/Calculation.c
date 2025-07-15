@@ -40,10 +40,7 @@ void CalGlucose(uint16_t adcValue)
     uint16_t EV_BACKGROUND;
     
     // 優先使用試片檢測模組的當前類型，如果無效則使用參數表中的值
-    StripType_TypeDef stripType = STRIP_DETECT_GetStripType();
-    if (stripType >= STRIP_TYPE_MAX) {
-        stripType = (StripType_TypeDef)PARAM_GetByte(PARAM_STRIP_TYPE);
-    }
+    StripType_TypeDef stripType = STRIP_DETECT_GetStripType();  
     
     printf("Using strip type: %s (%d)\r\n", StripType_GetName(stripType), stripType);
     

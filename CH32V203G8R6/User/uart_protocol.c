@@ -335,9 +335,8 @@ uint8_t UART_ProcessGetStatus(uint8_t *data, uint8_t length)
     }
     
     /* 獲取當前裝置狀態 */
-    DeviceStatus_TypeDef status;
-    
-    status.stripType = (uint16_t)PARAM_GetByte(PARAM_STRIP_TYPE);
+    DeviceStatus_TypeDef status;    
+    status.stripType = STRIP_DETECT_GetStripType();
     status.stripStatus = (uint16_t)Check_Strip_Status();
     status.batteryVoltage = Get_Battery_Voltage();
     status.temperature = Get_Temperature();
@@ -381,10 +380,12 @@ uint8_t UART_ProcessSetParam(uint8_t *data, uint8_t length)
     /* 設置參數 */
     PARAM_SetWord(PARAM_CODE_TABLE_V, code);
     PARAM_SetByte(PARAM_EVENT, event);
-    
-    /* 同步更新測試結果結構 */
-    current_test_result.eventType = event;
-    current_test_result.stripCode = code;
+
+    /* 更新校驗和 */
+    PARAM_UpdateChecksum();
+
+    /* 將更新後的參數表保存到Flash */
+    PARAM_SaveToFlash();
     
     /* 發送確認回應 */
     UART_SendParamAck(0); // 0表示成功

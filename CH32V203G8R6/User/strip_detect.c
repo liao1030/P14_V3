@@ -170,9 +170,6 @@ void STRIP_DETECT_Process(void)
                stripInfo.pin3Status,
                stripInfo.pin5Status);
         
-        /* 保存試片類型到參數表 */
-        PARAM_SetByte(PARAM_STRIP_TYPE, (uint8_t)stripInfo.type);
-        
         /* 設置W電極PWM佔空比 */
         STRIP_DETECT_UpdateWPWMDuty(stripInfo.type);
         
@@ -387,9 +384,6 @@ void STRIP_DETECT_SetStripType(StripType_TypeDef type)
 {
     stripInfo.type = type;
     stripInfo.state = STRIP_STATE_DETECTED;
-    
-    /* 保存試片類型到參數表 */
-    PARAM_SetByte(PARAM_STRIP_TYPE, (uint8_t)type);
     
     /* 設置W電極PWM佔空比 */
     STRIP_DETECT_UpdateWPWMDuty(type);
