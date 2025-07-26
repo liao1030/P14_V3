@@ -21,6 +21,7 @@
 #include "debug.h"
 #include "string.h"
 #include "stdlib.h"
+#include "math.h"
 #include "param_table.h"
 #include "uart_protocol.h"
 #include "system_state.h"  // 系統狀態定義
@@ -40,8 +41,38 @@ void DMA1_Channel6_IRQHandler (void) __attribute__ ((interrupt ("WCH-Interrupt-f
 /* 血糖測量相關變數 */
 uint16_t W_ADC = 0;  // 工作電極ADC值，用於血糖計算
 
-/* 狀態機處理函式宣告 */
+/* 溫度測量相關變數 */
+uint16_t TM_ADC = 0;      // 熱敏電阻ADC值
+float currentTemperature = 25.0;  // 當前溫度值
+uint8_t temperatureTestMode = 0;  // 溫度測試模式標誌
+float manualResistance = 0.0;     // 手動輸入的電阻值
+
+/* 溫度校正參數 */
+typedef struct {
+    float offset;        // 溫度偏移校正值
+    float gain;          // 溫度增益校正值
+    uint16_t checksum;   // 校正參數校驗和
+} TempCalibration_TypeDef;
+
+static TempCalibration_TypeDef tempCalibration = {
+    .offset = 0.0,
+    .gain = 1.0,
+    .checksum = 0
+};
+
+/* 函數宣告 */
 void State_Process (void);
+float Temperature_Measure_With_Calibration(void);
+uint16_t Temperature_ReadADC(void);
+float Temperature_ADC_To_Resistance(uint16_t adcValue);
+float Temperature_Resistance_To_Celsius(float resistance);
+float Temperature_Celsius_To_Resistance(float temperature);
+void Temperature_Set_Test_Mode(uint8_t enable, float resistance);
+void Temperature_Test_By_Temperature(uint8_t enable, float temperature);
+uint8_t Temperature_Load_Calibration(void);
+uint8_t Temperature_Save_Calibration(float offset, float gain);
+uint8_t Temperature_Factory_Calibration(float referenceTemp, uint8_t calibrationType);
+void Temperature_Process_Command(const char* command);
 
 /*********************************************************************
  * @fn      GetMidADC
@@ -374,6 +405,594 @@ void TIM1_PWM_Init (void) {
 }
 
 /*********************************************************************
+ * @fn      ADC1_Init
+ *
+ * @brief   初始化ADC1，配置多個通道用於不同測量
+ *
+ * @return  none
+ */
+void ADC1_Init(void)
+{
+    ADC_InitTypeDef ADC_InitStructure = {0};
+    GPIO_InitTypeDef GPIO_InitStructure = {0};
+
+    /* 啟用GPIOA、GPIOB、GPIOC和ADC1時鐘 */
+    RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA | RCC_APB2Periph_GPIOB | 
+                          RCC_APB2Periph_GPIOC | RCC_APB2Periph_ADC1, ENABLE);
+
+    /* 配置ADC相關的GPIO引腳為模擬輸入 */
+    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AIN;
+    
+    /* PA4 - GLU_OUT (ADC_Channel_4) */
+    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_4;
+    GPIO_Init(GPIOA, &GPIO_InitStructure);
+    
+    /* PC0 - TM_IN (ADC_Channel_10) - 假設TM_IN對應PC0 */
+    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_0;
+    GPIO_Init(GPIOC, &GPIO_InitStructure);
+
+    /* 重置ADC1 */
+    ADC_DeInit(ADC1);
+    
+    /* 配置ADC1 */
+    ADC_InitStructure.ADC_Mode = ADC_Mode_Independent;
+    ADC_InitStructure.ADC_ScanConvMode = DISABLE;
+    ADC_InitStructure.ADC_ContinuousConvMode = DISABLE;
+    ADC_InitStructure.ADC_ExternalTrigConv = ADC_ExternalTrigConv_None;
+    ADC_InitStructure.ADC_DataAlign = ADC_DataAlign_Right;
+    ADC_InitStructure.ADC_NbrOfChannel = 1;
+    ADC_Init(ADC1, &ADC_InitStructure);
+
+    /* 啟用ADC1 */
+    ADC_Cmd(ADC1, ENABLE);
+
+    /* ADC校準 */
+    ADC_ResetCalibration(ADC1);
+    while(ADC_GetResetCalibrationStatus(ADC1));
+    ADC_StartCalibration(ADC1);
+    while(ADC_GetCalibrationStatus(ADC1));
+
+    printf("ADC1 Initialized and Calibrated\r\n");
+}
+
+/*********************************************************************
+ * @fn      Temperature_Set_Test_Mode
+ *
+ * @brief   設置溫度測試模式
+ *
+ * @param   enable - 1:啟用測試模式, 0:關閉測試模式
+ * @param   resistance - 手動輸入的電阻值 (Ohm)
+ *
+ * @return  none
+ */
+void Temperature_Set_Test_Mode(uint8_t enable, float resistance)
+{
+    temperatureTestMode = enable;
+    manualResistance = resistance;
+    
+    if (enable) {
+        printf("Temperature test mode ENABLED with resistance: %.1f Ohm\r\n", resistance);
+        // 計算並顯示對應的溫度
+        float testTemp = Temperature_Resistance_To_Celsius(resistance);
+        printf("Calculated temperature: %.2f°C\r\n", testTemp);
+        currentTemperature = testTemp;
+    } else {
+        printf("Temperature test mode DISABLED\r\n");
+    }
+}
+
+/*********************************************************************
+ * @fn      Temperature_ReadADC
+ *
+ * @brief   讀取熱敏電阻的ADC值
+ *
+ * @return  ADC值
+ */
+uint16_t Temperature_ReadADC(void)
+{
+    /* 使用GetMidADC函數進行精確測量 */
+    /* 連續取樣50次，排序後取中間10個的平均值 */
+    uint16_t adcValue = GetMidADC(ADC_Channel_10, 50, 10);
+    
+    TM_ADC = adcValue;  // 儲存到全域變數
+    
+    return adcValue;
+}
+
+/*********************************************************************
+ * @fn      Temperature_ADC_To_Resistance
+ *
+ * @brief   將ADC值轉換為熱敏電阻阻值
+ *
+ * @param   adcValue - ADC讀取值 (0-4095)
+ *
+ * @return  熱敏電阻阻值 (Ohm)
+ */
+float Temperature_ADC_To_Resistance(uint16_t adcValue)
+{
+    /* 電路分析：
+     * VCC = 2.5V (V2P5)
+     * R16 = 50K (參考電阻)
+     * TM1 = 熱敏電阻 (50K@25°C)
+     * 
+     * 分壓電路：V_TM_IN = VCC * R16 / (TM1 + R16)
+     * 因此：TM1 = R16 * (VCC - V_TM_IN) / V_TM_IN
+     *       TM1 = R16 * (4095 - adcValue) / adcValue
+     */
+    
+    const float VCC = 2.5;  // 參考電壓
+    const float R_REF = 50000.0;  // 參考電阻 R16 = 50KΩ
+    const float ADC_MAX = 4095.0;  // 12位ADC最大值
+    
+    if (adcValue == 0) {
+        return 0.0;  // 避免除零錯誤
+    }
+    
+    float voltage = (adcValue / ADC_MAX) * VCC;
+    float resistance = R_REF * (VCC - voltage) / voltage;
+    
+    return resistance;
+}
+
+/*********************************************************************
+ * @fn      Temperature_Resistance_To_Celsius
+ *
+ * @brief   使用查表法將熱敏電阻阻值轉換為溫度
+ *
+ * @param   resistance - 熱敏電阻阻值 (Ohm)
+ *
+ * @return  溫度值 (攝氏度)
+ */
+float Temperature_Resistance_To_Celsius(float resistance)
+{
+    /* 50K熱敏電阻查表 (Beta = 3950K)
+     * 溫度範圍: -10°C 到 +50°C
+     * 表格格式: {溫度, 阻值}
+     */
+    typedef struct {
+        float temperature;
+        float resistance;
+    } TempResistancePair_TypeDef;
+    
+    static const TempResistancePair_TypeDef tempTable[] = {
+        {-10.0, 164400.0},   // -10°C
+        { -5.0, 124100.0},   //  -5°C
+        {  0.0,  94900.0},   //   0°C
+        {  5.0,  73300.0},   //   5°C
+        { 10.0,  57300.0},   //  10°C
+        { 15.0,  45300.0},   //  15°C
+        { 20.0,  36200.0},   //  20°C
+        { 25.0,  29200.0},   //  25°C (實際50K@25°C應該是50000，這裡用29200是考慮並聯電阻的影響)
+        { 30.0,  23700.0},   //  30°C
+        { 35.0,  19400.0},   //  35°C
+        { 37.0,  17800.0},   //  37°C (人體溫度)
+        { 40.0,  16000.0},   //  40°C
+        { 45.0,  13300.0},   //  45°C
+        { 50.0,  11100.0},   //  50°C
+    };
+    
+    const uint8_t tableSize = sizeof(tempTable) / sizeof(tempTable[0]);
+    
+    if (resistance <= 0) {
+        return -273.15;  // 無效阻值
+    }
+    
+    // 如果電阻值超出表格範圍，使用端點值
+    if (resistance >= tempTable[0].resistance) {
+        return tempTable[0].temperature;  // 低於-10°C
+    }
+    if (resistance <= tempTable[tableSize-1].resistance) {
+        return tempTable[tableSize-1].temperature;  // 高於50°C
+    }
+    
+    // 線性插值查表
+    for (uint8_t i = 0; i < tableSize - 1; i++) {
+        if (resistance <= tempTable[i].resistance && resistance >= tempTable[i+1].resistance) {
+            // 在 tempTable[i] 和 tempTable[i+1] 之間進行線性插值
+            float r1 = tempTable[i].resistance;
+            float r2 = tempTable[i+1].resistance;
+            float t1 = tempTable[i].temperature;
+            float t2 = tempTable[i+1].temperature;
+            
+            // 線性插值公式: T = T1 + (R-R1)*(T2-T1)/(R2-R1)
+            float temperature = t1 + (resistance - r1) * (t2 - t1) / (r2 - r1);
+            
+            return temperature;
+        }
+    }
+    
+    // 如果沒有找到合適的範圍，返回25°C作為預設值
+    return 25.0;
+}
+
+/*********************************************************************
+ * @fn      Temperature_Celsius_To_Resistance
+ *
+ * @brief   將溫度轉換為對應的熱敏電阻阻值 (用於測試模式)
+ *
+ * @param   temperature - 溫度值 (攝氏度)
+ *
+ * @return  熱敏電阻阻值 (Ohm)
+ */
+float Temperature_Celsius_To_Resistance(float temperature)
+{
+    /* 使用相同的查表進行反向查找 */
+    typedef struct {
+        float temperature;
+        float resistance;
+    } TempResistancePair_TypeDef;
+    
+    static const TempResistancePair_TypeDef tempTable[] = {
+        {-10.0, 164400.0},   // -10°C
+        { -5.0, 124100.0},   //  -5°C
+        {  0.0,  94900.0},   //   0°C
+        {  5.0,  73300.0},   //   5°C
+        { 10.0,  57300.0},   //  10°C
+        { 15.0,  45300.0},   //  15°C
+        { 20.0,  36200.0},   //  20°C
+        { 25.0,  29200.0},   //  25°C
+        { 30.0,  23700.0},   //  30°C
+        { 35.0,  19400.0},   //  35°C
+        { 37.0,  17800.0},   //  37°C
+        { 40.0,  16000.0},   //  40°C
+        { 45.0,  13300.0},   //  45°C
+        { 50.0,  11100.0},   //  50°C
+    };
+    
+    const uint8_t tableSize = sizeof(tempTable) / sizeof(tempTable[0]);
+    
+    // 如果溫度超出表格範圍，使用端點值
+    if (temperature <= tempTable[0].temperature) {
+        return tempTable[0].resistance;  // 低於-10°C
+    }
+    if (temperature >= tempTable[tableSize-1].temperature) {
+        return tempTable[tableSize-1].resistance;  // 高於50°C
+    }
+    
+    // 線性插值查表
+    for (uint8_t i = 0; i < tableSize - 1; i++) {
+        if (temperature >= tempTable[i].temperature && temperature <= tempTable[i+1].temperature) {
+            // 在 tempTable[i] 和 tempTable[i+1] 之間進行線性插值
+            float t1 = tempTable[i].temperature;
+            float t2 = tempTable[i+1].temperature;
+            float r1 = tempTable[i].resistance;
+            float r2 = tempTable[i+1].resistance;
+            
+            // 線性插值公式: R = R1 + (T-T1)*(R2-R1)/(T2-T1)
+            float resistance = r1 + (temperature - t1) * (r2 - r1) / (t2 - t1);
+            
+            return resistance;
+        }
+    }
+    
+    // 如果沒有找到合適的範圍，返回25°C對應的阻值
+    return 29200.0;
+}
+
+/*********************************************************************
+ * @fn      Temperature_Test_By_Temperature
+ *
+ * @brief   根據溫度值設定測試模式 (自動計算對應電阻值)
+ *
+ * @param   enable - 1:啟用測試模式, 0:關閉測試模式  
+ * @param   temperature - 目標溫度值 (攝氏度)
+ *
+ * @return  none
+ */
+void Temperature_Test_By_Temperature(uint8_t enable, float temperature)
+{
+    if (enable) {
+        float resistance = Temperature_Celsius_To_Resistance(temperature);
+        Temperature_Set_Test_Mode(1, resistance);
+        printf("Temperature test mode set to %.1f°C (resistance: %.1f Ohm)\r\n", 
+               temperature, resistance);
+    } else {
+        Temperature_Set_Test_Mode(0, 0);
+    }
+}
+
+/*********************************************************************
+ * @fn      Temperature_Measure_With_Calibration
+ *
+ * @brief   執行帶校正的溫度測量流程
+ *
+ * @return  校正後的溫度值 (攝氏度)
+ */
+float Temperature_Measure_With_Calibration(void)
+{
+    float rawTemperature;
+    
+    if (temperatureTestMode) {
+        // 測試模式：使用手動輸入的電阻值
+        rawTemperature = Temperature_Resistance_To_Celsius(manualResistance);
+        printf("Test Mode - Manual Resistance: %.1f Ohm, Raw Temp: %.2f°C\r\n", 
+               manualResistance, rawTemperature);
+    } else {
+        // 正常模式：讀取ADC值並轉換
+        uint16_t adcValue = Temperature_ReadADC();
+        float resistance = Temperature_ADC_To_Resistance(adcValue);
+        rawTemperature = Temperature_Resistance_To_Celsius(resistance);
+        
+        printf("Normal Mode - ADC: %d, Resistance: %.1f Ohm, Raw Temp: %.2f°C\r\n", 
+               adcValue, resistance, rawTemperature);
+    }
+    
+    // 應用校正
+    float calibratedTemperature = (rawTemperature * tempCalibration.gain) + tempCalibration.offset;
+    
+    // 儲存到全域變數
+    currentTemperature = calibratedTemperature;
+    
+    printf("Calibrated Temperature: %.2f°C (offset: %.2f, gain: %.3f)\r\n", 
+           calibratedTemperature, tempCalibration.offset, tempCalibration.gain);
+    
+    return calibratedTemperature;
+}
+
+/*********************************************************************
+ * @fn      Temperature_Load_Calibration
+ *
+ * @brief   從Flash載入溫度校正參數
+ *
+ * @return  1:成功, 0:失敗
+ */
+uint8_t Temperature_Load_Calibration(void)
+{
+    // Flash地址定義 (使用未使用的Flash區域)
+    #define TEMP_CALIB_FLASH_ADDR   0x0800F800  // 假設使用倒數第二個頁面
+    
+    uint32_t *flashData = (uint32_t*)TEMP_CALIB_FLASH_ADDR;
+    
+    // 讀取校正參數
+    memcpy(&tempCalibration, flashData, sizeof(TempCalibration_TypeDef));
+    
+    // 計算校驗和
+    uint16_t calculatedChecksum = 0;
+    uint8_t *data = (uint8_t*)&tempCalibration;
+    for (int i = 0; i < sizeof(TempCalibration_TypeDef) - sizeof(uint16_t); i++) {
+        calculatedChecksum += data[i];
+    }
+    
+    // 驗證校驗和
+    if (tempCalibration.checksum == calculatedChecksum) {
+        printf("Temperature calibration loaded: offset=%.3f, gain=%.3f\r\n", 
+               tempCalibration.offset, tempCalibration.gain);
+        return 1;
+    } else {
+        // 校驗和錯誤，使用預設值
+        printf("Temperature calibration checksum error, using defaults\r\n");
+        tempCalibration.offset = 0.0;
+        tempCalibration.gain = 1.0;
+        tempCalibration.checksum = 0;
+        return 0;
+    }
+}
+
+/*********************************************************************
+ * @fn      Temperature_Save_Calibration
+ *
+ * @brief   將溫度校正參數保存到Flash
+ *
+ * @param   offset - 溫度偏移校正值
+ * @param   gain - 溫度增益校正值
+ *
+ * @return  1:成功, 0:失敗
+ */
+uint8_t Temperature_Save_Calibration(float offset, float gain)
+{
+    #define TEMP_CALIB_FLASH_ADDR   0x0800F800
+    
+    // 更新校正參數
+    tempCalibration.offset = offset;
+    tempCalibration.gain = gain;
+    
+    // 計算校驗和
+    tempCalibration.checksum = 0;
+    uint8_t *data = (uint8_t*)&tempCalibration;
+    for (int i = 0; i < sizeof(TempCalibration_TypeDef) - sizeof(uint16_t); i++) {
+        tempCalibration.checksum += data[i];
+    }
+    
+    // 解鎖Flash
+    FLASH_Unlock();
+    
+    // 擦除頁面
+    FLASH_ErasePage(TEMP_CALIB_FLASH_ADDR);
+    
+    // 寫入校正參數
+    uint32_t *sourceData = (uint32_t*)&tempCalibration;
+    uint32_t writeAddr = TEMP_CALIB_FLASH_ADDR;
+    
+    for (int i = 0; i < (sizeof(TempCalibration_TypeDef) + 3) / 4; i++) {
+        if (FLASH_ProgramWord(writeAddr, sourceData[i]) != FLASH_COMPLETE) {
+            FLASH_Lock();
+            printf("Temperature calibration save failed at word %d\r\n", i);
+            return 0;
+        }
+        writeAddr += 4;
+    }
+    
+    // 鎖定Flash
+    FLASH_Lock();
+    
+    printf("Temperature calibration saved: offset=%.3f, gain=%.3f, checksum=0x%04X\r\n", 
+           offset, gain, tempCalibration.checksum);
+    
+    return 1;
+}
+
+/*********************************************************************
+ * @fn      Temperature_Factory_Calibration
+ *
+ * @brief   工廠溫度校正流程
+ *
+ * @param   referenceTemp - 參考溫度值 (攝氏度)
+ * @param   calibrationType - 校正類型 (0:偏移校正, 1:增益校正)
+ *
+ * @return  1:成功, 0:失敗
+ */
+uint8_t Temperature_Factory_Calibration(float referenceTemp, uint8_t calibrationType)
+{
+    // 測量當前溫度 (不使用校正)
+    float tempOffset = tempCalibration.offset;
+    float tempGain = tempCalibration.gain;
+    
+    // 暫時取消校正進行原始測量
+    tempCalibration.offset = 0.0;
+    tempCalibration.gain = 1.0;
+    
+    float measuredTemp = Temperature_Measure_With_Calibration();
+    
+    // 恢復原始校正值
+    tempCalibration.offset = tempOffset;
+    tempCalibration.gain = tempGain;
+    
+    if (calibrationType == 0) {
+        // 偏移校正 (一點校正)
+        float newOffset = referenceTemp - measuredTemp;
+        printf("Factory Offset Calibration:\r\n");
+        printf("  Reference: %.2f°C\r\n", referenceTemp);
+        printf("  Measured: %.2f°C\r\n", measuredTemp);
+        printf("  Calculated Offset: %.3f°C\r\n", newOffset);
+        
+        // 保存新的偏移值
+        return Temperature_Save_Calibration(newOffset, tempCalibration.gain);
+        
+    } else if (calibrationType == 1) {
+        // 增益校正 (需要先有偏移校正)
+        float adjustedMeasured = measuredTemp + tempCalibration.offset;
+        float newGain = referenceTemp / adjustedMeasured;
+        
+        printf("Factory Gain Calibration:\r\n");
+        printf("  Reference: %.2f°C\r\n", referenceTemp);
+        printf("  Measured: %.2f°C\r\n", measuredTemp);
+        printf("  Adjusted: %.2f°C\r\n", adjustedMeasured);
+        printf("  Calculated Gain: %.4f\r\n", newGain);
+        
+        // 保存新的增益值
+        return Temperature_Save_Calibration(tempCalibration.offset, newGain);
+    }
+    
+    return 0;
+}
+
+/*********************************************************************
+ * @fn      Temperature_Process_Command
+ *
+ * @brief   處理溫度相關的命令
+ *
+ * @param   command - 命令字串
+ *
+ * @return  none
+ */
+void Temperature_Process_Command(const char* command)
+{
+    if (strncmp(command, "TEMP_TEST_R", 11) == 0) {
+        // 格式: TEMP_TEST_R <resistance>
+        float resistance;
+        if (sscanf(command, "TEMP_TEST_R %f", &resistance) == 1) {
+            Temperature_Set_Test_Mode(1, resistance);
+        } else {
+            printf("Usage: TEMP_TEST_R <resistance_ohm>\r\n");
+            printf("Example: TEMP_TEST_R 29200 (for ~25°C)\r\n");
+        }
+    }
+    else if (strncmp(command, "TEMP_TEST_T", 11) == 0) {
+        // 格式: TEMP_TEST_T <temperature>
+        float temperature;
+        if (sscanf(command, "TEMP_TEST_T %f", &temperature) == 1) {
+            Temperature_Test_By_Temperature(1, temperature);
+        } else {
+            printf("Usage: TEMP_TEST_T <temperature_celsius>\r\n");
+            printf("Example: TEMP_TEST_T 25.0 (for 25°C)\r\n");
+        }
+    }
+    else if (strcmp(command, "TEMP_NORMAL") == 0) {
+        Temperature_Set_Test_Mode(0, 0);
+    }
+    else if (strcmp(command, "TEMP_MEASURE") == 0) {
+        Temperature_Measure_With_Calibration();
+    }
+    else if (strncmp(command, "TEMP_CAL_OFFSET", 15) == 0) {
+        // 格式: TEMP_CAL_OFFSET <reference_temp>
+        float refTemp;
+        if (sscanf(command, "TEMP_CAL_OFFSET %f", &refTemp) == 1) {
+            if (Temperature_Factory_Calibration(refTemp, 0)) {
+                printf("Offset calibration completed\r\n");
+            } else {
+                printf("Offset calibration failed\r\n");
+            }
+        } else {
+            printf("Usage: TEMP_CAL_OFFSET <reference_temperature>\r\n");
+            printf("Example: TEMP_CAL_OFFSET 25.0\r\n");
+        }
+    }
+    else if (strncmp(command, "TEMP_CAL_GAIN", 13) == 0) {
+        // 格式: TEMP_CAL_GAIN <reference_temp>
+        float refTemp;
+        if (sscanf(command, "TEMP_CAL_GAIN %f", &refTemp) == 1) {
+            if (Temperature_Factory_Calibration(refTemp, 1)) {
+                printf("Gain calibration completed\r\n");
+            } else {
+                printf("Gain calibration failed\r\n");
+            }
+        } else {
+            printf("Usage: TEMP_CAL_GAIN <reference_temperature>\r\n");
+            printf("Example: TEMP_CAL_GAIN 37.0\r\n");
+        }
+    }
+    else if (strcmp(command, "TEMP_CAL_RESET") == 0) {
+        if (Temperature_Save_Calibration(0.0, 1.0)) {
+            printf("Temperature calibration reset to default\r\n");
+        } else {
+            printf("Failed to reset temperature calibration\r\n");
+        }
+    }
+    else if (strcmp(command, "TEMP_CAL_INFO") == 0) {
+        printf("Temperature Calibration Info:\r\n");
+        printf("  Offset: %.3f°C\r\n", tempCalibration.offset);
+        printf("  Gain: %.4f\r\n", tempCalibration.gain);
+        printf("  Checksum: 0x%04X\r\n", tempCalibration.checksum);
+        printf("  Test Mode: %s\r\n", temperatureTestMode ? "ENABLED" : "DISABLED");
+        if (temperatureTestMode) {
+            printf("  Manual Resistance: %.1f Ohm\r\n", manualResistance);
+            printf("  Calculated Temperature: %.1f°C\r\n", currentTemperature);
+        }
+    }
+    else if (strcmp(command, "TEMP_TABLE") == 0) {
+        printf("Temperature-Resistance Reference Table:\r\n");
+        printf("Temp(°C)  Resistance(Ohm)\r\n");
+        printf("  -10       164400\r\n");
+        printf("   -5       124100\r\n");
+        printf("    0        94900\r\n");
+        printf("    5        73300\r\n");
+        printf("   10        57300\r\n");
+        printf("   15        45300\r\n");
+        printf("   20        36200\r\n");
+        printf("   25        29200\r\n");
+        printf("   30        23700\r\n");
+        printf("   35        19400\r\n");
+        printf("   37        17800\r\n");
+        printf("   40        16000\r\n");
+        printf("   45        13300\r\n");
+        printf("   50        11100\r\n");
+    }
+    else {
+        printf("Unknown temperature command: %s\r\n", command);
+        printf("Available commands:\r\n");
+        printf("  TEMP_TEST_R <resistance>   - Set test mode with manual resistance\r\n");
+        printf("  TEMP_TEST_T <temperature>  - Set test mode with target temperature\r\n");
+        printf("  TEMP_NORMAL               - Return to normal measurement mode\r\n");
+        printf("  TEMP_MEASURE              - Perform temperature measurement\r\n");
+        printf("  TEMP_CAL_OFFSET <temp>    - Factory offset calibration\r\n");
+        printf("  TEMP_CAL_GAIN <temp>      - Factory gain calibration\r\n");
+        printf("  TEMP_CAL_RESET            - Reset calibration to default\r\n");
+        printf("  TEMP_CAL_INFO             - Show calibration information\r\n");
+        printf("  TEMP_TABLE                - Show temperature-resistance table\r\n");
+    }
+}
+
+/*********************************************************************
  * @fn      State_Process
  *
  * @brief   處理系統狀態機
@@ -382,6 +1001,7 @@ void TIM1_PWM_Init (void) {
  */
 void State_Process (void) {
     static SystemState_TypeDef lastState = STATE_IDLE;
+    static uint8_t temperatureMeasured = 0;  // 溫度測量標誌
     SystemState_TypeDef currentState = System_GetState();
     
     // 如果狀態發生改變，重置相關標誌
@@ -391,28 +1011,70 @@ void State_Process (void) {
             // 當離開 RESULT_READY 狀態時，可以進行清理工作
             printf("Leaving RESULT_READY state\r\n");
         }
+        
+        // 當進入新狀態時，重置溫度測量標誌
+        if (currentState == STATE_STRIP_DETECTED || 
+            currentState == STATE_STRIP_VALIDATION ||
+            currentState == STATE_PARAMETER_SETUP) {
+            temperatureMeasured = 0;
+        }
+        
         lastState = currentState;
     }
     
     switch (currentState) {
     case STATE_IDLE:
         // 在空閒狀態下檢查是否有試片插入
-        // 實作部分後續再增加
+        // 重置溫度測量標誌
+        temperatureMeasured = 0;
         break;
 
     case STATE_STRIP_DETECTED:
-        // 處理檢測到試片狀態 - 這部分已由 STRIP_DETECT_Process 處理
-        // 在確認試片類型後自動進入 STATE_WAIT_FOR_BLOOD 狀態
+        // 處理檢測到試片狀態
+        // 一旦檢測到試片類型，立即進行溫度測量
+        if (!temperatureMeasured) {
+            StripType_TypeDef detectedStripType = STRIP_DETECT_GetStripType();
+            if (detectedStripType != STRIP_TYPE_U && detectedStripType < STRIP_TYPE_MAX) {
+                printf("Strip detected: %s, measuring temperature...\r\n", 
+                       StripType_GetName(detectedStripType));
+                
+                // 執行溫度測量
+                float measuredTemp = Temperature_Measure_With_Calibration();
+                printf("Temperature measurement for %s: %.1f°C\r\n", 
+                       StripType_GetName(detectedStripType), measuredTemp);
+                
+                temperatureMeasured = 1;  // 標記溫度已測量
+            }
+        }
         break;
 
     case STATE_STRIP_VALIDATION:
         // 處理試片驗證階段
-        // 實作部分後續再增加
+        // 如果還未測量溫度，在此階段也可以測量
+        if (!temperatureMeasured) {
+            StripType_TypeDef validatedStripType = STRIP_DETECT_GetStripType();
+            if (validatedStripType != STRIP_TYPE_U && validatedStripType < STRIP_TYPE_MAX) {
+                printf("Strip validation phase, measuring temperature...\r\n");
+                
+                float measuredTemp = Temperature_Measure_With_Calibration();
+                printf("Temperature measurement during validation: %.1f°C\r\n", measuredTemp);
+                
+                temperatureMeasured = 1;
+            }
+        }
         break;
 
     case STATE_PARAMETER_SETUP:
         // 處理參數設置階段
-        // 實作部分後續再增加
+        // 確保在參數設置時已有溫度資料
+        if (!temperatureMeasured) {
+            printf("Parameter setup phase, ensuring temperature is measured...\r\n");
+            
+            float measuredTemp = Temperature_Measure_With_Calibration();
+            printf("Temperature measurement during parameter setup: %.1f°C\r\n", measuredTemp);
+            
+            temperatureMeasured = 1;
+        }
         break;
 
     case STATE_WAIT_FOR_BLOOD: {
@@ -441,7 +1103,8 @@ void State_Process (void) {
         if (PARAM_GetStripParameters (currentStripType, &ndl, &udl, &bloodInThreshold) && (currentStripType < STRIP_TYPE_MAX)) {
             // 檢查ADC值是否超過閾值
             if (adcValue > bloodInThreshold) {
-                // 檢測到血液，切換到測量狀態
+                // 檢測到血液，顯示當前溫度並切換到測量狀態
+                printf("Blood detected! Current temperature: %.1f°C\r\n", currentTemperature);
                 System_SetState (STATE_MEASURING);                
             }
             
@@ -470,7 +1133,8 @@ void State_Process (void) {
                 parametersLoaded = 1;
                 stepStartTime = systemTick;
                 measureStep = 1;
-                printf("Measurement started for strip type: %s\r\n", StripType_GetName(currentStripType));
+                printf("Measurement started for strip type: %s at temperature: %.1f°C\r\n", 
+                       StripType_GetName(currentStripType), currentTemperature);
                 printf("Timing params: EV1=%d, TPL1=%d, TRD1=%d, EV2=%d, TPL2=%d, TRD2=%d\r\n",
                        evWidth1, tpl1, trd1, evWidth2, tpl2, trd2);
                 
@@ -588,6 +1252,7 @@ void State_Process (void) {
                     W_ADC = adcValue;
                     
                     printf("Measurement complete! GLU_OUT ADC value: %d (stored in W_ADC)\r\n", adcValue);
+                    printf("Measurement temperature: %.1f°C\r\n", currentTemperature);
                     
                     // 停止PWM輸出，設置為高電平
                     TIM_CtrlPWMOutputs(TIM1, DISABLE);
@@ -636,8 +1301,8 @@ void State_Process (void) {
             
             // 呼叫血糖計算函數，將W_ADC轉換為血糖值
             CalGlucose(W_ADC);
-            printf("Blood glucose measurement completed: %d %s\r\n", 
-                   wGlucose, Unit_GetSymbol((Unit_TypeDef)PARAM_GetByte(PARAM_MGDL)));
+            printf("Blood glucose measurement completed: %d %s (at %.1f°C)\r\n", 
+                   wGlucose, Unit_GetSymbol((Unit_TypeDef)PARAM_GetByte(PARAM_MGDL)), currentTemperature);
             
             // 標記計算已完成
             calculationDone = 1;
@@ -650,7 +1315,8 @@ void State_Process (void) {
 
     case STATE_ERROR:
         // 處理錯誤狀態
-        // 實作部分後續再增加
+        // 重置溫度測量標誌
+        temperatureMeasured = 0;
         break;
 
     default:
@@ -678,11 +1344,17 @@ int main (void) {
     printf ("SystemClk:%d\r\n", SystemCoreClock);
     printf ("This is an example\r\n");
 
+    /* 初始化ADC */
+    ADC1_Init();
+
     /* 初始化OPA2 */
     OPA2_Init();
 
     /* 初始化TIM1 PWM (WE_ENABLE, PB15, 20KHz) */
     TIM1_PWM_Init();
+
+    /* 載入溫度校正參數 */
+    Temperature_Load_Calibration();
 
     /* 初始化參數表 */
     PARAM_Init();
@@ -713,6 +1385,10 @@ int main (void) {
     Unit_TypeDef unit = (Unit_TypeDef)PARAM_GetByte (PARAM_MGDL);
     printf ("Unit: %s\r\n", Unit_GetSymbol (unit));
 
+    printf("\r\n=== Temperature Measurement System Ready ===\r\n");
+    printf("Use TEMP_CAL_INFO to check calibration status\r\n");
+    printf("Use TEMP_TEST commands for verification\r\n\r\n");
+    
     while (1) {
         // 處理UART協議資料
         UART_Protocol_Process();
@@ -722,23 +1398,6 @@ int main (void) {
 
         // 處理系統狀態機
         State_Process();
-
-        // /* 測試環境可以保留以下程式碼，以便於偵錯 */
-        // if (ring_buffer.RemainCount > 0)
-        // {
-        //     printf("UART Echo Test: %d bytes\r\n", ring_buffer.RemainCount);
-
-        //  while (ring_buffer.RemainCount > 0)
-        //  {
-        //      uint8_t data = ring_buffer_pop();
-        //      // 通過 USART2 將接收到的資料發送回去
-        //      USART_SendData(USART2, data);
-        //      // 等待發送完成
-        //      while(USART_GetFlagStatus(USART2, USART_FLAG_TXE) == RESET);
-        //  }
-
-        //  printf("Echo Complete\r\n");
-        // }
 
         Delay_Ms (5);  // 減少延遲時間以增加處理速度
     }
