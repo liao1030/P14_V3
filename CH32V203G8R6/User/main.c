@@ -623,20 +623,20 @@ float Temperature_Celsius_To_Resistance(float temperature)
     } TempResistancePair_TypeDef;
     
     static const TempResistancePair_TypeDef tempTable[] = {
-        {-10.0, 164400.0},   // -10°C
-        { -5.0, 124100.0},   //  -5°C
-        {  0.0,  94900.0},   //   0°C
-        {  5.0,  73300.0},   //   5°C
-        { 10.0,  57300.0},   //  10°C
-        { 15.0,  45300.0},   //  15°C
-        { 20.0,  36200.0},   //  20°C
-        { 25.0,  29200.0},   //  25°C
-        { 30.0,  23700.0},   //  30°C
-        { 35.0,  19400.0},   //  35°C
-        { 37.0,  17800.0},   //  37°C
-        { 40.0,  16000.0},   //  40°C
-        { 45.0,  13300.0},   //  45°C
-        { 50.0,  11100.0},   //  50°C
+        {-10.0, 277926.5},   // -10°C
+        { -5.0, 212221.1},   //  -5°C
+        {  0.0, 163500.0},   //   0°C
+        {  5.0, 127036.5},   //   5°C
+        { 10.0,  99504.5},   //  10°C
+        { 15.0,  78540.0},   //  15°C
+        { 20.0,  62447.6},   //  20°C
+        { 25.0,  50000.0},   //  25°C
+        { 30.0,  40301.0},   //  30°C
+        { 35.0,  32690.9},   //  35°C
+        { 37.0,  30117.4},   //  37°C
+        { 40.0,  26679.8},   //  40°C
+        { 45.0,  21901.5},   //  45°C
+        { 50.0,  18080.0},   //  50°C
     };
     
     const uint8_t tableSize = sizeof(tempTable) / sizeof(tempTable[0]);
@@ -666,7 +666,7 @@ float Temperature_Celsius_To_Resistance(float temperature)
     }
     
     // 如果沒有找到合適的範圍，返回25°C對應的阻值
-    return 29200.0;
+    return 50000.0;
 }
 
 /*********************************************************************
@@ -894,7 +894,7 @@ void Temperature_Process_Command(const char* command)
             Temperature_Set_Test_Mode(1, resistance);
         } else {
             printf("Usage: TEMP_TEST_R <resistance_ohm>\r\n");
-            printf("Example: TEMP_TEST_R 29200 (for ~25°C)\r\n");
+            printf("Example: TEMP_TEST_R 50000 (for ~25°C)\r\n");
         }
     }
     else if (strncmp(command, "TEMP_TEST_T", 11) == 0) {
@@ -962,20 +962,20 @@ void Temperature_Process_Command(const char* command)
     else if (strcmp(command, "TEMP_TABLE") == 0) {
         printf("Temperature-Resistance Reference Table:\r\n");
         printf("Temp(°C)  Resistance(Ohm)\r\n");
-        printf("  -10       164400\r\n");
-        printf("   -5       124100\r\n");
-        printf("    0        94900\r\n");
-        printf("    5        73300\r\n");
-        printf("   10        57300\r\n");
-        printf("   15        45300\r\n");
-        printf("   20        36200\r\n");
-        printf("   25        29200\r\n");
-        printf("   30        23700\r\n");
-        printf("   35        19400\r\n");
-        printf("   37        17800\r\n");
-        printf("   40        16000\r\n");
-        printf("   45        13300\r\n");
-        printf("   50        11100\r\n");
+        printf("  -10       277927\r\n");
+        printf("   -5       212221\r\n");
+        printf("    0       163500\r\n");
+        printf("    5       127037\r\n");
+        printf("   10        99505\r\n");
+        printf("   15        78540\r\n");
+        printf("   20        62448\r\n");
+        printf("   25        50000\r\n");
+        printf("   30        40301\r\n");
+        printf("   35        32691\r\n");
+        printf("   37        30117\r\n");
+        printf("   40        26680\r\n");
+        printf("   45        21902\r\n");
+        printf("   50        18080\r\n");
     }
     else {
         printf("Unknown temperature command: %s\r\n", command);

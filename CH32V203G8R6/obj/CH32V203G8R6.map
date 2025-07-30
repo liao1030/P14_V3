@@ -159,8 +159,6 @@ Discarded input sections
                 0x0000000000000000      0x184 ./User/main.o
  .text.Temperature_Process_Command
                 0x0000000000000000      0x4c8 ./User/main.o
- .rodata.Temperature_Celsius_To_Resistance.cst4
-                0x0000000000000000        0xc ./User/main.o
  .rodata.Temperature_Factory_Calibration.str1.4
                 0x0000000000000000       0xbe ./User/main.o
  .rodata.Temperature_Process_Command.str1.4
