@@ -16,6 +16,7 @@
 #include "app_uart.h"
 #include "StripDetect.h"
 #include "CH58x_common.h"
+#include "SLEEP.h"
 
 /*********************************************************************
  * MACROS
@@ -76,6 +77,8 @@ volatile StripDetectState_t stripState = {
  */
 extern uint32_t tmos_GetSystemClock(void);
 extern void send_to_uart_mcu(uint8_t *buf, uint16_t len);
+extern uint32_t CH58X_LowPower(uint32_t time);
+extern void HAL_SleepInit(void);
 
 /*********************************************************************
  * LOCAL VARIABLES
@@ -193,6 +196,15 @@ uint16_t StripDetect_ProcessEvent(tmosTaskID task_id, uint16_t events)
         
         return (events ^ STRIP_SEND_MESSAGE_EVT);
     }
+
+    if(events & STRIP_ENTER_SLEEP_EVT)
+    {
+        // 進入休眠模式
+        PRINT("Entering sleep mode due to strip removal\n");
+        StripDetect_EnterSleepMode();
+        
+        return (events ^ STRIP_ENTER_SLEEP_EVT);
+    }
     
     // 返回未處理事件
     return 0;
@@ -236,7 +248,7 @@ static void StripDetect_PeriodicCheck(void)
             stripState.isStripInserted = true;
             stripState.pin3Status = stablePin3Status;
             stripState.pin5Status = stablePin5Status;
-            stripState.insertTimeStamp = GetSysClock() / 1000;
+            stripState.insertTimeStamp = RTC_GetCycle32k() / 32;
             
             // 試片插入時，V2P5_ENABLE輸出高電平，供電給CH32V203
             GPIOA_SetBits(V2P5_ENABLE_PIN);
@@ -283,6 +295,12 @@ static void StripDetect_PeriodicCheck(void)
             GPIOB_SetBits(T3_IN_SEL_PIN);
             
             PRINT("Strip Removed (Polling)\n");
+            
+            // 延遲500ms後進入休眠模式，確保所有操作完成
+            tmos_start_task(StripDetect_TaskID, STRIP_ENTER_SLEEP_EVT, MS1_TO_SYSTEM_TIME(500));
+            
+            // 停止定期檢查，等待休眠
+            return;
         }
     }
     
@@ -467,4 +485,83 @@ static uint16_t GetBatteryVoltage(void)
     voltage = (uint16_t)(((sum / 512.0) - 3) * 1050);
 
     return voltage;
+}
+
+/*********************************************************************
+ * @fn      StripDetect_ConfigureWakeupInterrupt
+ *
+ * @brief   配置GPIO中斷用於休眠喚醒
+ *
+ * @param   none
+ *
+ * @return  none
+ */
+void StripDetect_ConfigureWakeupInterrupt(void)
+{
+    // 配置 Strip_Detect_3 (PB11) 為下降沿中斷喚醒
+    GPIOB_ModeCfg(STRIP_DETECT_3_PIN, GPIO_ModeIN_PU);
+    GPIOB_ITModeCfg(STRIP_DETECT_3_PIN, GPIO_ITMode_FallEdge);
+    PFIC_EnableIRQ(GPIO_B_IRQn);
+    
+    // 配置 Strip_Detect_5 (PA15) 為下降沿中斷喚醒  
+    GPIOA_ModeCfg(STRIP_DETECT_5_PIN, GPIO_ModeIN_PU);
+    GPIOA_ITModeCfg(STRIP_DETECT_5_PIN, GPIO_ITMode_FallEdge);
+    PFIC_EnableIRQ(GPIO_A_IRQn);
+    
+    PRINT("GPIO wakeup interrupts configured\n");
+}
+
+/*********************************************************************
+ * @fn      StripDetect_EnterSleepMode
+ *
+ * @brief   進入休眠模式
+ *
+ * @param   none
+ *
+ * @return  none
+ */
+void StripDetect_EnterSleepMode(void)
+{
+    // 首先配置GPIO中斷用於喚醒
+    StripDetect_ConfigureWakeupInterrupt();
+    
+    // 關閉定期檢查任務
+    tmos_stop_task(StripDetect_TaskID, STRIP_PERIODIC_CHECK_EVT);
+    
+    // 關閉其他不必要的外設，降低功耗
+    GPIOA_ResetBits(V2P5_ENABLE_PIN);  // 確保CH32V203不供電
+    GPIOB_SetBits(T3_IN_SEL_PIN);      // 確保T3電極關閉
+    
+    PRINT("System entering sleep mode...\n");
+    
+    // 進入休眠模式，無限期休眠直到GPIO中斷喚醒
+    // 使用最長的休眠時間
+    CH58X_LowPower(RTC_GetCycle32k() + SLEEP_RTC_MAX_TIME);
+}
+
+/*********************************************************************
+ * @fn      StripDetect_WakeupFromSleep
+ *
+ * @brief   從休眠模式喚醒後的處理
+ *
+ * @param   none
+ *
+ * @return  none
+ */
+void StripDetect_WakeupFromSleep(void)
+{
+    PRINT("System waking up from sleep mode\n");
+    
+    // 重新配置GPIO為正常工作模式
+    GPIOB_ModeCfg(STRIP_DETECT_3_PIN, GPIO_ModeIN_Floating);
+    GPIOA_ModeCfg(STRIP_DETECT_5_PIN, GPIO_ModeIN_Floating);
+    
+    // 禁用GPIO中斷
+    GPIOB_ITModeCfg(STRIP_DETECT_3_PIN, GPIO_ITMode_LowLevel);
+    GPIOA_ITModeCfg(STRIP_DETECT_5_PIN, GPIO_ITMode_LowLevel);
+    
+    // 重新啟動定期檢查任務
+    tmos_start_task(StripDetect_TaskID, STRIP_PERIODIC_CHECK_EVT, MS1_TO_SYSTEM_TIME(100));
+    
+    PRINT("Strip detection resumed\n");
 }

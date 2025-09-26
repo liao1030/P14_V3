@@ -19,6 +19,14 @@ extern "C" {
  * INCLUDES
  */
 #include "CONFIG.h"
+#include <stdint.h>
+
+// 定義 bool 類型（如果編譯器不支援）
+#ifndef bool
+typedef uint8_t bool;
+#define true  1
+#define false 0
+#endif
 
 /*********************************************************************
  * CONSTANTS
@@ -26,6 +34,7 @@ extern "C" {
 // 任務事件定義
 #define STRIP_PERIODIC_CHECK_EVT         0x0040
 #define STRIP_SEND_MESSAGE_EVT           0x0080
+#define STRIP_ENTER_SLEEP_EVT            0x0100
 
 // 試片類型定義
 #define STRIP_TYPE_GLV                   0x00
@@ -67,6 +76,21 @@ extern bool StripDetect_IsStripInserted(void);
  * 獲取試片類型
  */
 extern uint8_t StripDetect_GetStripType(void);
+
+/*
+ * 進入休眠模式
+ */
+extern void StripDetect_EnterSleepMode(void);
+
+/*
+ * 配置GPIO中斷用於休眠喚醒
+ */
+extern void StripDetect_ConfigureWakeupInterrupt(void);
+
+/*
+ * 從休眠模式喚醒後的處理
+ */
+extern void StripDetect_WakeupFromSleep(void);
 
 /*********************************************************************
 *********************************************************************/

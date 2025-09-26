@@ -18,6 +18,7 @@
 #include "peripheral.h"
 #include "app_uart.h"
 #include "StripDetect.h"
+#include "interrupt_handler.h"
 
 /*********************************************************************
  * GLOBAL TYPEDEFS

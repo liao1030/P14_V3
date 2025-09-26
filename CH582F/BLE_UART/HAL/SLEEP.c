@@ -80,7 +80,7 @@ uint32_t CH58X_LowPower(uint32_t time)
 /*******************************************************************************
  * @fn      HAL_SleepInit
  *
- * @brief   配置睡眠唤醒的方式   - RTC唤醒，触发模式
+ * @brief   配置睡眠唤醒的方式   - RTC唤醒，触发模式，GPIO唤醒
  *
  * @param   None.
  *
@@ -91,10 +91,11 @@ void HAL_SleepInit(void)
 #if(defined(HAL_SLEEP)) && (HAL_SLEEP == TRUE)
     sys_safe_access_enable();
     R8_SLP_WAKE_CTRL |= RB_SLP_RTC_WAKE; // RTC唤醒
-    sys_safe_access_disable();              //
+    R8_SLP_WAKE_CTRL |= RB_SLP_GPIO_WAKE; // GPIO唤醒
+    sys_safe_access_disable();              
     sys_safe_access_enable();
     R8_RTC_MODE_CTRL |= RB_RTC_TRIG_EN;  // 触发模式
-    sys_safe_access_disable();              //
+    sys_safe_access_disable();              
     PFIC_EnableIRQ(RTC_IRQn);
 #endif
 }

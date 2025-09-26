@@ -1,5 +1,5 @@
 ################################################################################
-# MRS Version: 2.1.0
+# MRS Version: 2.2.0
 # Automatically-generated file. Do not edit!
 ################################################################################
 
@@ -83,7 +83,35 @@ OBJS += \
 ./StdPeriphDriver/CH58x_usbhostClass.o 
 
 
+EXPANDS += \
+./StdPeriphDriver/CH58x_adc.c.234r.expand \
+./StdPeriphDriver/CH58x_clk.c.234r.expand \
+./StdPeriphDriver/CH58x_flash.c.234r.expand \
+./StdPeriphDriver/CH58x_gpio.c.234r.expand \
+./StdPeriphDriver/CH58x_i2c.c.234r.expand \
+./StdPeriphDriver/CH58x_pwm.c.234r.expand \
+./StdPeriphDriver/CH58x_pwr.c.234r.expand \
+./StdPeriphDriver/CH58x_spi0.c.234r.expand \
+./StdPeriphDriver/CH58x_spi1.c.234r.expand \
+./StdPeriphDriver/CH58x_sys.c.234r.expand \
+./StdPeriphDriver/CH58x_timer0.c.234r.expand \
+./StdPeriphDriver/CH58x_timer1.c.234r.expand \
+./StdPeriphDriver/CH58x_timer2.c.234r.expand \
+./StdPeriphDriver/CH58x_timer3.c.234r.expand \
+./StdPeriphDriver/CH58x_uart0.c.234r.expand \
+./StdPeriphDriver/CH58x_uart1.c.234r.expand \
+./StdPeriphDriver/CH58x_uart2.c.234r.expand \
+./StdPeriphDriver/CH58x_uart3.c.234r.expand \
+./StdPeriphDriver/CH58x_usb2dev.c.234r.expand \
+./StdPeriphDriver/CH58x_usb2hostBase.c.234r.expand \
+./StdPeriphDriver/CH58x_usb2hostClass.c.234r.expand \
+./StdPeriphDriver/CH58x_usbdev.c.234r.expand \
+./StdPeriphDriver/CH58x_usbhostBase.c.234r.expand \
+./StdPeriphDriver/CH58x_usbhostClass.c.234r.expand 
+
+
 
 # Each subdirectory must supply rules for building sources it contributes
 StdPeriphDriver/%.o: ../StdPeriphDriver/%.c
 	@	riscv-none-embed-gcc -march=rv32imac -mabi=ilp32 -mcmodel=medany -msmall-data-limit=8 -mno-save-restore -fmax-errors=20 -Os -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections -fno-common -g -DDEBUG=2 -DCH582F -I"/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/Startup" -I"/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/APP/include" -I"/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/Profile/include" -I"/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/StdPeriphDriver/inc" -I"/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/HAL/include" -I"/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/Ld" -I"/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/LIB" -I"/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/RVMSIS" -I"/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/APP/app_drv_fifo" -I"/Users/liao1030/HMD/_Projects/_P14_V2_1/Firmware/P14_V3/CH582F/BLE_UART/APP/ble_uart_service" -std=gnu99 -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@)" -c -o "$@" "$<"
+

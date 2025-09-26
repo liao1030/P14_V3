@@ -1,0 +1,44 @@
+```mermaid
+---
+title: CH582F 試片偵測自動休眠與喚醒流程
+---
+flowchart TD
+    A["系統啟動"] --> B["初始化試片偵測模組"]
+    B --> C["初始化GPIO和休眠功能"]
+    C --> D["開始定期檢查<br/>(100ms間隔)"]
+    
+    D --> E{"檢查試片狀態"}
+    E -->|"Pin3或Pin5為LOW"| F["試片插入偵測"]
+    E -->|"Pin3和Pin5都為HIGH"| G{"檢查是否之前有插入?"}
+    
+    F --> H["設置V2P5_ENABLE=HIGH<br/>供電給CH32V203"]
+    H --> I["啟動延遲任務<br/>(等待1000ms)"]
+    I --> J["發送試片插入消息給MCU"]
+    J --> K["等待MCU回應試片類型"]
+    K --> L["繼續定期檢查"]
+    L --> E
+    
+    G -->|"是"| M["試片拔出偵測"]
+    G -->|"否"| L
+    
+    M --> N["設置V2P5_ENABLE=LOW<br/>停止供電給CH32V203"]
+    N --> O["設置T3_IN_SEL=HIGH<br/>關閉T3電極"]
+    O --> P["啟動休眠延遲任務<br/>(500ms後進入休眠)"]
+    
+    P --> Q["配置GPIO中斷"]
+    Q --> R["配置PA15和PB11<br/>為下降沿中斷"]
+    R --> S["停止定期檢查任務"]
+    S --> T["進入低功耗休眠模式"]
+    
+    T --> U["等待GPIO中斷<br/>(試片插入)"]
+    U --> V["GPIO中斷觸發"]
+    V --> W["系統喚醒"]
+    W --> X["恢復GPIO為正常模式"]
+    X --> Y["重新啟動定期檢查"]
+    Y --> D
+    
+    style A fill:#90EE90
+    style T fill:#FFB6C1
+    style V fill:#87CEEB
+    style W fill:#98FB98
+```
